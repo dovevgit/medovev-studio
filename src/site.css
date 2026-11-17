@@ -3258,3 +3258,42 @@ html.a11y-cursor * {
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * The portrait on the about page.
+ *
+ * Framed rather than dropped onto the page: a thin gilt rule and a dark mount
+ * put it on the wall of the same room as the rest of the site, and a soft
+ * wash at its foot carries the picture into the page instead of ending it on
+ * a hard edge.
+ * ------------------------------------------------------------------------ */
+.portrait {
+  position: relative;
+  max-width: 26rem;
+  margin: 0 auto clamp(2rem, 5vw, 3rem);
+  padding: clamp(0.4rem, 1.5vw, 0.7rem);
+  border: 1px solid var(--page-edge);
+  border-radius: 1.1rem;
+  background: var(--page-card);
+}
+
+.portrait__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.8rem;
+}
+
+/* The wash sits on the picture, not under it, so the bottom edge dissolves
+ * into the page's own dark rather than stopping against it. */
+.portrait::after {
+  position: absolute;
+  right: clamp(0.4rem, 1.5vw, 0.7rem);
+  bottom: clamp(0.4rem, 1.5vw, 0.7rem);
+  left: clamp(0.4rem, 1.5vw, 0.7rem);
+  height: 28%;
+  border-radius: 0 0 0.8rem 0.8rem;
+  background: linear-gradient(180deg, rgba(18, 13, 9, 0) 0%, rgba(18, 13, 9, 0.72) 100%);
+  content: "";
+  pointer-events: none;
+}

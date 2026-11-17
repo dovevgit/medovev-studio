@@ -10,6 +10,19 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   return (
     <InnerPage eyebrow={ABOUT.eyebrow} lead={ABOUT.lead} title={ABOUT.title}>
+      {/* The portrait, before anything else on the page. "About" is a page
+          about a person, and a face answers more of that question in a
+          glance than the four facts below it do in a sentence each. */}
+      <figure className="portrait">
+        <img
+          alt="דובב גרינברג יושב על כס עץ מגולף ומחזיק פרש שחמט"
+          className="portrait__img"
+          height={900}
+          src="/assets/about-portrait.webp"
+          width={900}
+        />
+      </figure>
+
       {/* The four standing facts, before the prose: a visitor who reads
           nothing else should still come away with them. */}
       <section className="page__stats">
