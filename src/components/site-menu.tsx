@@ -80,6 +80,13 @@ export function SiteMenu() {
 
   return (
     <>
+      {/* The mark alone, not the whole lockup: at the height a corner slot
+          allows, the words under the monogram would be four pixels tall. The
+          lockup gets its room inside the panel instead. */}
+      <a aria-label="לדף הבית" className="site-brand" href="/">
+        <img alt="DG Workflow System Studio" height={287} src="/assets/logo-mark.webp" width={360} />
+      </a>
+
       <button
         aria-controls={panelId}
         aria-expanded={open}
@@ -106,6 +113,14 @@ export function SiteMenu() {
         role="dialog"
       >
         <nav className="site-menu__inner">
+          <img
+            alt="DG Workflow System Studio"
+            className="site-menu__logo"
+            height={446}
+            src="/assets/logo-full.webp"
+            width={760}
+          />
+
           <ul className="site-menu__list">
             {PAGES.map((page) => (
               <MenuItem key={page.href} link={page} onNavigate={() => setOpen(false)} />

@@ -260,44 +260,60 @@
 }
 
 /* ---------------------------------------------------------------------------
- * The scroll cue, on phones.
+ * The scroll cue.
  *
- * A phone shows the film as a strip with the copy beneath it, and what is
- * left under the copy is empty black. Two things were wrong with that: the
- * band read as the end of the page, and nothing told the visitor that their
- * thumb was doing anything -- the film changes, but slowly enough that
- * someone who is not watching it thinks the page is stuck.
+ * The journey runs for several screens on one pinned stage, and the film
+ * changes slowly enough that someone who is not watching it closely thinks
+ * the page is stuck. So the foot of the stage carries a rail that fills as
+ * the journey runs -- every screen, not only phones.
  *
- * So the band gets the one thing it was missing: a rail that fills as the
- * journey runs, and, for the first few dozen pixels only, the word and the
- * chevron that say which way to go. Both are driven by `--copy-progress`,
- * the same value the headlines read, so there is no second scroll listener.
+ * The engine draws a bar of its own across the TOP of the stage. It fills
+ * left to right on a right-to-left page and sits at the far edge from where
+ * anyone is looking, so this replaces it rather than joining it.
+ *
+ * The word and the chevron are for phones alone: a thumb has no hover and no
+ * visible scrollbar to tell it the page can move. They show for the first
+ * 1.2% of the journey and then go.
  *
  * Both carry a fallback in `var()`: before hydration the property does not
  * exist yet, and without one the rail would render full width -- a gold bar
  * across the screen -- for the first frame.
  * ------------------------------------------------------------------------ */
-.ss-cue,
-.ss-rail {
+.scroll-scrub .scroll-scrub__progress {
   display: none;
 }
 
-/* The engine draws its own 2px progress bar across the top of the stage. On
- * a phone it is the wrong bar in the wrong place: it fills left to right on
- * a right-to-left page, and it sits at the top edge, furthest from the thumb
- * and from the band the visitor is actually looking at. The rail below
- * replaces it there; on a desktop it stays as it was. */
-@media (hover: none) and (pointer: coarse), (max-width: 860px) {
-  .scroll-scrub .scroll-scrub__progress {
-    display: none;
-  }
+.ss-rail {
+  position: absolute;
+  right: 0;
+  bottom: calc(1.3rem + env(safe-area-inset-bottom));
+  left: 0;
+  z-index: 6;
+  display: block;
+  height: 2px;
+  margin-inline: clamp(1.5rem, 7vw, 6rem);
+  border-radius: 999px;
+  background: rgba(241, 232, 214, 0.14);
+  pointer-events: none;
+}
+
+.ss-rail__fill {
+  display: block;
+  width: calc(clamp(0, var(--copy-progress, 0), 1) * 100%);
+  height: 100%;
+  border-radius: 999px;
+  background: #c9a042;
+}
+
+.ss-cue {
+  display: none;
 }
 
 @media (hover: none) and (pointer: coarse), (max-width: 860px) {
   .ss-cue {
     position: absolute;
     right: 0;
-    bottom: calc(2.6rem + env(safe-area-inset-bottom));
+    bottom: calc(2.9rem + env(safe-area-inset-bottom));
     left: 0;
     z-index: 6;
     display: flex;
@@ -323,25 +339,8 @@
   }
 
   .ss-rail {
-    position: absolute;
-    right: 0;
     bottom: calc(1rem + env(safe-area-inset-bottom));
-    left: 0;
-    z-index: 6;
-    display: block;
-    height: 2px;
     margin-inline: 1.5rem;
-    border-radius: 999px;
-    background: rgba(241, 232, 214, 0.14);
-    pointer-events: none;
-  }
-
-  .ss-rail__fill {
-    display: block;
-    width: calc(clamp(0, var(--copy-progress, 0), 1) * 100%);
-    height: 100%;
-    border-radius: 999px;
-    background: #c9a042;
   }
 }
 
@@ -688,6 +687,39 @@
  * a position, it carries its own dark disc. One appearance, readable on both.
  * ======================================================================== */
 
+/* The mark rides the same two backgrounds the menu button does, and like it
+ * takes no disc: gold reads on the film's near-black and on the dark page
+ * below it alike. The shadow is there for the one frame of film that goes
+ * pale behind it. */
+.site-brand {
+  position: fixed;
+  top: clamp(0.85rem, 2vw, 1.4rem);
+  inset-inline-start: clamp(0.9rem, 2.2vw, 1.6rem);
+  z-index: 60;
+  display: block;
+  line-height: 0;
+}
+
+.site-brand img {
+  width: auto;
+  height: clamp(2.1rem, 4.6vw, 3rem);
+  filter: drop-shadow(0 1px 6px rgba(6, 5, 4, 0.75));
+  transition: transform 180ms ease;
+}
+
+.site-brand:hover img,
+.site-brand:focus-visible img {
+  transform: translateY(-1px) scale(1.03);
+}
+
+.site-menu__logo {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: clamp(4.2rem, 11vw, 6rem);
+  margin: 0 auto clamp(2rem, 5vw, 3rem);
+}
+
 .site-menu__button {
   position: fixed;
   top: clamp(0.85rem, 2vw, 1.4rem);
@@ -752,7 +784,7 @@
 .site-menu__inner {
   max-width: 54rem;
   margin: 0 auto;
-  padding: clamp(4.5rem, 10vw, 6.5rem) clamp(1.5rem, 6vw, 3rem)
+  padding: clamp(4rem, 9vw, 5.5rem) clamp(1.5rem, 6vw, 3rem)
     clamp(3rem, 8vw, 5rem);
 }
 
@@ -838,6 +870,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .site-brand img,
   .site-menu__bars > span,
   .site-menu__panel,
   .closing__cta,
