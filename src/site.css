@@ -595,14 +595,18 @@
  * the eye reads a slow hold in the dark and then a quick opening, the way
  * dawn actually behaves, rather than an even wash. */
 .after-film__dawn {
-  height: 64vh;
+  /* Was 64vh, which meant two thirds of a screen of empty gradient before
+   * the first word arrived. The band is now a third of a screen, and its
+   * stops lighten early, so the heading is already on its way up as the
+   * background opens rather than waiting for it to finish. */
+  height: 34vh;
   background: linear-gradient(
     180deg,
     #0b0a09 0%,
-    #130e0a 20%,
-    #3a2a1a 47%,
-    #8a6e48 71%,
-    #c8b18c 88%,
+    #1b140d 14%,
+    #5c4529 40%,
+    #a98d62 64%,
+    #d8c7a6 84%,
     var(--wood) 100%
   );
 }
@@ -612,7 +616,7 @@
  * reads as texture rather than as lines. */
 .after-film__body {
   position: relative;
-  padding: clamp(2.5rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4rem)
+  padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.25rem, 5vw, 4rem)
     clamp(4rem, 9vw, 7rem);
   background-image: repeating-linear-gradient(
       91deg,
@@ -986,4 +990,143 @@
   color: inherit;
   font-weight: 600;
   text-decoration: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * A service as one of the film's banners.
+ *
+ * The artwork is a cut-out — cloth, gold frame, fringe, and the fallen king
+ * lying across the lower edge, half on the cloth and half off it. It carries
+ * no lettering: the words below are live HTML laid over the velvet.
+ *
+ * Everything scales in `cqw`, container-query units measured against the
+ * card's own width. That is what keeps the type locked to the cloth: the
+ * words grow and shrink in exact step with the picture, so the same line sits
+ * in the same place on a laptop and on a phone, with no breakpoint doing it
+ * by hand.
+ *
+ * The box the text lives in comes from measuring the artwork, not from the
+ * eye: the clear run of velvet starts 31% across and ends at 95%, and runs
+ * from 10% down to 73%. If the artwork is replaced, measure again.
+ * ------------------------------------------------------------------------ */
+.flag-card {
+  container-type: inline-size;
+  position: relative;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.flag-card__art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.flag-card__text {
+  position: absolute;
+  /* Physical sides, deliberately: the cloth's clear run is on the right of
+   * the picture whatever direction the document reads in. */
+  top: 14%;
+  right: 6%;
+  bottom: 27%;
+  left: 34%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.4cqw;
+  text-align: right;
+}
+
+.flag-card__title {
+  margin: 0;
+  color: #f6edd9;
+  font-size: 5.4cqw;
+  font-weight: 700;
+  line-height: 1.1;
+  /* The velvet is dark but not even -- it has folds. A soft shadow keeps the
+   * type legible where a highlight runs behind it. */
+  text-shadow: 0 0.12cqw 0.5cqw rgba(6, 10, 24, 0.75);
+}
+
+.flag-card__line {
+  margin: 0;
+  color: #d9c79c;
+  font-size: 2.7cqw;
+  font-weight: 500;
+  line-height: 1.3;
+  text-shadow: 0 0.1cqw 0.45cqw rgba(6, 10, 24, 0.7);
+}
+
+/* Light and loud against the deep blue: parchment, not gold, so it reads as
+ * a button rather than as another piece of the frame. */
+.flag-card__cta {
+  margin-top: 0.8cqw;
+  padding: 1.15cqw 3cqw;
+  border: 0.12cqw solid #e8d9b4;
+  border-radius: 999px;
+  background: #f7efde;
+  color: #22365c;
+  font-size: 2.1cqw;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 0.3cqw 1.2cqw rgba(6, 10, 24, 0.45);
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.flag-card__cta:hover,
+.flag-card__cta:focus-visible {
+  background: #fffaf0;
+  transform: translateY(-0.15cqw);
+}
+
+/* Below roughly a tablet the picture is too short for type that scales with
+ * it -- 5.4cqw of a 360px card is 19px, and the button would be unreadable.
+ * The words come off the cloth and sit under the picture instead, which also
+ * gives the king room to read. */
+@media (max-width: 760px) {
+  .flag-card__text {
+    position: static;
+    gap: 0.5rem;
+    padding: 1.25rem 0.25rem 0;
+    text-align: right;
+  }
+
+  .flag-card__title {
+    font-size: clamp(1.6rem, 7vw, 2.3rem);
+    color: var(--wood-ink);
+    text-shadow: none;
+  }
+
+  .flag-card__line {
+    font-size: clamp(1rem, 4.2vw, 1.2rem);
+    color: var(--wood-ink-soft);
+    text-shadow: none;
+  }
+
+  .flag-card__cta {
+    margin-top: 0.35rem;
+    padding: 0.7rem 1.8rem;
+    border-width: 1px;
+    background: var(--royal);
+    color: #f4ecdc;
+    font-size: 1rem;
+    box-shadow: none;
+  }
+
+  .flag-card__cta:hover,
+  .flag-card__cta:focus-visible {
+    background: var(--royal-lit);
+    transform: none;
+  }
+}
+
+.services {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flag-card__cta {
+    transition: none;
+  }
 }

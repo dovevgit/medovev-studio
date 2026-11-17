@@ -1,3 +1,4 @@
+import { FlagCard } from "@/components/flag-card";
 import { SERVICES, WHATSAPP_URL } from "@/site-content";
 
 /**
@@ -24,8 +25,21 @@ export function AfterFilm() {
           <h2 className="services__title">פתרונות מקצה לקצה לצמיחה עסקית</h2>
         </header>
 
+        <FlagCard
+          art="/assets/flag-strategy.webp"
+          artHeight={469}
+          artWidth={1400}
+          cta="לעמוד האסטרטגיה"
+          href="/services/strategy"
+          line="תוכנית פעולה אמיתית"
+          title="קודם כל אסטרטגיה"
+        />
+
+        {/* The remaining eight still wear the first, plain treatment. They
+            stay on the page so the site is whole while each one is redesigned
+            as its own banner, in turn. */}
         <ul className="services">
-          {SERVICES.map((service) => (
+          {SERVICES.filter((service) => service.slug !== "strategy").map((service) => (
             <li className="service" key={service.slug}>
               <h3 className="service__title">{service.title}</h3>
               <p className="service__blurb">{service.blurb}</p>
