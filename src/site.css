@@ -1259,6 +1259,11 @@
  * picture of its own, wider and shorter than a hanging man, so the box
  * changes shape with it. */
 .rappel[data-landed="true"] .rappel__knight {
+  /* Off the rope and onto the ground: absolute at the lane's foot, rather
+   * than sticky partway up the screen. */
+  position: absolute;
+  top: auto;
+  bottom: 0;
   width: 150%;
   aspect-ratio: 320 / 297;
   background-image: url("/assets/knight-land.webp");

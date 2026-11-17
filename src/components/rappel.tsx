@@ -39,14 +39,16 @@ export function Rappel() {
       // How far the lane has travelled up the screen, which is the distance
       // the knight has covered: the rope's own length, not the page's.
       const travelled = Math.max(0, -box.top);
-      const run = Math.max(1, lane.offsetHeight - window.innerHeight * 0.4);
 
       lane.style.setProperty(
         "--knight-frame",
         String(Math.floor(travelled / (PULL / FRAMES)) % FRAMES),
       );
-      // The last stretch is the landing, so the pose has somewhere to change.
-      lane.dataset.landed = travelled >= run ? "true" : "";
+
+      // He lands when the end of the rope comes into view, which is the
+      // moment it looks right -- and, unlike a distance along the lane, it
+      // is a point the page can always actually reach.
+      lane.dataset.landed = box.bottom <= window.innerHeight * 0.92 ? "true" : "";
     };
 
     const onScroll = () => {
