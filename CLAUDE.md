@@ -19,7 +19,7 @@ medovev.com and carries this same Hebrew copy, so:
 npm run check
 ```
 
-It builds, then runs three guards. All must print `OK`. If any prints `FAIL`,
+It builds, then runs four guards. All must print `OK`. If any prints `FAIL`,
 fix the page and do not push.
 
 - **`scripts/check_mobile_width.py`** — opens every built page in a phone-sized
@@ -34,8 +34,19 @@ fix the page and do not push.
   translation is a pass over the rendered page, so the failure mode is a React
   re-render putting the Hebrew back; checking the page before any interaction
   would never catch it.
+- **`scripts/check_works.py`** — opens the site and uses it: scrolls the film,
+  opens the menu, plays the memory game to a win, filters the gallery, opens a
+  picture, plays a voice sample, clicks a reel, submits the form and works the
+  accessibility menu. The other three check that pages load and fit; none of
+  them presses anything, and a portfolio piece is judged by someone clicking
+  around it.
 
-A GitHub Action runs all three after each push, as a safety net.
+A GitHub Action runs all four after each push, as a safety net.
+
+**When writing a check, make it able to fail.** Two assertions here once
+passed because the win dialog is always in the markup and only `data-open`
+shows it, so counting the element was true either way. Assert on the state,
+not on the element's existence.
 
 ## Languages
 

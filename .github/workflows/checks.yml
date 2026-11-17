@@ -30,3 +30,5 @@ jobs:
         run: python3 scripts/check_links.py
       - name: The language switch survives a re-render
         run: python3 scripts/check_i18n.py
+      - name: Everything on the site still responds
+        run: python3 scripts/check_works.py
