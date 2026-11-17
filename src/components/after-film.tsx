@@ -29,7 +29,7 @@ export function AfterFilm() {
           art="/assets/flag-strategy.webp"
           artHeight={469}
           artWidth={1400}
-          cta="לעמוד האסטרטגיה"
+          cta="אסטרטגיה עסקית"
           href="/services/strategy"
           line="תוכנית פעולה אמיתית"
           title="קודם כל אסטרטגיה"

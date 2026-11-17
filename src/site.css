@@ -595,11 +595,12 @@
  * the eye reads a slow hold in the dark and then a quick opening, the way
  * dawn actually behaves, rather than an even wash. */
 .after-film__dawn {
-  /* Was 64vh, which meant two thirds of a screen of empty gradient before
-   * the first word arrived. The band is now a third of a screen, and its
-   * stops lighten early, so the heading is already on its way up as the
-   * background opens rather than waiting for it to finish. */
-  height: 34vh;
+  /* Started at 64vh -- two thirds of a screen of empty gradient before the
+   * first word arrived -- then a third. Still too long to sit through: the
+   * band earns its keep in the first fifth of a screen and the heading
+   * follows immediately, so the background opens WHILE the words arrive
+   * rather than before them. */
+  height: 20vh;
   background: linear-gradient(
     180deg,
     #0b0a09 0%,
@@ -616,7 +617,7 @@
  * reads as texture rather than as lines. */
 .after-film__body {
   position: relative;
-  padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.25rem, 5vw, 4rem)
+  padding: clamp(0.5rem, 1.2vw, 1rem) clamp(1.25rem, 5vw, 4rem)
     clamp(4rem, 9vw, 7rem);
   background-image: repeating-linear-gradient(
       91deg,
@@ -632,7 +633,7 @@
 
 .services__head {
   max-width: 62rem;
-  margin: 0 auto clamp(2rem, 4vw, 3rem);
+  margin: 0 auto clamp(1.1rem, 2.4vw, 1.9rem);
   text-align: center;
 }
 
@@ -1033,8 +1034,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
-  gap: 1.4cqw;
+  justify-content: flex-start;
+  gap: 1.1cqw;
   text-align: right;
 }
 
@@ -1061,7 +1062,13 @@
 /* Light and loud against the deep blue: parchment, not gold, so it reads as
  * a button rather than as another piece of the frame. */
 .flag-card__cta {
-  margin-top: 0.8cqw;
+  /* Lifted out of the column so it can sit low on the cloth and well to the
+   * left of the headline, in the clear blue above the fringe rather than
+   * tucked under the line. Still clear of the king, who ends at 31% across. */
+  position: absolute;
+  left: 35%;
+  bottom: 28%;
+  margin: 0;
   padding: 1.15cqw 3cqw;
   border: 0.12cqw solid #e8d9b4;
   border-radius: 999px;
@@ -1105,6 +1112,8 @@
   }
 
   .flag-card__cta {
+    position: static;
+    align-self: flex-start;
     margin-top: 0.35rem;
     padding: 0.7rem 1.8rem;
     border-width: 1px;
