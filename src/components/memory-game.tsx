@@ -334,15 +334,6 @@ export function MemoryGame() {
                 </span>
               </button>
 
-              {/* The same name again, under the card rather than on it. A
-                  phone's card is about 60px wide; a name set inside it
-                  there would be five pixels tall. Beneath it, on the dark
-                  page, it is simply legible. One of the two shows at a
-                  time, so the button's own label carries the name for a
-                  screen reader and this copy is hidden from it. */}
-              <span aria-hidden="true" className="memory__caption">
-                {name}
-              </span>
             </div>
           );
         })}

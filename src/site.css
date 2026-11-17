@@ -923,11 +923,6 @@
   flex-direction: column;
 }
 
-/* The caption only shows on a phone; see the small-screen block below. */
-.memory__caption {
-  display: none;
-}
-
 .memory__card {
   position: relative;
   aspect-ratio: 3 / 4;
@@ -1178,34 +1173,19 @@
     padding-inline: 0.3rem;
   }
 
-  /* No name on the cloth now, so the emblem is the only thing inside and
-   * the padding is what keeps it from filling the card edge to edge. */
+  /* The name stays on the cloth here too, which is what the card is for --
+   * so the padding gives it almost the whole width to run in, and the
+   * emblem takes what is left. The frame's corner flourishes sit in the
+   * corners; the centre of the foot, where a centred line sits, is clear
+   * velvet down to about 88%, so a tighter inset is safe. */
   .memory__face--front {
-    gap: 0;
-    padding: 15% 14%;
+    gap: 2%;
+    padding: 7% 5% 9%;
   }
 
   .memory__name {
-    display: none;
-  }
-
-  .memory__caption {
-    display: block;
-    margin-top: 0.3rem;
-    color: var(--wood-ink);
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1.15;
-    text-align: center;
-    /* Kept in the layout at zero opacity rather than hidden: the row's
-     * height is then the same before and after a card turns, and the board
-     * does not shuffle itself under the thumb. */
-    opacity: 0;
-    transition: opacity 220ms ease;
-  }
-
-  .memory__slot[data-open] .memory__caption {
-    opacity: 1;
+    font-size: 10px;
+    line-height: 1.1;
   }
 
   .memory__toast {
@@ -1216,7 +1196,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .memory__caption,
   .memory__inner,
   .memory__reset,
   .memory__win {
