@@ -6,6 +6,8 @@ import {
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
+import { SiteFooter } from "@/components/site-footer";
+
 import appCss from "../styles.css?url";
 
 const TITLE = "סטודיו לאסטרטגיה עסקית | דובב גרינברג";
@@ -55,7 +57,12 @@ function RootDocument({ children }: { children: ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <SiteFooter />
+    </>
+  );
 }
 
 function NotFoundComponent() {

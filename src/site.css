@@ -2681,3 +2681,24 @@
     transition: none;
   }
 }
+
+/* ===========================================================================
+ * The credit line.
+ *
+ * One bar at the foot of every document. It carries its own near-black so it
+ * closes the home page, which ends on pale wood, and the inner pages, which
+ * end in the dark, in the same way.
+ * ======================================================================== */
+.site-foot {
+  padding: clamp(1.4rem, 4vw, 2.2rem) 1.25rem calc(clamp(1.4rem, 4vw, 2.2rem) + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(227, 185, 74, 0.16);
+  background: #0f0b07;
+  text-align: center;
+}
+
+.site-foot__line {
+  margin: 0;
+  color: #a79c8c;
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+}
