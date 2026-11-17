@@ -7,7 +7,6 @@ import {
 import type { ReactNode } from "react";
 
 import { AccessibilityMenu } from "@/components/accessibility-menu";
-import { LanguagePicker } from "@/components/language";
 import { SiteFooter } from "@/components/site-footer";
 
 import appCss from "../styles.css?url";
@@ -98,7 +97,6 @@ function RootComponent() {
       <Outlet />
       <SiteFooter />
       <AccessibilityMenu />
-      <LanguagePicker />
       {/* No analytics, deliberately. This is a portfolio piece, and the one
           thing on it that was metered by use had no job here: nothing on the
           site now counts anything or calls anything. */}

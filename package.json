@@ -7,7 +7,7 @@
     "build": "tsr generate && tsc --noEmit && vite build && cp dist/client/404/index.html dist/client/404.html",
     "preview": "vite preview",
     "typecheck": "tsr generate && tsc --noEmit",
-    "check": "npm run build && python3 scripts/check_mobile_width.py dist/client && python3 scripts/check_links.py && python3 scripts/check_i18n.py && python3 scripts/check_works.py"
+    "check": "npm run build && python3 scripts/check_mobile_width.py dist/client && python3 scripts/check_links.py && python3 scripts/check_works.py"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.170.17",

@@ -22,7 +22,7 @@ medovev.com and carries this same Hebrew copy, so:
 npm run check
 ```
 
-It builds, then runs four guards. All must print `OK`. If any prints `FAIL`,
+It builds, then runs three guards. All must print `OK`. If any prints `FAIL`,
 fix the page and do not push.
 
 - **`scripts/check_mobile_width.py`** — opens every built page in a phone-sized
@@ -32,11 +32,6 @@ fix the page and do not push.
 - **`scripts/check_links.py`** — fails if any internal link or asset points at
   something that is not there, if an image has no `alt`, or if a page is
   missing its title/description/canonical/og:image/h1.
-- **`scripts/check_i18n.py`** — switches the page to English and to Russian and
-  checks it again AFTER opening the menu and filtering the gallery. The
-  translation is a pass over the rendered page, so the failure mode is a React
-  re-render putting the Hebrew back; checking the page before any interaction
-  would never catch it.
 - **`scripts/check_works.py`** — opens the site and uses it: scrolls the film,
   opens the menu, plays the memory game to a win, filters the gallery, opens a
   picture, plays a voice sample, clicks a reel, submits the form and works the
@@ -44,19 +39,12 @@ fix the page and do not push.
   them presses anything, and a portfolio piece is judged by someone clicking
   around it.
 
-A GitHub Action runs all four after each push, as a safety net.
+A GitHub Action runs all three after each push, as a safety net.
 
 **When writing a check, make it able to fail.** Two assertions here once
 passed because the win dialog is always in the markup and only `data-open`
 shows it, so counting the element was true either way. Assert on the state,
 not on the element's existence.
-
-## Languages
-
-`src/i18n/{en,ru}.json` are keyed by the **Hebrew string itself**, so a new
-Hebrew string on a page simply has no translation and stays Hebrew. After
-adding or changing Hebrew copy, run `npm run check`; if the share of untouched
-Hebrew rises, add the new strings to both files.
 
 ## CSS pitfalls that already broke the phone layout once (Nov 2026)
 
