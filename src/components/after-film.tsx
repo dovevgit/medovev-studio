@@ -78,7 +78,19 @@ export function AfterFilm() {
           title="פתרונות AI מתקדמים"
         />
 
-        {/* The remaining five still wear the first, plain treatment. They
+        <FlagCard
+          art="/assets/flag-implementer.webp"
+          artHeight={469}
+          artWidth={1400}
+          cta="מיישם AI"
+          /* The rook stands on the left: the field is 22%-75% across. */
+          field={{ bottom: 27, left: 24, right: 27, top: 16 }}
+          href="/services/implementer"
+          line="הדרכה והטמעת תהליכים בארגון"
+          title="מיישם AI"
+        />
+
+        {/* The remaining four still wear the first, plain treatment. They
             stay on the page so the site is whole while each one is redesigned
             as its own banner, in turn. */}
         <ul className="services">
@@ -87,7 +99,8 @@ export function AfterFilm() {
               service.slug !== "strategy" &&
               service.slug !== "digital" &&
               service.slug !== "web" &&
-              service.slug !== "ai",
+              service.slug !== "ai" &&
+              service.slug !== "implementer",
           ).map((service) => (
             <li className="service" key={service.slug}>
               <h3 className="service__title">{service.title}</h3>
