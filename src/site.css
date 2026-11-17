@@ -1,20 +1,4 @@
 /* ---------------------------------------------------------------------------
- * The page as the ladder's containing block.
- *
- * The ladder hangs from y=0 of the whole page -- over the film as well -- so
- * it is positioned against <main> rather than against the section beneath the
- * film.
- *
- * `clip` rather than `hidden` for the overflow guard: `hidden` would make
- * <main> a scroll container, and a scroll container is what `position: sticky`
- * resolves against, so the climber would stop sticking to the window.
- * ------------------------------------------------------------------------ */
-main {
-  position: relative;
-  overflow-x: clip;
-}
-
-/* ---------------------------------------------------------------------------
  * Mobile framing for the scroll-scrub film.
  *
  * The film is 16:9 and a phone viewport is tall and narrow, so the engine's
@@ -589,8 +573,7 @@ main {
   position: relative;
   /* A guard: nothing in here may widen the page sideways. `clip` rather
    * than `hidden` on purpose -- hidden would make this a scroll container,
-   * and the knight on the rope would then stick to it instead of to the
-   * window, which stops him holding his place on screen. */
+   * which changes what any `position: sticky` inside resolves against. */
   overflow-x: clip;
   background: var(--wood);
   color: var(--wood-ink);
@@ -858,8 +841,6 @@ main {
 .memory {
   position: relative;
   z-index: 1;
-  /* Room above the board for the knight to pace in when the rope stops here,
-   * which it does on a phone. */
   margin-top: clamp(3.5rem, 8vw, 6rem);
 }
 
@@ -1223,201 +1204,6 @@ main {
   .memory__reset,
   .memory__win {
     transition: none;
-  }
-}
-
-/* ===========================================================================
- * The knight on the ladder.
- *
- * A rope ladder runs down the left margin from the very top of the page --
- * over the film as well, so there is something descending from the first
- * flick of the finger. On the way down he is sticky: he keeps his place on
- * the screen while the page scrolls past, and what moves is the ladder
- * behind him and his hands, which the script advances a frame at a time.
- * At the foot he steps off and paces back and forth on a timer.
- *
- * The rungs are the whole point of a ladder here. A rope is a smooth line
- * with nothing to measure movement against; rungs stream past him, which is
- * what makes a descent read as a descent.
- *
- * How far down it goes is set from the script, in --lane-end: on a desktop
- * it runs the whole page, and on a phone it stops above the board, where the
- * cards take the full width and a knight on top of them is a knight in the
- * way.
- *
- * The climb cells were cut around the LADDER rather than around the knight,
- * so its rails sit at the same place in every frame: 63.87% across the cell
- * and 15.18% of it wide. The page's ladder is drawn exactly there, and the
- * two read as one ladder.
- * ======================================================================== */
-.ladder {
-  --knight-w: clamp(5rem, 9vw, 9.5rem);
-  --lane-x: clamp(0.25rem, 2vw, 3.5rem);
-  --pace: clamp(8rem, 26vw, 24rem);
-
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: var(--lane-end, 0);
-  left: 0;
-  /* Above the film, which pins its stage at z-index 0, and below the menu. */
-  z-index: 3;
-  pointer-events: none;
-}
-
-.ladder__rails {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  /* Centred on the sprite's own ladder: 63.87% across the cell, 15.18% wide. */
-  left: calc(var(--lane-x) + var(--knight-w) * 0.5628);
-  width: calc(var(--knight-w) * 0.1518);
-  background: url("/assets/ladder-tile.webp") top center / 100% auto repeat-y;
-  /* It is fixed somewhere above the page and paid out towards the ground, so
-   * the top is cut square -- it comes in from off-screen -- while the foot
-   * fades rather than ending in mid-air. */
-  mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 4rem), transparent 100%);
-}
-
-/* The climber's own column.
- *
- * Laid out as a plain block in a right-to-left page, a box with a width and
- * a left margin is over-constrained, and it is the LEFT margin the browser
- * drops: the knight went to the right edge while his ladder stayed on the
- * left. Positioned, there is nothing to resolve. */
-.ladder__column {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: var(--lane-x);
-  width: var(--knight-w);
-}
-
-.ladder__climber {
-  position: sticky;
-  top: 26vh;
-  width: 100%;
-  aspect-ratio: 307 / 420;
-  background-image: url("/assets/knight-climb.webp");
-  background-repeat: no-repeat;
-  /* Fifteen cells side by side: at 1500% the strip is fifteen element-widths
-   * wide, and a percentage position runs across the fourteen widths of
-   * overhang -- so cell n sits at n/14 of it. */
-  background-size: 1500% 100%;
-  background-position: calc(var(--knight-frame, 0) / 14 * 100%) 0;
-  filter: drop-shadow(0 0.6rem 1rem rgba(0, 0, 0, 0.55));
-}
-
-/* Stepping off: ten frames, played once, between the climb and the walk. */
-.ladder__dismount {
-  position: absolute;
-  bottom: 0;
-  left: var(--lane-x);
-  width: calc(var(--knight-w) * 1.08);
-  aspect-ratio: 245 / 300;
-  opacity: 0;
-  background-image: url("/assets/knight-dismount.webp");
-  background-repeat: no-repeat;
-  background-size: 1000% 100%;
-  filter: drop-shadow(0 0.5rem 0.9rem rgba(0, 0, 0, 0.55));
-}
-
-/* Off the ladder. The walker carries the pacing and the sprite inside it
- * carries the facing, because one transform cannot do both: a scaleX on the
- * same box would mirror its own translateX and send him the wrong way. */
-.ladder__walker {
-  position: absolute;
-  bottom: 0;
-  left: var(--lane-x);
-  width: calc(var(--knight-w) * 1.04);
-  aspect-ratio: 235 / 300;
-  opacity: 0;
-  animation: knight-pace 5.4s linear infinite;
-  filter: drop-shadow(0 0.5rem 0.9rem rgba(0, 0, 0, 0.55));
-}
-
-.ladder__walker > span {
-  position: absolute;
-  inset: 0;
-  background-image: url("/assets/knight-walk.webp");
-  background-repeat: no-repeat;
-  background-size: 800% 100%;
-  animation: knight-step 0.9s steps(8) infinite,
-    knight-face 5.4s step-end infinite;
-}
-
-.ladder[data-landed="true"] .ladder__climber {
-  opacity: 0;
-}
-
-.ladder[data-landed="true"] .ladder__dismount {
-  animation: knight-drop 0.6s steps(10) 1 forwards,
-    knight-handover 0.6s step-end 1 forwards;
-}
-
-.ladder[data-landed="true"] .ladder__walker {
-  opacity: 1;
-  /* He walks once he is off the ladder, not during the jump. */
-  transition: opacity 0.14s linear 0.56s;
-}
-
-@keyframes knight-step {
-  from { background-position-x: 0%; }
-  to { background-position-x: 100%; }
-}
-
-@keyframes knight-drop {
-  from { background-position-x: 0%; }
-  to { background-position-x: 100%; }
-}
-
-/* Visible for the whole jump, gone on the last frame, where the walker
- * takes over. */
-@keyframes knight-handover {
-  0% { opacity: 1; }
-  92% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-@keyframes knight-pace {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(var(--pace)); }
-  100% { transform: translateX(0); }
-}
-
-/* step-end, so the turn happens at the end of each leg rather than easing
- * through a mirror. */
-@keyframes knight-face {
-  0% { transform: scaleX(1); }
-  50% { transform: scaleX(-1); }
-  100% { transform: scaleX(1); }
-}
-
-@media (max-width: 860px) {
-  .ladder {
-    --knight-w: clamp(3.6rem, 18vw, 5.4rem);
-    --lane-x: 0.1rem;
-    --pace: 9rem;
-  }
-
-  .ladder__climber {
-    top: 22svh;
-  }
-
-  .ladder__walker {
-    animation-duration: 3.4s;
-  }
-
-  .ladder__walker > span {
-    animation-duration: 0.9s, 3.4s;
-  }
-}
-
-/* No ladder and no knight for anyone who asked the page to hold still: the
- * whole thing is motion driven by scroll. */
-@media (prefers-reduced-motion: reduce) {
-  .ladder {
-    display: none;
   }
 }
 

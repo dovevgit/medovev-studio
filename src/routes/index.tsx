@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 import { AfterFilm } from "@/components/after-film";
-import { Ladder } from "@/components/ladder";
 import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
 import { SiteMenu } from "@/components/site-menu";
 import { scrollScrubScenes, scrollScrubTheme } from "@/scroll-scrub-scenes";
@@ -299,10 +298,6 @@ function Index() {
     <>
       <SiteMenu />
       <main>
-        {/* The ladder is a child of <main> rather than of the section below
-            the film, so it can hang from the very top of the page and run
-            over the film: the descent starts with the first scroll. */}
-        <Ladder />
         <ScrollScrub scenes={scrollScrubScenes} theme={scrollScrubTheme} />
         <AfterFilm />
       </main>
