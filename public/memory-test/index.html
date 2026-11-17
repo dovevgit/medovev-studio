@@ -120,7 +120,11 @@ h1 {
 .card:focus-visible { outline: 2px solid var(--gilt); outline-offset: 3px; }
 
 .inner {
+  /* A span is inline by default, and an inline box ignores width and height:
+   * left that way it measures 0x0, and the two absolutely positioned faces
+   * resolve inset:0 against nothing and vanish. */
   position: relative;
+  display: block;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
