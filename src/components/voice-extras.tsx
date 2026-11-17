@@ -16,7 +16,7 @@ import { SHOWREEL, SPONSOR_REELS, VOICE_SAMPLES } from "@/page-copy";
  */
 
 /** A YouTube still that becomes a player on click. */
-function Reel({ id, label }: { id: string; label: string }) {
+function Reel({ eager, id, label }: { eager?: boolean; id: string; label: string }) {
   const [playing, setPlaying] = useState(false);
 
   if (playing) {
@@ -43,7 +43,10 @@ function Reel({ id, label }: { id: string; label: string }) {
         <img
           alt=""
           height={360}
-          loading="lazy"
+          // The showreel is the first thing on the page, so it is not
+          // deferred: a lazy image above the fold is a blank box while the
+          // browser works out that it was visible all along.
+          loading={eager ? "eager" : "lazy"}
           src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
           width={480}
         />
@@ -212,7 +215,7 @@ export function VoiceExtras() {
   return (
     <>
       <section className="page__showreel">
-        <Reel id={SHOWREEL.id} label={SHOWREEL.label} />
+        <Reel eager id={SHOWREEL.id} label={SHOWREEL.label} />
         <div className="showreel__links">
           <a
             className="page-link"
