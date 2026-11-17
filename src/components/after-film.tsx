@@ -65,7 +65,20 @@ export function AfterFilm() {
           title="נכסים דיגיטליים"
         />
 
-        {/* The remaining six still wear the first, plain treatment. They
+        <FlagCard
+          art="/assets/flag-ai.webp"
+          artHeight={469}
+          artWidth={1400}
+          cta="פתרונות AI"
+          /* The pawn stands on the left and the gold corners close in on the
+             right: the field is 22%-78% across, 12%-78% down. */
+          field={{ bottom: 26, left: 24, right: 24, top: 16 }}
+          href="/services/ai"
+          line="צ'אטבוטים, סוכנים ואוטומציות"
+          title="פתרונות AI מתקדמים"
+        />
+
+        {/* The remaining five still wear the first, plain treatment. They
             stay on the page so the site is whole while each one is redesigned
             as its own banner, in turn. */}
         <ul className="services">
@@ -73,7 +86,8 @@ export function AfterFilm() {
             (service) =>
               service.slug !== "strategy" &&
               service.slug !== "digital" &&
-              service.slug !== "web",
+              service.slug !== "web" &&
+              service.slug !== "ai",
           ).map((service) => (
             <li className="service" key={service.slug}>
               <h3 className="service__title">{service.title}</h3>
