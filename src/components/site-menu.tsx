@@ -80,11 +80,14 @@ export function SiteMenu() {
 
   return (
     <>
-      {/* The mark alone, not the whole lockup: at the height a corner slot
-          allows, the words under the monogram would be four pixels tall. The
-          lockup gets its room inside the panel instead. */}
+      {/* Both lockups ship, and the viewport picks one. A desktop corner has
+          the height for the words under the monogram; a phone's does not --
+          there they would come out a few pixels tall, so the phone gets the
+          mark on its own. The link carries the name for a screen reader, so
+          neither image needs alt text of its own. */}
       <a aria-label="לדף הבית" className="site-brand" href="/">
-        <img alt="DG Workflow System Studio" height={287} src="/assets/logo-mark.webp" width={360} />
+        <img alt="" className="site-brand__full" height={446} src="/assets/logo-full.webp" width={760} />
+        <img alt="" className="site-brand__mark" height={287} src="/assets/logo-mark.webp" width={360} />
       </a>
 
       <button
