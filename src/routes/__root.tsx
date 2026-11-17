@@ -6,8 +6,6 @@ import {
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
-import { Analytics } from "@vercel/analytics/react";
-
 import { AccessibilityMenu } from "@/components/accessibility-menu";
 import { LanguagePicker } from "@/components/language";
 import { SiteFooter } from "@/components/site-footer";
@@ -47,13 +45,6 @@ export const Route = createRootRoute({
       { href: "/assets/favicon.png", rel: "icon", type: "image/png" },
       { href: "/assets/apple-touch-icon.png", rel: "apple-touch-icon" },
       { href: "/assets/manifest.webmanifest", rel: "manifest" },
-    ],
-    scripts: [
-      // The same tracker the other two sites use, carried over as it is. It
-      // listens on the document for clicks and scroll depth, so it needs no
-      // hook into the components and nothing to maintain alongside them.
-      // It records what KIND of thing happened and on which page, never who.
-      { defer: true, src: "/assets/track.js" },
     ],
     meta: [
       { charSet: "utf-8" },
@@ -108,8 +99,9 @@ function RootComponent() {
       <SiteFooter />
       <AccessibilityMenu />
       <LanguagePicker />
-      {/* Supplies window.va, which the tracker above reports through. */}
-      <Analytics />
+      {/* No analytics, deliberately. This is a portfolio piece, and the one
+          thing on it that was metered by use had no job here: nothing on the
+          site now counts anything or calls anything. */}
     </>
   );
 }

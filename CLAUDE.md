@@ -11,7 +11,10 @@ medovev.com and carries this same Hebrew copy, so:
   medovev.com;
 - the contact form stores nothing and says so. There is no `api/` directory
   and there must not be one: a live write path into the studio's database has
-  no business on a demonstration site.
+  no business on a demonstration site;
+- **nothing on the site is metered by use.** No analytics, no functions, no
+  database — the whole site is static files, so showing it to people cannot
+  turn into a bill. Do not add anything billed per request or per event.
 
 ## Before every push
 
