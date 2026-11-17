@@ -1,6 +1,17 @@
 # Rules for this repository
 
-medovev.com — a Hebrew, right-to-left site. **Most visitors are on phones.**
+A Hebrew, right-to-left site. **Most visitors are on phones.**
+
+**This is a portfolio piece, not a site in use.** The studio's real site is
+medovev.com and carries this same Hebrew copy, so:
+
+- every page says `noindex` and `robots.txt` disallows everything — two sites
+  competing over one set of words would cost the real one its position;
+- `canonical` and `og:` point at this deployment's own address, never at
+  medovev.com;
+- the contact form stores nothing and says so. There is no `api/` directory
+  and there must not be one: a live write path into the studio's database has
+  no business on a demonstration site.
 
 ## Before every push
 
@@ -16,9 +27,8 @@ fix the page and do not push.
   Horizontal overflow is invisible on a desktop: the page looks fine until
   someone opens it on a phone and finds they can drag the whole site sideways.
 - **`scripts/check_links.py`** — fails if any internal link or asset points at
-  something that is not there, if an image has no `alt`, if a page is missing
-  its title/description/canonical/og:image/h1, or if a URL the **old** site
-  published would 404 here.
+  something that is not there, if an image has no `alt`, or if a page is
+  missing its title/description/canonical/og:image/h1.
 - **`scripts/check_i18n.py`** — switches the page to English and to Russian and
   checks it again AFTER opening the menu and filtering the gallery. The
   translation is a pass over the rendered page, so the failure mode is a React

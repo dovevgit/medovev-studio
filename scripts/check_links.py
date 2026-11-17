@@ -1,29 +1,19 @@
 #!/usr/bin/env python3
-"""Migration guard: nothing the site points at may be missing.
+"""Nothing the site points at may be missing.
 
-Three questions, asked of the build output rather than of the source, so the
-answers are about what visitors are actually served:
+Asked of the build output rather than of the source, so the answers are about
+what visitors are actually served:
 
 1. Does every internal link land on a page that exists?
 2. Does every image, stylesheet, script and media file referenced exist?
-3. Does every URL the OLD site published -- its sitemap and its redirects --
-   still resolve here, by a page of the same path or by a redirect in
-   vercel.json?
-
-The third is the one that matters on the day the domain moves. An inbound
-link or a search result pointing at an old URL that 404s is a visitor lost
-and a position lost, and neither shows up in any test that only looks at the
-new site's own pages.
+3. Does every picture say what it is, and every page carry its head tags?
 
 Usage:  npm run build && python3 scripts/check_links.py
-        python3 scripts/check_links.py --old ../path/to/old-site
 """
-import argparse
-import json
 import pathlib
 import re
 import sys
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote
 
 DIST = pathlib.Path("dist/client")
 
@@ -97,41 +87,7 @@ def check_head(pages):
     return bad
 
 
-def old_urls(old_root: pathlib.Path):
-    """What the old site published: its sitemap, plus the sources of its
-    redirects, which are the URLs from the site before it."""
-    urls = set()
-    sm = old_root / "sitemap.xml"
-    if sm.exists():
-        for loc in re.findall(r"<loc>([^<]+)</loc>", sm.read_text("utf-8")):
-            urls.add(urlparse(loc).path)
-    vj = old_root / "vercel.json"
-    if vj.exists():
-        for r in json.loads(vj.read_text("utf-8")).get("redirects", []):
-            src = r["source"]
-            if "(" not in src:  # skip the catch-all host rules
-                urls.add(unquote(src))
-    return urls
-
-
-def check_old(old_root: pathlib.Path, pages):
-    """Every old URL still goes somewhere."""
-    cfg = json.loads(pathlib.Path("vercel.json").read_text("utf-8"))
-    sources = {unquote(r["source"]) for r in cfg.get("redirects", [])}
-    lost = []
-    for url in sorted(old_urls(old_root)):
-        path = url.rstrip("/") or "/"
-        if path in pages or url in sources or path in {unquote(s).rstrip("/") for s in sources}:
-            continue
-        lost.append(url)
-    return lost
-
-
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--old", default="/home/claude/business-manager/offers")
-    args = ap.parse_args()
-
     if not DIST.exists():
         print("FAIL  dist/client: not built. Run `npm run build` first.")
         sys.exit(1)
@@ -165,19 +121,6 @@ def main():
             print(f"   - {where}  has no {what}")
     else:
         print("OK    every page has a title, description, canonical, og:image and an h1")
-
-    old_root = pathlib.Path(args.old)
-    if old_root.exists():
-        lost = check_old(old_root, pages)
-        if lost:
-            failed = True
-            print(f"FAIL  {len(lost)} URL(s) the old site published would 404 here")
-            for url in lost[:20]:
-                print(f"   - {url}")
-        else:
-            print(f"OK    every URL the old site published still resolves ({len(old_urls(old_root))} checked)")
-    else:
-        print(f"SKIP  old site not found at {old_root}; migration coverage not checked")
 
     sys.exit(1 if failed else 0)
 

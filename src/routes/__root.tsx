@@ -14,9 +14,15 @@ import { SiteFooter } from "@/components/site-footer";
 
 import appCss from "../styles.css?url";
 
-/** Where the site will live. Absolute URLs are required in og: tags and in
- *  a canonical link -- a relative one is ignored by most crawlers. */
-const SITE = "https://medovev.com";
+/** This site's own address.
+ *
+ * NOT medovev.com. This is a demonstration build, and the studio's real site
+ * lives at that domain with this same Hebrew copy on it. Pointing a canonical
+ * link there would tell a crawler that the real version of this page is
+ * somewhere it is not, and pointing it here while letting the page be indexed
+ * would set two sites competing over one set of words. So: the truthful
+ * address, and noindex below. */
+const SITE = "https://medovev-studio.vercel.app";
 
 const TITLE = "סטודיו לאסטרטגיה עסקית | דובב גרינברג";
 const DESCRIPTION =
@@ -66,6 +72,9 @@ export const Route = createRootRoute({
       { content: "630", property: "og:image:height" },
       { content: "summary_large_image", name: "twitter:card" },
       { content: "#0b0a09", name: "theme-color" },
+      // A demonstration carrying a live site's copy must stay out of the
+      // index, or it competes with that site over its own words.
+      { content: "noindex, nofollow", name: "robots" },
       { content: url, property: "og:url" },
     ],
     };

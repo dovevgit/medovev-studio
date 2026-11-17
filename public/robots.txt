@@ -1,5 +1,5 @@
+# A demonstration build. The studio's real site is medovev.com and carries
+# this same Hebrew copy, so this one stays out of search rather than
+# competing with it over its own words. Every page also says noindex.
 User-agent: *
-Allow: /
-Disallow: /api/
-
-Sitemap: https://medovev.com/sitemap.xml
+Disallow: /

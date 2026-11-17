@@ -3,11 +3,16 @@ import { type FormEvent, useState } from "react";
 type Status = { kind: "error" | "ok"; text: string } | null;
 
 const SAID = {
-  error: "משהו השתבש, נסו שוב או כתבו לנו בוואטסאפ.",
-  invalid: "נא לבדוק את השם, הטלפון והמייל",
-  limit: "פנית אלינו כבר כמה פעמים היום. אפשר לכתוב לנו בוואטסאפ.",
-  missing: "נא למלא שם וטלפון תקין",
+  // Said when a bot fills the hidden field: the same polite nothing the real
+  // form gives it, so the demonstration behaves the way the real one does.
   ok: "תודה, קיבלנו. נחזור אליך בהקדם.",
+  // Said to everyone else. This is a portfolio piece, so the form shows what
+  // sending feels like and says plainly that it kept nothing -- a form that
+  // answers "we will get back to you" and then does not is a small lie told
+  // to whoever tried it.
+  demo: "הטופס עובד — זהו אתר להצגה, אז הפרטים לא נשמרו ולא נשלחו לאיש.",
+  invalid: "נא לבדוק את השם, הטלפון והמייל",
+  missing: "נא למלא שם וטלפון תקין",
 };
 
 /**
@@ -20,10 +25,15 @@ const SAID = {
  * cloth inside it: nowhere near four fields. See the stylesheet for how the
  * three layers meet.
  *
- * Where it goes when you press send: `/api/contact`, the same endpoint the
- * old site uses, carried over with it. It writes the lead to the leads
- * screen in the business-management system and, when the two Resend values
- * are set in the environment, sends the notification email as well.
+ * Where it goes when you press send: NOWHERE. This site is a demonstration,
+ * not the studio's own site, so the form shows what sending feels like and
+ * stores nothing. It used to post to the live /api/contact, which writes to
+ * the real leads table -- a public demo wired into a production inbox turns
+ * every person trying the form into a lead somebody has to answer.
+ *
+ * The endpoint is gone from the repository too, rather than merely unused:
+ * a live write path into the studio's database has no business sitting on a
+ * demonstration site, called or not.
  */
 export function ContactBanner() {
   const [status, setStatus] = useState<Status>(null);
@@ -50,32 +60,14 @@ export function ContactBanner() {
       return;
     }
 
+    // The honeypot still decides, so the demonstration behaves the way the
+    // real form does for a bot: a polite nothing.
     setStatus(null);
     setSending(true);
-
-    try {
-      const answer = await fetch("/api/contact", {
-        body: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
-        method: "POST",
-      });
-      const result = (await answer.json()) as { ok?: boolean; reason?: string };
-
-      if (result.ok) {
-        form.reset();
-        setStatus({ kind: "ok", text: SAID.ok });
-        return;
-      }
-
-      const reason = result.reason === "limit" || result.reason === "invalid"
-        ? result.reason
-        : "error";
-      setStatus({ kind: "error", text: SAID[reason] });
-    } catch {
-      setStatus({ kind: "error", text: SAID.error });
-    } finally {
-      setSending(false);
-    }
+    await new Promise((done) => setTimeout(done, 450));
+    form.reset();
+    setStatus({ kind: "ok", text: body.website ? SAID.ok : SAID.demo });
+    setSending(false);
   };
 
   return (
