@@ -1,0 +1,30 @@
+name: Site checks
+
+# Fails (and GitHub emails the repo owner) if a change makes a page wider than
+# a phone screen, breaks a link, or drops a URL the old site published.
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm ci
+      - run: npm run build
+      - name: Install browser
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+      - name: Every page fits a phone screen
+        run: python3 scripts/check_mobile_width.py dist/client
+      - name: Nothing the site points at is missing
+        run: python3 scripts/check_links.py
