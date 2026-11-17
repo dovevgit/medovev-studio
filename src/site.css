@@ -327,8 +327,8 @@
   /* Standing on the rail, not inside it. */
   bottom: 100%;
   right: calc(clamp(0, var(--copy-progress, 0), 1) * 100%);
-  width: calc(var(--sentry-h, 2.9rem) * 0.7833);
-  height: var(--sentry-h, 2.9rem);
+  width: calc(var(--sentry-h, 3.3rem) * 0.7833);
+  height: var(--sentry-h, 3.3rem);
   /* Half his own width, so it is his FEET that track the progress and not
    * his left edge. */
   transform: translateX(50%);
@@ -355,7 +355,7 @@
 
 @media (hover: none) and (pointer: coarse), (max-width: 860px) {
   .ss-walker {
-    --sentry-h: 2.3rem;
+    --sentry-h: 2.7rem;
   }
 }
 
