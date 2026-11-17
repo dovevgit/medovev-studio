@@ -31,7 +31,7 @@ export function InnerPage({
   return (
     <>
       <SiteMenu />
-      <main className="page">
+      <main className="page" id="main">
         <header className="page__intro">
           <p className="page__eyebrow">{eyebrow}</p>
           <h1 className="page__title">{title}</h1>

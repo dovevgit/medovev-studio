@@ -2702,3 +2702,305 @@
   font-size: 0.88rem;
   letter-spacing: 0.04em;
 }
+
+/* ===========================================================================
+ * The accessibility menu.
+ *
+ * Every setting is a class on <html> and a rule here, so the work is a
+ * stylesheet the browser already knows how to apply rather than JavaScript
+ * walking the page.
+ *
+ * Text size is the clearest case: the site is built in `rem` throughout, so
+ * one number on the root element moves all of it. There is nothing to
+ * remember per element and nothing to put back on reset.
+ *
+ * Each override is scoped away from the menu itself with :not(.a11y-ui *),
+ * because a high-contrast page that also repaints its own accessibility
+ * panel leaves the person unable to find the switch they just pressed.
+ * ======================================================================== */
+html[data-a11y-font="on"] {
+  font-size: calc(100% * var(--a11y-scale, 1));
+}
+
+/* --- the colour modes ---------------------------------------------------- */
+html.a11y-high body *:not(.a11y-ui):not(.a11y-ui *):not(img):not(video):not(svg):not(svg *) {
+  border-color: #ff0 !important;
+  background-color: #000 !important;
+  box-shadow: none !important;
+  color: #ff0 !important;
+  text-shadow: none !important;
+}
+
+html.a11y-high body,
+html.a11y-high {
+  background: #000 !important;
+}
+
+html.a11y-high body a:not(.a11y-ui a),
+html.a11y-high body a *:not(.a11y-ui *) {
+  color: #0ff !important;
+}
+
+html.a11y-light body *:not(.a11y-ui):not(.a11y-ui *):not(img):not(video):not(svg):not(svg *) {
+  border-color: #000 !important;
+  background-color: #fff !important;
+  color: #000 !important;
+  text-shadow: none !important;
+}
+
+html.a11y-light body,
+html.a11y-light {
+  background: #fff !important;
+}
+
+html.a11y-light body a:not(.a11y-ui a),
+html.a11y-light body a *:not(.a11y-ui *) {
+  color: #0000c8 !important;
+}
+
+/* Inversion is a filter on the root, so pictures are inverted back: a
+ * photograph in negative is not a more readable photograph. */
+html.a11y-invert body {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html.a11y-invert img,
+html.a11y-invert video,
+html.a11y-invert picture,
+html.a11y-invert iframe {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html.a11y-gray body {
+  filter: grayscale(1);
+}
+
+/* --- the switches -------------------------------------------------------- */
+html.a11y-underline a:not(.a11y-ui a) {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+
+html.a11y-font body *:not(.a11y-ui):not(.a11y-ui *) {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+html.a11y-spacing body *:not(.a11y-ui):not(.a11y-ui *) {
+  letter-spacing: 0.06em !important;
+  line-height: 1.8 !important;
+  word-spacing: 0.16em !important;
+}
+
+html.a11y-headings :is(h1, h2, h3, h4, h5, h6):not(.a11y-ui *) {
+  background: rgba(255, 235, 59, 0.22) !important;
+  outline: 3px solid #e3b94a !important;
+  outline-offset: 4px;
+}
+
+html.a11y-focus :is(a, button, input, select, textarea, [tabindex]):focus {
+  outline: 4px solid #ff9800 !important;
+  outline-offset: 3px !important;
+}
+
+html.a11y-anim *,
+html.a11y-anim *::before,
+html.a11y-anim *::after {
+  animation: none !important;
+  scroll-behavior: auto !important;
+  transition: none !important;
+}
+
+html.a11y-cursor,
+html.a11y-cursor * {
+  cursor: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l7 18 2.6-7.4L20 10z' fill='%23000' stroke='%23fff' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E")
+      4 4,
+    auto !important;
+}
+
+/* The reading guide: a clear band with the rest of the page dimmed around
+ * it. The dimming is one enormous spread shadow rather than four elements. */
+.a11y-guide {
+  position: fixed;
+  z-index: 2147482000;
+  right: 0;
+  left: 0;
+  height: 46px;
+  border-top: 3px solid #e3b94a;
+  border-bottom: 3px solid #e3b94a;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.45);
+  clip-path: inset(-100vmax 0 -100vmax 0);
+  pointer-events: none;
+}
+
+/* --- the button and the panel -------------------------------------------- */
+.a11y-skip {
+  position: fixed;
+  z-index: 2147483000;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: 0.6rem;
+  background: #e3b94a;
+  color: #1b1309;
+  font-weight: 700;
+  text-decoration: none;
+  /* Off-screen until focused -- NOT by a large negative offset, which in a
+   * right-to-left page stretches the document sideways on a phone. */
+  transform: translateY(-150%);
+}
+
+.a11y-skip:focus {
+  transform: translateY(0);
+}
+
+.a11y-btn {
+  position: fixed;
+  z-index: 2147482500;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid rgba(227, 185, 74, 0.55);
+  border-radius: 999px;
+  background: #15100a;
+  color: #e3b94a;
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  place-items: center;
+}
+
+.a11y-btn:hover {
+  background: #22190d;
+}
+
+.a11y-panel {
+  position: fixed;
+  z-index: 2147482600;
+  right: 1rem;
+  bottom: calc(4.4rem + env(safe-area-inset-bottom));
+  width: min(20rem, calc(100vw - 2rem));
+  max-height: min(32rem, calc(100svh - 7rem));
+  padding: 1rem;
+  overflow-y: auto;
+  border: 1px solid rgba(227, 185, 74, 0.4);
+  border-radius: 1rem;
+  background: #15100a;
+  color: #efe6d5;
+  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.6);
+}
+
+.a11y-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.a11y-panel__title {
+  margin: 0;
+  color: #e3b94a;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.a11y-panel__close {
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 1px solid rgba(227, 185, 74, 0.3);
+  border-radius: 999px;
+  background: none;
+  color: #efe6d5;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.a11y-size {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+  padding: 0.5rem;
+  border: 1px solid rgba(227, 185, 74, 0.22);
+  border-radius: 0.7rem;
+}
+
+.a11y-size__btn {
+  min-width: 3rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid rgba(227, 185, 74, 0.35);
+  border-radius: 0.5rem;
+  background: rgba(227, 185, 74, 0.1);
+  color: #e3b94a;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.a11y-size__btn:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.a11y-size__read {
+  color: #c2b6a2;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.a11y-grid {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.a11y-opt {
+  padding: 0.55rem 0.4rem;
+  border: 1px solid rgba(227, 185, 74, 0.22);
+  border-radius: 0.55rem;
+  background: rgba(255, 248, 235, 0.04);
+  color: #ded3c0;
+  cursor: pointer;
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
+.a11y-opt[aria-pressed="true"] {
+  border-color: #e3b94a;
+  background: rgba(227, 185, 74, 0.18);
+  color: #f3dda0;
+  font-weight: 700;
+}
+
+.a11y-panel__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(227, 185, 74, 0.18);
+}
+
+.a11y-reset {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid rgba(227, 185, 74, 0.35);
+  border-radius: 999px;
+  background: none;
+  color: #e3b94a;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.a11y-statement {
+  color: #c2b6a2;
+  font-size: 0.82rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.page__updated {
+  color: var(--page-ink-soft);
+  font-size: 0.88rem;
+}

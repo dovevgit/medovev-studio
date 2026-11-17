@@ -24,7 +24,7 @@ export function PagePlaceholder({
   return (
     <>
       <SiteMenu />
-      <main className="stub">
+      <main className="stub" id="main">
         <div className="stub__inner">
           {eyebrow ? <p className="stub__eyebrow">{eyebrow}</p> : null}
           <h1 className="stub__title">{title}</h1>

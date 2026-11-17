@@ -340,7 +340,7 @@ function Index() {
   return (
     <>
       <SiteMenu />
-      <main>
+      <main id="main">
         <ScrollScrub scenes={scrollScrubScenes} theme={scrollScrubTheme} />
         <AfterFilm />
       </main>

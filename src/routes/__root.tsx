@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
+import { AccessibilityMenu } from "@/components/accessibility-menu";
 import { SiteFooter } from "@/components/site-footer";
 
 import appCss from "../styles.css?url";
@@ -61,6 +62,7 @@ function RootComponent() {
     <>
       <Outlet />
       <SiteFooter />
+      <AccessibilityMenu />
     </>
   );
 }
