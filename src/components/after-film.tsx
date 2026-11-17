@@ -21,7 +21,6 @@ export function AfterFilm() {
 
       <div className="after-film__body">
         <header className="services__head">
-          <p className="services__eyebrow">השירותים שלנו</p>
           <h2 className="services__title">פתרונות מקצה לקצה לצמיחה עסקית</h2>
         </header>
 

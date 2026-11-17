@@ -613,13 +613,6 @@
   text-align: center;
 }
 
-.services__eyebrow {
-  margin: 0 0 0.6rem;
-  color: var(--gilt);
-  font-size: clamp(0.82rem, 1.4vw, 0.95rem);
-  font-weight: 600;
-  letter-spacing: 0.22em;
-}
 
 .services__title {
   margin: 0;
