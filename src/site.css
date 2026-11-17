@@ -1610,8 +1610,10 @@
   inset: 0;
   z-index: 55;
   overflow-y: auto;
-  background: linear-gradient(180deg, #120d09 0%, #1d140c 100%);
-  color: #efe6d5;
+  /* The artwork's own backdrop, so the scroll at the head of the panel sits
+   * in the same room as the panel rather than on top of it. */
+  background: #241910;
+  color: #3a2a16;
   opacity: 0;
   visibility: hidden;
   transition: opacity 200ms ease, visibility 0s linear 200ms;
@@ -1624,10 +1626,41 @@
 }
 
 .site-menu__inner {
-  max-width: 54rem;
+  max-width: 46rem;
   margin: 0 auto;
-  padding: clamp(4rem, 9vw, 5.5rem) clamp(1.5rem, 6vw, 3rem)
-    clamp(3rem, 8vw, 5rem);
+  padding: clamp(3.5rem, 8vw, 5rem) clamp(0.9rem, 3vw, 2rem) clamp(2.5rem, 7vw, 4rem);
+}
+
+/* The scroll, whole and at its own proportions. Stretching the whole picture
+ * to whatever height the list happens to need would pull the two kings out
+ * of shape, so only the parchment below it stretches -- parchment is texture,
+ * and texture has no shape to lose. */
+.site-menu__crown {
+  position: relative;
+  display: grid;
+  aspect-ratio: 1672 / 941;
+  background: url("/assets/menu-scroll.webp") center / 100% 100% no-repeat;
+  place-items: center;
+}
+
+.site-menu__logo {
+  width: clamp(7rem, 26%, 13rem);
+  height: auto;
+  /* The lockup is drawn for a dark page; on parchment it needs its own
+   * ground rather than a filter, which would grey the gold. */
+  margin-top: -4%;
+}
+
+/* The sheet the links are written on. It is pulled up under the scroll's
+ * torn bottom edge so the two read as one piece of parchment. */
+.site-menu__sheet {
+  margin-top: -7%;
+  padding: clamp(1rem, 3vw, 1.6rem) clamp(1.4rem, 5vw, 3rem) clamp(1.6rem, 4vw, 2.4rem);
+  background: url("/assets/menu-parchment.webp") center / 100% 100% no-repeat;
+  /* The sheet's own torn edge at the foot, cut rather than drawn: a soft
+   * wedge out of each bottom corner reads as paper, a straight line reads as
+   * a box. */
+  clip-path: polygon(0 0, 100% 0, 100% 97%, 82% 100%, 54% 97.5%, 26% 100%, 0 96.5%);
 }
 
 .site-menu__list {
@@ -1637,65 +1670,79 @@
 }
 
 .site-menu__list a {
-  display: block;
-  padding: 0.42rem 0;
-  color: inherit;
-  font-size: clamp(1.25rem, 3.4vw, 1.75rem);
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0;
+  color: #3b2a14;
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
+  font-weight: 700;
   text-decoration: none;
   transition: color 140ms ease;
 }
 
 .site-menu__list a:hover,
 .site-menu__list a:focus-visible {
-  color: #e3b94a;
+  color: #8a5a10;
+}
+
+.site-menu__icon {
+  width: clamp(1.8rem, 6vw, 2.3rem);
+  height: auto;
+  flex: 0 0 auto;
+  /* The emblems are drawn on white and cut out of it, so on parchment they
+   * need a shadow to sit on the page rather than float above it. */
+  filter: drop-shadow(0 1px 2px rgba(60, 40, 14, 0.45));
 }
 
 .site-menu__heading {
-  margin: clamp(1.5rem, 4vw, 2.2rem) 0 0.5rem;
-  color: #a79c8c;
-  font-size: 0.85rem;
-  font-weight: 600;
+  margin: clamp(0.8rem, 2.5vw, 1.2rem) 0 0.3rem;
+  color: #7a5a22;
+  font-size: 0.78rem;
+  font-weight: 700;
   letter-spacing: 0.2em;
 }
 
 /* The nine services are the longest part of the menu. Two columns keep the
  * whole site reachable without scrolling the panel on a laptop. */
 .site-menu__list--services {
-  columns: 2;
-  column-gap: clamp(1.5rem, 4vw, 3rem);
+  display: grid;
+  gap: 0 clamp(0.8rem, 3vw, 2rem);
+  grid-template-columns: 1fr 1fr;
 }
 
-@media (max-width: 620px) {
+@media (max-width: 560px) {
   .site-menu__list--services {
-    columns: 1;
+    grid-template-columns: 1fr;
   }
 }
 
 .site-menu__list--services a {
-  font-size: clamp(1rem, 2.6vw, 1.18rem);
-  font-weight: 500;
+  font-size: clamp(0.9rem, 2.4vw, 1.05rem);
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .site-menu__list--quiet {
-  margin-top: clamp(1.5rem, 4vw, 2.2rem);
-  padding-top: 1rem;
-  border-top: 1px solid rgba(243, 239, 232, 0.14);
+  margin-top: clamp(0.9rem, 3vw, 1.4rem);
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(90, 62, 22, 0.3);
 }
 
 .site-menu__list--quiet a {
-  font-size: clamp(0.98rem, 2.4vw, 1.1rem);
-  font-weight: 500;
+  font-size: clamp(0.92rem, 2.3vw, 1.02rem);
+  font-weight: 600;
 }
 
 .site-menu__cta {
   display: inline-block;
-  margin-top: clamp(1.75rem, 4vw, 2.5rem);
-  padding: 0.75rem 2rem;
+  margin-top: clamp(1rem, 3vw, 1.6rem);
+  padding: 0.7rem 1.9rem;
+  border: 1px solid #8a5a10;
   border-radius: 999px;
-  background: #e3b94a;
+  background: linear-gradient(180deg, #e3b94a, #c08f23);
   color: #241a0b;
-  font-size: 1.02rem;
+  font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
 }
@@ -3022,4 +3069,13 @@ html.a11y-cursor * {
 .page__updated {
   color: var(--page-ink-soft);
   font-size: 0.88rem;
+}
+
+/* The page's own emblem, above its headline. */
+.page__icon {
+  display: block;
+  width: clamp(4.2rem, 13vw, 5.6rem);
+  height: auto;
+  margin: 0 auto clamp(0.8rem, 2.5vw, 1.2rem);
+  filter: drop-shadow(0 0.4rem 0.9rem rgba(0, 0, 0, 0.55));
 }

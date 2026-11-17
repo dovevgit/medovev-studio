@@ -17,6 +17,14 @@ export type ServiceEntry = {
   blurb: string;
 };
 
+/**
+ * Each service's emblem. The file is named after the slug, so a service's
+ * icon is derivable rather than listed: /assets/svc-<slug>.webp.
+ */
+export function serviceIcon(slug: string) {
+  return `/assets/svc-${slug}.webp`;
+}
+
 export const SERVICES: ServiceEntry[] = [
   {
     blurb: "הבנה עמוקה של העסק והמלצות לפעולה",

@@ -5,6 +5,7 @@ import {
   PAGES,
   SERVICE_LINKS,
   WHATSAPP_URL,
+  serviceIcon,
   type MenuLink,
 } from "@/site-content";
 
@@ -116,52 +117,77 @@ export function SiteMenu() {
         role="dialog"
       >
         <nav className="site-menu__inner">
-          <img
-            alt="DG Workflow System Studio"
-            className="site-menu__logo"
-            height={446}
-            src="/assets/logo-full.webp"
-            width={760}
-          />
+          {/* The scroll stands at the head of the panel, whole and at its own
+              proportions, and the parchment it is written on carries on down
+              behind the links. Stretching the whole picture to whatever
+              height the list happens to need would have pulled the two kings
+              out of shape; letting the parchment alone carry the stretch
+              costs nothing, because parchment is texture and texture does
+              not have a shape to lose. */}
+          <div className="site-menu__crown">
+            <img
+              alt="DG Workflow System Studio"
+              className="site-menu__logo"
+              height={446}
+              src="/assets/logo-full.webp"
+              width={760}
+            />
+          </div>
 
-          <ul className="site-menu__list">
-            {PAGES.map((page) => (
-              <MenuItem key={page.href} link={page} onNavigate={() => setOpen(false)} />
-            ))}
-          </ul>
+          <div className="site-menu__sheet">
+            <ul className="site-menu__list">
+              {PAGES.map((page) => (
+                <MenuItem key={page.href} link={page} onNavigate={() => setOpen(false)} />
+              ))}
+            </ul>
 
-          <p className="site-menu__heading">השירותים</p>
-          <ul className="site-menu__list site-menu__list--services">
-            {SERVICE_LINKS.map((service) => (
-              <MenuItem
-                key={service.href}
-                link={service}
-                onNavigate={() => setOpen(false)}
-              />
-            ))}
-          </ul>
+            <p className="site-menu__heading">השירותים</p>
+            <ul className="site-menu__list site-menu__list--services">
+              {SERVICE_LINKS.map((service) => (
+                <MenuItem
+                  icon={serviceIcon(service.href.split("/").pop() ?? "")}
+                  key={service.href}
+                  link={service}
+                  onNavigate={() => setOpen(false)}
+                />
+              ))}
+            </ul>
 
-          <ul className="site-menu__list site-menu__list--quiet">
-            {ELSEWHERE.map((place) => (
-              <MenuItem key={place.href} link={place} onNavigate={() => setOpen(false)} />
-            ))}
-          </ul>
+            <ul className="site-menu__list site-menu__list--quiet">
+              {ELSEWHERE.map((place) => (
+                <MenuItem key={place.href} link={place} onNavigate={() => setOpen(false)} />
+              ))}
+            </ul>
 
-          <a className="site-menu__cta" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
-            שיחת ייעוץ
-          </a>
+            <a className="site-menu__cta" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
+              שיחת ייעוץ
+            </a>
+          </div>
         </nav>
       </div>
     </>
   );
 }
 
-function MenuItem({ link, onNavigate }: { link: MenuLink; onNavigate: () => void }) {
+function MenuItem({
+  icon,
+  link,
+  onNavigate,
+}: {
+  icon?: string;
+  link: MenuLink;
+  onNavigate: () => void;
+}) {
+  // The emblem is decoration beside a link that already says what it is, so
+  // it carries no alt text of its own and is not announced twice.
+  const art = icon ? <img alt="" className="site-menu__icon" height={48} src={icon} width={48} /> : null;
+
   if (link.external) {
     return (
       <li>
         <a href={link.href} onClick={onNavigate} rel="noreferrer" target="_blank">
-          {link.label}
+          {art}
+          <span>{link.label}</span>
           <span className="site-menu__away"> (נפתח בלשונית חדשה)</span>
         </a>
       </li>
@@ -175,7 +201,8 @@ function MenuItem({ link, onNavigate }: { link: MenuLink; onNavigate: () => void
   return (
     <li>
       <a href={link.href} onClick={onNavigate}>
-        {link.label}
+        {art}
+        <span>{link.label}</span>
       </a>
     </li>
   );

@@ -4,6 +4,7 @@ import { Cta, InnerPage, Lists, Prose, Steps } from "@/components/inner-page";
 import { PagePlaceholder } from "@/components/page-placeholder";
 import { VoiceExtras } from "@/components/voice-extras";
 import { SERVICE_PAGES } from "@/page-copy";
+import { serviceIcon } from "@/site-content";
 
 export const Route = createFileRoute("/services/$slug")({
   component: ServicePage,
@@ -20,7 +21,12 @@ function ServicePage() {
   }
 
   return (
-    <InnerPage eyebrow="השירותים שלנו" lead={page.lead} title={page.title}>
+    <InnerPage
+      eyebrow="השירותים שלנו"
+      icon={serviceIcon(slug)}
+      lead={page.lead}
+      title={page.title}
+    >
       {/* The voice page is the one that has to be heard, not only read:
           the showreel, the telephony samples and the reels go above its
           prose, where the old site puts them. */}

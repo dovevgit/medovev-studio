@@ -20,11 +20,14 @@ import { WHATSAPP_CONSULT, WHATSAPP_HELLO } from "@/site-content";
 export function InnerPage({
   children,
   eyebrow,
+  icon,
   lead,
   title,
 }: {
   children: ReactNode;
   eyebrow: string;
+  /** The page's own emblem, above the headline. */
+  icon?: string;
   lead?: string;
   title: string;
 }) {
@@ -33,6 +36,9 @@ export function InnerPage({
       <SiteMenu />
       <main className="page" id="main">
         <header className="page__intro">
+          {/* Decoration above a headline that already names the page, so it
+              carries no alt text and is not read out twice. */}
+          {icon ? <img alt="" className="page__icon" height={88} src={icon} width={88} /> : null}
           <p className="page__eyebrow">{eyebrow}</p>
           <h1 className="page__title">{title}</h1>
           {lead ? <p className="page__lead">{lead}</p> : null}
