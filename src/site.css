@@ -1099,7 +1099,57 @@
 
 @media (max-width: 860px) {
   .memory__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * The board has to fit a phone screen whole.
+ *
+ * A memory game you have to scroll is not a memory game: you cannot hold a
+ * board in your head that you can only ever see half of. Eighteen cards at
+ * three to four, three across, come to about 990px of board -- more than a
+ * phone has in total, let alone after the heading.
+ *
+ * Six across brings it to roughly 240px, which fits with room to spare. The
+ * cost is the name: at that width it would set at five pixels. So on a phone
+ * the card carries its emblem alone, the line under the board does the
+ * naming when a pair is found, and the emblem gets the space the name used
+ * to take.
+ * ------------------------------------------------------------------------ */
+@media (max-width: 620px) {
+  .memory {
+    margin-top: clamp(2.5rem, 7vw, 3.5rem);
+  }
+
+  .memory__lede {
+    font-size: 0.88rem;
+  }
+
+  .memory__bar {
+    margin-bottom: 0.9rem;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .memory__grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.3rem;
+  }
+
+  .memory__face--front {
+    gap: 0;
+    padding: 9% 11% 11%;
+  }
+
+  .memory__name {
+    display: none;
+  }
+
+  .memory__toast {
+    min-height: 3rem;
+    margin-top: 0.9rem;
+    font-size: 0.88rem;
   }
 }
 
