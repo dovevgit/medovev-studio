@@ -52,12 +52,28 @@ export function AfterFilm() {
           title="נוכחות דיגיטלית"
         />
 
-        {/* The remaining seven still wear the first, plain treatment. They
+        <FlagCard
+          art="/assets/flag-assets.webp"
+          artHeight={469}
+          artWidth={1400}
+          cta="נכסים דיגיטליים"
+          /* The queen stands on the right, reaching in from 67%: the field is
+             13%-67% across, 12%-80% down. */
+          field={{ bottom: 24, left: 15, right: 35, top: 16 }}
+          href="/services/web"
+          line="אתרים, אפליקציות ורשתות חברתיות"
+          title="נכסים דיגיטליים"
+        />
+
+        {/* The remaining six still wear the first, plain treatment. They
             stay on the page so the site is whole while each one is redesigned
             as its own banner, in turn. */}
         <ul className="services">
           {SERVICES.filter(
-            (service) => service.slug !== "strategy" && service.slug !== "digital",
+            (service) =>
+              service.slug !== "strategy" &&
+              service.slug !== "digital" &&
+              service.slug !== "web",
           ).map((service) => (
             <li className="service" key={service.slug}>
               <h3 className="service__title">{service.title}</h3>
