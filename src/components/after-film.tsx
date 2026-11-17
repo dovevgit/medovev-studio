@@ -103,7 +103,23 @@ export function AfterFilm() {
           title="הפקות וידאו"
         />
 
-        {/* The remaining three still wear the first, plain treatment. They
+        {/* Out of order for now: photography and podcasts still wear the
+            plain treatment, and this one slots in behind them once they
+            have banners of their own. */}
+        <FlagCard
+          art="/assets/flag-voice.webp"
+          artHeight={469}
+          artWidth={1400}
+          cta="קריינות מקצועית"
+          /* The microphone stands on the right from 79%, and the gold
+             corners reach in at each end: the field is 20%-68%. */
+          field={{ bottom: 27, left: 20, right: 32, top: 16 }}
+          href="/services/voice"
+          line="הקריין המושמע ביותר בישראל"
+          title="קריינות מקצועית"
+        />
+
+        {/* The remaining two still wear the first, plain treatment. They
             stay on the page so the site is whole while each one is redesigned
             as its own banner, in turn. */}
         <ul className="services">
@@ -114,7 +130,8 @@ export function AfterFilm() {
               service.slug !== "web" &&
               service.slug !== "ai" &&
               service.slug !== "implementer" &&
-              service.slug !== "video",
+              service.slug !== "video" &&
+              service.slug !== "voice",
           ).map((service) => (
             <li className="service" key={service.slug}>
               <h3 className="service__title">{service.title}</h3>
