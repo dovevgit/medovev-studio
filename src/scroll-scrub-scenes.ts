@@ -29,7 +29,7 @@ export const scrollScrubScenes: ScrollScrubScene[] = [
     label: "אסטרטגיה",
     linger: 0.2,
     mobileClip: "/assets/world/scene-01-mobile.mp4",
-    mobileObjectPosition: "50% 26%",
+    mobileObjectPosition: "50% 30%",
     mobilePoster: "/assets/world/scene-01-mobile-poster.png",
     poster: "/assets/world/scene-01-poster.png",
     scroll: 2.2,

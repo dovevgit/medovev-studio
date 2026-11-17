@@ -98,6 +98,30 @@ function useChapterCopyLayer() {
       stage.append(layer);
     }
 
+    // The scroll cue lives in the stage so it stays pinned for the whole
+    // journey and leaves with it. Both pieces are decorative: the rail
+    // repeats what the scrollbar already says, and the word is for the first
+    // moment only, so neither is announced.
+    if (!stage.querySelector(".ss-cue")) {
+      const cue = document.createElement("div");
+      cue.className = "ss-cue";
+      cue.setAttribute("aria-hidden", "true");
+      const word = document.createElement("span");
+      word.textContent = "גלול";
+      const chevron = document.createElement("span");
+      chevron.className = "ss-cue__chevron";
+      cue.append(word, chevron);
+
+      const rail = document.createElement("div");
+      rail.className = "ss-rail";
+      rail.setAttribute("aria-hidden", "true");
+      const fill = document.createElement("span");
+      fill.className = "ss-rail__fill";
+      rail.append(fill);
+
+      stage.append(cue, rail);
+    }
+
 
     const chapters = [
       ...root.querySelectorAll<HTMLElement>(".scroll-scrub__chapter"),

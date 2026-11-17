@@ -243,7 +243,7 @@
 
     align-items: flex-start;
     justify-content: flex-start;
-    padding: calc(var(--box-y) + var(--box-h) + 2.9rem)
+    padding: calc(var(--box-y) + var(--box-h) + 2rem)
       max(1.25rem, env(safe-area-inset-right))
       calc(1.5rem + env(safe-area-inset-bottom))
       max(1.25rem, env(safe-area-inset-left));
@@ -256,6 +256,97 @@
 @media (prefers-reduced-motion: reduce) {
   .ss-copy-slot {
     opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * The scroll cue, on phones.
+ *
+ * A phone shows the film as a strip with the copy beneath it, and what is
+ * left under the copy is empty black. Two things were wrong with that: the
+ * band read as the end of the page, and nothing told the visitor that their
+ * thumb was doing anything -- the film changes, but slowly enough that
+ * someone who is not watching it thinks the page is stuck.
+ *
+ * So the band gets the one thing it was missing: a rail that fills as the
+ * journey runs, and, for the first few dozen pixels only, the word and the
+ * chevron that say which way to go. Both are driven by `--copy-progress`,
+ * the same value the headlines read, so there is no second scroll listener.
+ *
+ * Both carry a fallback in `var()`: before hydration the property does not
+ * exist yet, and without one the rail would render full width -- a gold bar
+ * across the screen -- for the first frame.
+ * ------------------------------------------------------------------------ */
+.ss-cue,
+.ss-rail {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse), (max-width: 860px) {
+  .ss-cue {
+    position: absolute;
+    right: 0;
+    bottom: calc(2.6rem + env(safe-area-inset-bottom));
+    left: 0;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    color: rgba(241, 232, 214, 0.6);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+    opacity: clamp(0, calc(1 - var(--copy-progress, 0) / 0.012), 1);
+    transition: opacity 0.35s ease;
+  }
+
+  .ss-cue__chevron {
+    width: 0.62rem;
+    height: 0.62rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    animation: ss-cue-bob 1.8s ease-in-out infinite;
+  }
+
+  .ss-rail {
+    position: absolute;
+    right: 0;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    left: 0;
+    z-index: 6;
+    display: block;
+    height: 2px;
+    margin-inline: 1.5rem;
+    border-radius: 999px;
+    background: rgba(241, 232, 214, 0.14);
+    pointer-events: none;
+  }
+
+  .ss-rail__fill {
+    display: block;
+    width: calc(clamp(0, var(--copy-progress, 0), 1) * 100%);
+    height: 100%;
+    border-radius: 999px;
+    background: #c9a042;
+  }
+}
+
+@keyframes ss-cue-bob {
+  0%,
+  100% {
+    transform: rotate(45deg) translate(0, 0);
+  }
+
+  50% {
+    transform: rotate(45deg) translate(0.2rem, 0.2rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-cue__chevron {
+    animation: none;
+    transform: rotate(45deg);
   }
 }
 
