@@ -24,13 +24,16 @@ export function AfterFilm() {
       <div aria-hidden="true" className="after-film__dawn" />
 
       <div className="after-film__body">
-        <Rappel />
+        {/* The rope's lane ends where this wrapper does -- at the top of the
+            game. Everything the knight descends past lives inside it. */}
+        <div className="descent">
+          <Rappel />
 
-        <header className="services__head">
+          <header className="services__head">
           <h2 className="services__title">פתרונות מקצה לקצה לצמיחה עסקית</h2>
-        </header>
+          </header>
 
-        <FlagCard
+          <FlagCard
           art="/assets/flag-strategy.webp"
           artHeight={469}
           artWidth={1400}
@@ -41,9 +44,9 @@ export function AfterFilm() {
           href="/services/strategy"
           line="תוכנית פעולה אמיתית"
           title="קודם כל אסטרטגיה"
-        />
+          />
 
-        <FlagCard
+          <FlagCard
           art="/assets/flag-digital.webp"
           artHeight={469}
           artWidth={1400}
@@ -55,9 +58,9 @@ export function AfterFilm() {
           href="/services/digital"
           line="להיות בכל מקום ולדבר באותה שפה"
           title="נוכחות דיגיטלית"
-        />
+          />
 
-        <FlagCard
+          <FlagCard
           art="/assets/flag-assets.webp"
           artHeight={469}
           artWidth={1400}
@@ -68,9 +71,9 @@ export function AfterFilm() {
           href="/services/web"
           line="אתרים, אפליקציות ורשתות חברתיות"
           title="נכסים דיגיטליים"
-        />
+          />
 
-        <FlagCard
+          <FlagCard
           art="/assets/flag-ai.webp"
           artHeight={469}
           artWidth={1400}
@@ -81,9 +84,9 @@ export function AfterFilm() {
           href="/services/ai"
           line="צ'אטבוטים, סוכנים ואוטומציות"
           title="פתרונות AI מתקדמים"
-        />
+          />
 
-        <FlagCard
+          <FlagCard
           art="/assets/flag-implementer.webp"
           artHeight={469}
           artWidth={1400}
@@ -93,9 +96,9 @@ export function AfterFilm() {
           href="/services/implementer"
           line="הדרכה והטמעת תהליכים בארגון"
           title="מיישם AI"
-        />
+          />
 
-        <FlagCard
+          <FlagCard
           art="/assets/flag-video.webp"
           artHeight={469}
           artWidth={1400}
@@ -106,9 +109,9 @@ export function AfterFilm() {
           href="/services/video"
           line="מהקונספט ועד תוצר וידאו מושלם"
           title="הפקות וידאו"
-        />
+          />
 
-        <FlagCard
+          <FlagCard
           art="/assets/flag-photo.webp"
           artHeight={469}
           artWidth={1400}
@@ -120,9 +123,9 @@ export function AfterFilm() {
           href="/services/photo"
           line="נכסים, מוצרים ותדמית"
           title="צילום"
-        />
+          />
 
-        <FlagCard
+          <FlagCard
           art="/assets/flag-podcast.webp"
           artHeight={469}
           artWidth={1400}
@@ -133,9 +136,9 @@ export function AfterFilm() {
           href="/services/podcast"
           line="אפיון, הפקה וחיתוכים לסרטונים קצרים"
           title="פודקאסטים"
-        />
+          />
 
-        <FlagCard
+          <FlagCard
           art="/assets/flag-voice.webp"
           artHeight={469}
           artWidth={1400}
@@ -146,17 +149,17 @@ export function AfterFilm() {
           href="/services/voice"
           line="הקריין המושמע ביותר בישראל"
           title="קריינות מקצועית"
-        />
+          />
 
-        {/* Why us, about, and the ask -- all three on parchment.
-         *
-         * The banners above are the catalogue; this is the argument, and it
-         * wanted a different material to say so. Three small scrolls side by
-         * side for the reasons, then two wide ones, which share the one piece
-         * of art that has a gold rule around its field: the eye reads the
-         * repeat as "these two belong together". Every word here is the old
-         * site's, carried over unchanged. */}
-        <section className="why">
+          {/* Why us, about, and the ask -- all three on parchment.
+           *
+           * The banners above are the catalogue; this is the argument, and it
+           * wanted a different material to say so. Three small scrolls side by
+           * side for the reasons, then two wide ones, which share the one piece
+           * of art that has a gold rule around its field: the eye reads the
+           * repeat as "these two belong together". Every word here is the old
+           * site's, carried over unchanged. */}
+          <section className="why">
           <header className="why__head">
             <p className="why__eyebrow">למה לבחור בנו</p>
             <h2 className="why__title">
@@ -235,7 +238,8 @@ export function AfterFilm() {
             title="בואו נבנה יחד את המהלך העסקי הבא שלכם"
             wide
           />
-        </section>
+          </section>
+        </div>
 
         <MemoryGame />
 

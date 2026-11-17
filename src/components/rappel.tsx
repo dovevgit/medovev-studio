@@ -3,19 +3,19 @@ import { useEffect, useRef } from "react";
 /**
  * The knight who rappels down the page.
  *
- * A rope runs down the left margin from where the film ends to the contact
- * banner, and the knight hangs on it. He is `position: sticky`, so he holds
- * his place on the screen while the page scrolls past him -- what moves is
- * the rope behind him and his own hands, a frame at a time. Scrolling up
- * runs the cycle backwards and he climbs.
+ * A rope runs down the left margin from where the film ends to the memory
+ * game. He hangs on it, `position: sticky`, so he holds his place on the
+ * screen while the page scrolls past him -- what moves is the rope behind
+ * him and his own hands, a frame at a time. Scrolling up runs the cycle
+ * backwards and he climbs.
  *
- * The sprite is one strip of eight cells, every cell cut around the rope
- * rather than around the knight, so the rope in the picture lines up with
- * the rope the page draws above and below him.
+ * The rope sprite is one strip of eight cells, every cell cut around the
+ * rope rather than around the knight, so the rope in the picture lines up
+ * with the rope the page draws above and below him.
  *
- * At the foot of the rope sticky releases on its own and he arrives at the
- * bottom of the lane, where he swaps to the landing pose -- down on one
- * knee, beside the contact banner.
+ * At the foot of the rope he lets go, and from there he paces back and
+ * forth above the board -- a walk cycle on a timer, nothing to do with
+ * scroll any more, and clear of the cards.
  */
 
 /** Scroll distance for one full pull of the rope, in pixels. */
@@ -72,7 +72,10 @@ export function Rappel() {
   return (
     <div aria-hidden="true" className="rappel" ref={laneRef}>
       <div className="rappel__rope" />
-      <div className="rappel__knight" />
+      <div className="rappel__climber" />
+      <div className="rappel__walker">
+        <span />
+      </div>
     </div>
   );
 }

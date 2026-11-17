@@ -571,6 +571,11 @@
   --gilt: #c9a042;
 
   position: relative;
+  /* A guard: nothing in here may widen the page sideways. `clip` rather
+   * than `hidden` on purpose -- hidden would make this a scroll container,
+   * and the knight on the rope would then stick to it instead of to the
+   * window, which stops him holding his place on screen. */
+  overflow-x: clip;
   background: var(--wood);
   color: var(--wood-ink);
 }
@@ -1207,23 +1212,30 @@
  * The knight on the rope.
  *
  * The rope runs down the left margin of everything between the film and the
- * contact banner. The knight is sticky, so he keeps his place on the screen
- * while the page scrolls past him: what moves is the rope behind him and
- * his hands, which the script advances a frame at a time.
+ * memory game -- the `.descent` wrapper is exactly that stretch, so the lane
+ * ends where the board begins and the knight never covers a card.
  *
- * The sprite's own rope sits at 66.3% across each cell -- the cells were cut
- * around the rope, not around the knight -- so the page's rope is placed
+ * On the way down he is sticky: he keeps his place on the screen while the
+ * page scrolls past, and what moves is the rope behind him and his hands,
+ * which the script advances a frame at a time. At the foot he lets go, and
+ * the walker takes over -- a cycle on a timer, pacing above the board.
+ *
+ * The rope sprite's own rope sits at 66.3% across each cell (the cells were
+ * cut around the rope, not around the knight), so the page's rope is placed
  * there too and the two read as one line.
  * ======================================================================== */
+.descent {
+  position: relative;
+}
+
 .rappel {
   --knight-w: clamp(4.6rem, 8vw, 8rem);
+  --lane-x: clamp(0.25rem, 2vw, 3.5rem);
+  --pace: clamp(8rem, 26vw, 22rem);
 
   position: absolute;
-  top: 0;
-  bottom: 22rem;
-  left: clamp(0.25rem, 2vw, 3.5rem);
+  inset: 0;
   z-index: 2;
-  width: var(--knight-w);
   pointer-events: none;
 }
 
@@ -1231,19 +1243,20 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  /* Centred on the sprite's own rope: 66.3% across, 10.26% wide. */
-  left: 61.17%;
-  width: 10.26%;
+  /* Centred on the sprite's own rope: 66.3% across the cell, 10.26% wide. */
+  left: calc(var(--lane-x) + var(--knight-w) * 0.6117);
+  width: calc(var(--knight-w) * 0.1026);
   background: url("/assets/knight-rope-tile.webp") top center / 100% auto repeat-y;
-  /* It is a rope hanging from the film and paid out towards the ground, so
-   * it fades in at the top rather than being cut off square. */
-  mask-image: linear-gradient(180deg, transparent 0, #000 4rem, #000 calc(100% - 3rem), transparent 100%);
+  /* It hangs from the film and is paid out towards the ground, so it fades
+   * in at the top and out at the foot rather than being cut off square. */
+  mask-image: linear-gradient(180deg, transparent 0, #000 4rem, #000 calc(100% - 4rem), transparent 100%);
 }
 
-.rappel__knight {
+.rappel__climber {
   position: sticky;
   top: 26vh;
-  width: 100%;
+  margin-left: var(--lane-x);
+  width: var(--knight-w);
   aspect-ratio: 183 / 420;
   background-image: url("/assets/knight-rope.webp");
   background-repeat: no-repeat;
@@ -1255,36 +1268,74 @@
   filter: drop-shadow(0 0.6rem 1rem rgba(0, 0, 0, 0.55));
 }
 
-/* At the foot of the rope he lets go and lands on one knee. The pose is a
- * picture of its own, wider and shorter than a hanging man, so the box
- * changes shape with it. */
-.rappel[data-landed="true"] .rappel__knight {
-  /* Off the rope and onto the ground: absolute at the lane's foot, rather
-   * than sticky partway up the screen. */
+/* Off the rope. The walker carries the pacing and the sprite inside it
+ * carries the facing, because one transform cannot do both: a scaleX on the
+ * same box would mirror its own translateX and send him the wrong way. */
+.rappel__walker {
   position: absolute;
-  top: auto;
   bottom: 0;
-  width: 150%;
-  aspect-ratio: 320 / 297;
-  background-image: url("/assets/knight-land.webp");
-  background-size: 100% 100%;
-  background-position: 0 0;
+  left: var(--lane-x);
+  width: calc(var(--knight-w) * 1.1);
+  aspect-ratio: 220 / 300;
+  opacity: 0;
+  animation: knight-pace 5.4s linear infinite;
+  filter: drop-shadow(0 0.5rem 0.9rem rgba(0, 0, 0, 0.55));
 }
 
-.rappel[data-landed="true"] .rappel__rope {
-  mask-image: linear-gradient(180deg, transparent 0, #000 4rem, #000 calc(100% - 9rem), transparent 100%);
+.rappel__walker > span {
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/knight-walk.webp");
+  background-repeat: no-repeat;
+  background-size: 800% 100%;
+  animation: knight-step 0.9s steps(8) infinite,
+    knight-face 5.4s step-end infinite;
+}
+
+.rappel[data-landed="true"] .rappel__climber {
+  opacity: 0;
+}
+
+.rappel[data-landed="true"] .rappel__walker {
+  opacity: 1;
+}
+
+@keyframes knight-step {
+  from { background-position-x: 0%; }
+  to { background-position-x: 100%; }
+}
+
+@keyframes knight-pace {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(var(--pace)); }
+  100% { transform: translateX(0); }
+}
+
+/* step-end, so the turn happens at the end of each leg rather than easing
+ * through a mirror. */
+@keyframes knight-face {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(-1); }
+  100% { transform: scaleX(1); }
 }
 
 @media (max-width: 860px) {
   .rappel {
     --knight-w: clamp(3.4rem, 17vw, 5rem);
-
-    left: 0.1rem;
-    bottom: 26rem;
+    --lane-x: 0.1rem;
+    --pace: 9rem;
   }
 
-  .rappel__knight {
+  .rappel__climber {
     top: 22svh;
+  }
+
+  .rappel__walker {
+    animation-duration: 3.4s;
+  }
+
+  .rappel__walker > span {
+    animation-duration: 0.9s, 3.4s;
   }
 }
 
