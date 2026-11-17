@@ -14,6 +14,7 @@ import { Route as R404RouteImport } from './routes/404'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AccessibilityRouteImport } from './routes/accessibility'
 import { Route as ArticlesRouteImport } from './routes/articles'
+import { Route as PantoneRouteImport } from './routes/pantone'
 import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
@@ -43,6 +44,11 @@ const ArticlesRoute = ArticlesRouteImport.update({
   path: '/articles',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PantoneRoute = PantoneRouteImport.update({
+  id: '/pantone',
+  path: '/pantone',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrainingRoute = TrainingRouteImport.update({
   id: '/training',
   path: '/training',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
   '/articles': typeof ArticlesRouteWithChildren
+  '/pantone': typeof PantoneRoute
   '/training': typeof TrainingRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
   '/articles': typeof ArticlesRouteWithChildren
+  '/pantone': typeof PantoneRoute
   '/training': typeof TrainingRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
   '/articles': typeof ArticlesRouteWithChildren
+  '/pantone': typeof PantoneRoute
   '/training': typeof TrainingRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/accessibility'
     | '/articles'
+    | '/pantone'
     | '/training'
     | '/articles/$slug'
     | '/services/$slug'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/accessibility'
     | '/articles'
+    | '/pantone'
     | '/training'
     | '/articles/$slug'
     | '/services/$slug'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/accessibility'
     | '/articles'
+    | '/pantone'
     | '/training'
     | '/articles/$slug'
     | '/services/$slug'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AccessibilityRoute: typeof AccessibilityRoute
   ArticlesRoute: typeof ArticlesRouteWithChildren
+  PantoneRoute: typeof PantoneRoute
   TrainingRoute: typeof TrainingRoute
   ServicesSlugRoute: typeof ServicesSlugRoute
 }
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/articles'
       fullPath: '/articles'
       preLoaderRoute: typeof ArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pantone': {
+      id: '/pantone'
+      path: '/pantone'
+      fullPath: '/pantone'
+      preLoaderRoute: typeof PantoneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/training': {
@@ -212,6 +232,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AccessibilityRoute: AccessibilityRoute,
   ArticlesRoute: ArticlesRouteWithChildren,
+  PantoneRoute: PantoneRoute,
   TrainingRoute: TrainingRoute,
   ServicesSlugRoute: ServicesSlugRoute,
 }
