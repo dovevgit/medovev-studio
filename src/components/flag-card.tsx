@@ -60,22 +60,27 @@ export function FlagCard({
 
   return (
     <article className="flag-card">
-      <img
-        alt=""
-        className="flag-card__art"
-        height={artHeight}
-        src={art}
-        width={artWidth}
-      />
-      <div className="flag-card__text" style={placement}>
-        <h3 className="flag-card__title">{title}</h3>
-        <p className="flag-card__line">{line}</p>
+      {/* The stage is exactly the picture's box. Everything placed as a
+          percentage of the artwork is placed against THIS, not against the
+          card -- on a phone the card is taller than the picture, because the
+          button steps below it, and measuring against the card put the words
+          a fifth of the way down past where they belong. */}
+      <div className="flag-card__stage">
+        <img
+          alt=""
+          className="flag-card__art"
+          height={artHeight}
+          src={art}
+          width={artWidth}
+        />
+        <div className="flag-card__text" style={placement}>
+          <h3 className="flag-card__title">{title}</h3>
+          <p className="flag-card__line">{line}</p>
+        </div>
+        <a className="flag-card__cta" href={href} style={placement}>
+          {cta}
+        </a>
       </div>
-      {/* Separate from the words on purpose: on a phone they stay on the
-          cloth and only the button steps off it, below the picture. */}
-      <a className="flag-card__cta" href={href} style={placement}>
-        {cta}
-      </a>
     </article>
   );
 }
