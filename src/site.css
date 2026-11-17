@@ -675,12 +675,15 @@
 
 .scroll-card {
   container-type: inline-size;
-  margin: 0 auto;
 }
 
+/* The auto margin belongs to the wide ones alone. On a grid item an auto
+ * inline margin switches the item from stretch to shrink-to-fit, and the
+ * art inside asks for `width: 100%` of a width that is then indefinite --
+ * so all three of the small scrolls measured zero. */
 .scroll-card[data-wide] {
   max-width: 62rem;
-  margin-top: clamp(1.6rem, 4vw, 3rem);
+  margin: clamp(1.6rem, 4vw, 3rem) auto 0;
 }
 
 /* Exactly the picture's box, so the measured percentages resolve against the
