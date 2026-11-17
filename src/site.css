@@ -788,8 +788,13 @@
    * phone the card is the whole page. */
   .scroll-card__title { font-size: 5.8cqw; }
   .scroll-card__line { font-size: 3.5cqw; }
-  .scroll-card[data-wide] .scroll-card__title { font-size: 5.8cqw; }
-  .scroll-card[data-wide] .scroll-card__line { font-size: 3.5cqw; }
+
+  /* The two wide scrolls carry the longest lines on the page -- a 36
+   * character heading and a sentence under it -- and at a phone's width
+   * that is two lines of each. They get their own, smaller setting so the
+   * pair still lands inside the parchment. */
+  .scroll-card[data-wide] .scroll-card__title { font-size: 4.8cqw; }
+  .scroll-card[data-wide] .scroll-card__line { font-size: 3cqw; }
 }
 
 @media (prefers-reduced-motion: reduce) {
