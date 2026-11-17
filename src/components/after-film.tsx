@@ -23,7 +23,7 @@ export function AfterFilm() {
       <div aria-hidden="true" className="after-film__dawn" />
 
       <div className="after-film__body">
-        <header className="services__head">
+        <header className="services__head" id="services">
         <h2 className="services__title">פתרונות מקצה לקצה לצמיחה עסקית</h2>
         </header>
 

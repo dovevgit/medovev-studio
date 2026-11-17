@@ -2030,3 +2030,401 @@
     font-size: clamp(1.4rem, 6.4vw, 2rem);
   }
 }
+
+/* ===========================================================================
+ * The inner pages.
+ *
+ * The home page is a film; these are reading. They keep the site's dark wood
+ * and gilt and drop the motion: a headline, a column of prose set at a width
+ * the eye can track back to the start of the next line, and the lists and
+ * steps raised onto cards so the page can be skimmed as well as read.
+ *
+ * One stylesheet for all twelve, because they are the same page with
+ * different words in it.
+ * ======================================================================== */
+.page {
+  --page-ink: #efe6d5;
+  --page-ink-soft: #c2b6a2;
+  --page-gilt: #e3b94a;
+  --page-card: rgba(255, 248, 235, 0.045);
+  --page-edge: rgba(227, 185, 74, 0.22);
+
+  padding: clamp(6rem, 14vw, 9rem) clamp(1.25rem, 6vw, 3rem) clamp(4rem, 10vw, 7rem);
+  background: linear-gradient(180deg, #120d09 0%, #1c140d 45%, #241a10 100%);
+  color: var(--page-ink);
+  /* The page is shorter than the screen on the quieter services, and a short
+   * page on a dark site should still end in the dark rather than in the
+   * browser's own white. */
+  min-height: 100svh;
+}
+
+.page > * {
+  max-width: 62rem;
+  margin-inline: auto;
+}
+
+.page__intro {
+  max-width: 46rem;
+  margin-bottom: clamp(2.5rem, 7vw, 4rem);
+  text-align: center;
+}
+
+.page__eyebrow {
+  margin: 0 0 0.8rem;
+  color: var(--page-gilt);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+}
+
+.page__title {
+  margin: 0;
+  font-size: clamp(1.9rem, 5.5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.page__lead {
+  margin: 1.1rem 0 0;
+  color: var(--page-ink-soft);
+  font-size: clamp(1.02rem, 2.3vw, 1.22rem);
+  line-height: 1.6;
+}
+
+/* The reading column. Narrower than the cards on purpose: prose set the full
+ * width of a desktop window is prose nobody finishes. */
+.page__prose {
+  max-width: 44rem;
+  font-size: clamp(1rem, 2.1vw, 1.08rem);
+  line-height: 1.85;
+}
+
+.page__prose p {
+  margin: 0 0 1.25em;
+  color: #ded3c0;
+}
+
+.page-part {
+  margin-bottom: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.page__h2 {
+  margin: 0 0 0.9rem;
+  color: var(--page-ink);
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.page-quote {
+  margin: 1.6rem 0;
+  padding: 0.2rem 1.1rem;
+  border-inline-start: 3px solid var(--page-gilt);
+  color: #e8dcc6;
+  font-size: 1.08em;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.page-link {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.7rem 1.3rem;
+  border: 1px solid var(--page-edge);
+  border-radius: 999px;
+  color: var(--page-gilt);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.page-link:hover {
+  border-color: var(--page-gilt);
+  background: rgba(227, 185, 74, 0.1);
+}
+
+/* --- the bulleted lists ------------------------------------------------- */
+.page__lists {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.4rem);
+  margin-top: clamp(1.5rem, 4vw, 2.4rem);
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+.page-list {
+  padding: clamp(1.2rem, 3vw, 1.7rem);
+  border: 1px solid var(--page-edge);
+  border-radius: 1rem;
+  background: var(--page-card);
+}
+
+.page-list__head {
+  margin: 0 0 0.9rem;
+  color: var(--page-gilt);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.page-list__items {
+  margin: 0;
+  padding: 0;
+  color: #ded3c0;
+  font-size: 0.97rem;
+  line-height: 1.6;
+  list-style: none;
+}
+
+.page-list__items li {
+  position: relative;
+  padding-inline-start: 1.1rem;
+}
+
+.page-list__items li + li {
+  margin-top: 0.65rem;
+}
+
+/* A gilt tick rather than a bullet: the lists are things the studio does,
+ * not an inventory. */
+.page-list__items li::before {
+  position: absolute;
+  inset-inline-start: 0;
+  color: var(--page-gilt);
+  content: "✦";
+  font-size: 0.68em;
+  line-height: 2.4;
+}
+
+/* --- the numbered walk-through ------------------------------------------ */
+.page__steps {
+  margin-top: clamp(2.5rem, 6vw, 3.8rem);
+}
+
+.steps {
+  display: grid;
+  gap: clamp(0.8rem, 2vw, 1.1rem);
+  margin: 0;
+  padding: 0;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  padding: clamp(1.1rem, 2.6vw, 1.5rem);
+  border: 1px solid var(--page-edge);
+  border-radius: 1rem;
+  background: var(--page-card);
+}
+
+.step__num {
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  flex: 0 0 auto;
+  border: 1px solid var(--page-edge);
+  border-radius: 999px;
+  color: var(--page-gilt);
+  font-size: 0.95rem;
+  font-weight: 700;
+  place-items: center;
+}
+
+.step__title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.step__text {
+  margin: 0;
+  color: var(--page-ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* --- the four standing facts on the about page -------------------------- */
+.page__stats {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.stats {
+  display: grid;
+  gap: clamp(0.8rem, 2vw, 1.1rem);
+  margin: 0;
+  padding: 0;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  list-style: none;
+}
+
+.stats__item {
+  padding: clamp(1rem, 2.4vw, 1.4rem);
+  border: 1px solid var(--page-edge);
+  border-radius: 1rem;
+  background: var(--page-card);
+  text-align: center;
+}
+
+.stats__value {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--page-gilt);
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.stats__label {
+  color: var(--page-ink-soft);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* --- the articles index -------------------------------------------------- */
+.page__articles {
+  margin-top: clamp(1rem, 3vw, 1.6rem);
+}
+
+.art-list {
+  display: grid;
+  gap: clamp(0.9rem, 2.2vw, 1.2rem);
+  margin: 0;
+  padding: 0;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  list-style: none;
+}
+
+.art-card {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: clamp(1.2rem, 3vw, 1.7rem);
+  border: 1px solid var(--page-edge);
+  border-radius: 1rem;
+  background: var(--page-card);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.art-card:hover {
+  border-color: var(--page-gilt);
+  background: rgba(227, 185, 74, 0.07);
+}
+
+.art-card__meta {
+  color: var(--page-gilt);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.art-card__title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.art-card__blurb {
+  color: var(--page-ink-soft);
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
+/* --- the closing card ---------------------------------------------------- */
+.page__cta {
+  margin-top: clamp(3rem, 8vw, 4.5rem);
+}
+
+.page-cta {
+  padding: clamp(1.6rem, 4.5vw, 2.6rem);
+  border: 1px solid var(--page-edge);
+  border-radius: 1.2rem;
+  background: var(--page-card);
+  text-align: center;
+}
+
+.page-cta__title {
+  margin: 0;
+  font-size: clamp(1.3rem, 3.4vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.page-cta__text {
+  margin: 0.7rem 0 0;
+  color: var(--page-ink-soft);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.page-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: 1.4rem;
+}
+
+.page-cta__primary,
+.page-cta__secondary {
+  padding: 0.8rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.page-cta__primary {
+  border: 1px solid transparent;
+  background: linear-gradient(180deg, #e3b94a, #c9a042);
+  color: #1b1309;
+}
+
+.page-cta__secondary {
+  border: 1px solid var(--page-edge);
+  color: var(--page-gilt);
+}
+
+.page-cta__secondary:hover {
+  border-color: var(--page-gilt);
+  background: rgba(227, 185, 74, 0.1);
+}
+
+.page-cta__back {
+  display: inline-block;
+  margin-top: 1.2rem;
+  color: var(--page-ink-soft);
+  font-size: 0.92rem;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-card,
+  .page-link,
+  .page-cta__secondary {
+    transition: none;
+  }
+}
+
+/* The article's own date-and-byline line, and the bullets inside a body. */
+.page__byline {
+  max-width: 44rem;
+  margin: 0 auto 1.6rem;
+  color: var(--page-gilt);
+  font-size: 0.86rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.page-bullets {
+  margin: 0 0 1.25em;
+  padding-inline-start: 1.3rem;
+  color: #ded3c0;
+}
+
+.page-bullets li + li {
+  margin-top: 0.5rem;
+}

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ArticlesRouteImport } from './routes/articles'
 import { Route as TrainingRouteImport } from './routes/training'
+import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const TrainingRoute = TrainingRouteImport.update({
   path: '/training',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ArticlesRoute,
+} as any)
 const ServicesSlugRoute = ServicesSlugRouteImport.update({
   id: '/services/$slug',
   path: '/services/$slug',
@@ -44,38 +50,59 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/articles': typeof ArticlesRoute
+  '/articles': typeof ArticlesRouteWithChildren
   '/training': typeof TrainingRoute
+  '/articles/$slug': typeof ArticlesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/articles': typeof ArticlesRoute
+  '/articles': typeof ArticlesRouteWithChildren
   '/training': typeof TrainingRoute
+  '/articles/$slug': typeof ArticlesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/articles': typeof ArticlesRoute
+  '/articles': typeof ArticlesRouteWithChildren
   '/training': typeof TrainingRoute
+  '/articles/$slug': typeof ArticlesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/articles' | '/training' | '/services/$slug'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/articles'
+    | '/training'
+    | '/articles/$slug'
+    | '/services/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/articles' | '/training' | '/services/$slug'
+  to:
+    | '/'
+    | '/about'
+    | '/articles'
+    | '/training'
+    | '/articles/$slug'
+    | '/services/$slug'
   id:
-    '__root__' | '/' | '/about' | '/articles' | '/training' | '/services/$slug'
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/articles'
+    | '/training'
+    | '/articles/$slug'
+    | '/services/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  ArticlesRoute: typeof ArticlesRoute
+  ArticlesRoute: typeof ArticlesRouteWithChildren
   TrainingRoute: typeof TrainingRoute
   ServicesSlugRoute: typeof ServicesSlugRoute
 }
@@ -110,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrainingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/articles/$slug': {
+      id: '/articles/$slug'
+      path: '/$slug'
+      fullPath: '/articles/$slug'
+      preLoaderRoute: typeof ArticlesSlugRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
     '/services/$slug': {
       id: '/services/$slug'
       path: '/services/$slug'
@@ -120,10 +154,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ArticlesRouteChildren {
+  ArticlesSlugRoute: typeof ArticlesSlugRoute
+}
+
+const ArticlesRouteChildren: ArticlesRouteChildren = {
+  ArticlesSlugRoute: ArticlesSlugRoute,
+}
+
+const ArticlesRouteWithChildren = ArticlesRoute._addFileChildren(
+  ArticlesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  ArticlesRoute: ArticlesRoute,
+  ArticlesRoute: ArticlesRouteWithChildren,
   TrainingRoute: TrainingRoute,
   ServicesSlugRoute: ServicesSlugRoute,
 }
