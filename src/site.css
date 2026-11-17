@@ -824,6 +824,294 @@
 }
 
 /* ===========================================================================
+ * The memory game.
+ *
+ * The last thing on the page, and the only part of it anyone plays. Same
+ * principle as the banners and the scrolls above: the art carries the frame,
+ * the words are live text laid inside it -- here the service's name under
+ * its emblem, on the card's own cloth.
+ *
+ * The type is set in cqw against the card, not the page: the grid runs six
+ * across on a desktop and three on a phone, and the name has to hold at both.
+ * ======================================================================== */
+.memory {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+}
+
+.memory__head {
+  max-width: 40rem;
+  margin: 0 auto clamp(1.2rem, 3vw, 1.9rem);
+  text-align: center;
+}
+
+.memory__eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--gilt);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.memory__title {
+  margin: 0;
+  font-size: clamp(1.35rem, 3.6vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.memory__lede {
+  margin: 0.7rem auto 0;
+  max-width: 32rem;
+  color: var(--wood-ink-soft);
+  font-size: clamp(0.92rem, 2.1vw, 1.05rem);
+  line-height: 1.6;
+}
+
+/* One strip, so the counters and the reset button do not drift apart when
+ * the line wraps on a narrow screen. */
+.memory__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem 1.4rem;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto clamp(1.1rem, 2.6vw, 1.8rem);
+  padding: 0.65rem 1.1rem;
+  border: 1px solid rgba(201, 160, 66, 0.3);
+  border-radius: 999px;
+  background: rgba(23, 17, 12, 0.8);
+  font-size: 0.92rem;
+}
+
+.memory__bar b {
+  color: var(--gilt);
+  font-variant-numeric: tabular-nums;
+}
+
+.memory__reset {
+  padding: 0.42rem 1.1rem;
+  border: 1px solid rgba(241, 232, 214, 0.35);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--wood-ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.memory__reset:hover,
+.memory__reset:focus-visible {
+  background: var(--royal);
+  border-color: var(--royal-lit);
+}
+
+.memory__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(0.4rem, 1.3vw, 0.95rem);
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.memory__card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border: 0;
+  border-radius: 5%;
+  background: transparent;
+  perspective: 900px;
+  container-type: inline-size;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.memory__card:focus-visible {
+  outline: 2px solid var(--gilt);
+  outline-offset: 3px;
+}
+
+.memory__card[data-done] {
+  cursor: default;
+}
+
+/* A span is inline by default, and an inline box ignores width and height:
+ * left that way it measures 0x0 and the two absolutely positioned faces
+ * resolve inset: 0 against nothing. */
+.memory__inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 550ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.memory__card[data-open] .memory__inner {
+  transform: rotateY(180deg);
+}
+
+.memory__card:not([data-done]):hover .memory__inner {
+  transform: translateY(-2%);
+}
+
+.memory__card[data-open]:not([data-done]):hover .memory__inner {
+  transform: rotateY(180deg) translateY(-2%);
+}
+
+.memory__face {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-position: center;
+  background-size: cover;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.memory__face--back {
+  background-image: url("/assets/memory/card-back.webp");
+}
+
+/* Deeper at the foot than at the head: the frame's corner flourishes climb
+ * about a fifth of the card at the bottom, and the name would land on them. */
+.memory__face--front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5%;
+  padding: 10% 13% 17%;
+  background-image: url("/assets/memory/card-front.webp");
+  transform: rotateY(180deg);
+}
+
+.memory__face--front img {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0.4cqw 0.7cqw rgba(0, 0, 0, 0.5));
+}
+
+.memory__card[data-done] .memory__face--front {
+  box-shadow: 0 0 0 1px rgba(201, 160, 66, 0.9), 0 0 1.6rem rgba(201, 160, 66, 0.4);
+}
+
+.memory__name {
+  flex: 0 0 auto;
+  color: #f6edd9;
+  font-size: clamp(9px, 8.6cqw, 1.05rem);
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  text-shadow: 0 0.2cqw 0.6cqw rgba(6, 10, 24, 0.85);
+}
+
+.memory__toast {
+  min-height: 3.4rem;
+  max-width: 40rem;
+  margin: clamp(1.1rem, 2.6vw, 1.7rem) auto 0;
+  color: var(--wood-ink-soft);
+  font-size: clamp(0.9rem, 2vw, 1.02rem);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.memory__toast b {
+  display: block;
+  color: var(--gilt);
+  font-size: 1.1em;
+}
+
+.memory__toast a {
+  color: var(--wood-ink);
+  text-underline-offset: 0.25em;
+}
+
+.memory__win {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(6, 5, 4, 0.82);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 320ms ease, visibility 0s linear 320ms;
+}
+
+.memory__win[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 320ms ease, visibility 0s;
+}
+
+.memory__win-box {
+  max-width: 30rem;
+  padding: clamp(1.6rem, 4vw, 2.6rem);
+  border: 1px solid rgba(201, 160, 66, 0.45);
+  border-radius: 1.1rem;
+  background: var(--wood-raised);
+  text-align: center;
+}
+
+.memory__win-box h3 {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 700;
+}
+
+.memory__win-box p {
+  margin: 0 0 1.4rem;
+  color: var(--wood-ink-soft);
+  line-height: 1.6;
+}
+
+.memory__win-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.memory__win-row .scroll-card__cta {
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Fixed and on top of everything, but only while there is confetti to draw:
+ * it is painted into and cleared, never shown as a box. */
+.memory__confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .memory__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memory__inner,
+  .memory__reset,
+  .memory__win {
+    transition: none;
+  }
+}
+
+/* ===========================================================================
  * The menu.
  *
  * The button rides over two backgrounds that could hardly differ more -- the

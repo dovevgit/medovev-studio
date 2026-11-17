@@ -1,4 +1,5 @@
 import { FlagCard } from "@/components/flag-card";
+import { MemoryGame } from "@/components/memory-game";
 import { ScrollCard } from "@/components/scroll-card";
 import { WHATSAPP_CONSULT, WHATSAPP_HELLO } from "@/site-content";
 
@@ -231,6 +232,8 @@ export function AfterFilm() {
             wide
           />
         </section>
+
+        <MemoryGame />
       </div>
     </section>
   );
