@@ -601,7 +601,6 @@
 /* Everything reads above the trail. */
 .services__head,
 .flag-card,
-.services,
 .closing {
   position: relative;
   z-index: 1;
@@ -619,77 +618,6 @@
   font-size: clamp(1.65rem, 4.2vw, 2.9rem);
   font-weight: 700;
   line-height: 1.15;
-}
-
-.services {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(0.9rem, 1.8vw, 1.4rem);
-  max-width: 76rem;
-  margin: 0 auto;
-  padding: 0;
-  list-style: none;
-}
-
-@media (max-width: 1040px) {
-  .services {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .services {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* A card is a panel of lighter wood lying on the darker board. The border is
- * the only edge it gets -- no drop shadow, which on a warm ground turns grey
- * and muddy. */
-.service {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-  padding: clamp(1.25rem, 2.4vw, 1.7rem);
-  border: 1px solid var(--wood-edge);
-  border-radius: 14px;
-  /* Translucent, so the trail shows through the ones still waiting for
-   * their banner rather than being blocked by them. */
-  background: rgba(25, 19, 14, 0.82);
-  backdrop-filter: blur(2px);
-}
-
-.service__title {
-  margin: 0;
-  font-size: clamp(1.1rem, 1.9vw, 1.32rem);
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.service__blurb {
-  flex: 1;
-  margin: 0;
-  color: var(--wood-ink-soft);
-  font-size: clamp(0.95rem, 1.5vw, 1.04rem);
-  line-height: 1.5;
-}
-
-.service__link {
-  align-self: flex-start;
-  margin-top: 0.5rem;
-  padding: 0.58rem 1.25rem;
-  border-radius: 999px;
-  background: var(--royal);
-  color: #f4ecdc;
-  font-size: 0.97rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background-color 160ms ease;
-}
-
-.service__link:hover,
-.service__link:focus-visible {
-  background: var(--royal-lit);
 }
 
 .closing {
@@ -883,7 +811,6 @@
 @media (prefers-reduced-motion: reduce) {
   .site-menu__bars > span,
   .site-menu__panel,
-  .service__link,
   .closing__cta,
   .site-menu__list a {
     transition: none;
@@ -1141,10 +1068,6 @@
     background: var(--royal-lit);
     transform: none;
   }
-}
-
-.services {
-  margin-top: clamp(2rem, 4vw, 3rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

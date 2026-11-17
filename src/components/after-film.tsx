@@ -1,5 +1,5 @@
 import { FlagCard } from "@/components/flag-card";
-import { SERVICES, WHATSAPP_URL } from "@/site-content";
+import { WHATSAPP_URL } from "@/site-content";
 
 /**
  * Where the page comes up out of the film.
@@ -11,8 +11,8 @@ import { SERVICES, WHATSAPP_URL } from "@/site-content";
  * pale wood the rest of the site lives on. The visitor scrolls out of the
  * night rather than hitting a white page.
  *
- * Everything below that band sits on the pale wood: the nine services, each
- * with the studio's own line and a way into its page.
+ * Below that band the nine services each get a banner of their own: the
+ * studio's line on the cloth, and a way into its page.
  */
 export function AfterFilm() {
   return (
@@ -116,9 +116,19 @@ export function AfterFilm() {
           title="צילום"
         />
 
-        {/* Out of order for now: podcasts still wear the plain treatment,
-            and this one slots in behind them once they have a banner of
-            their own. */}
+        <FlagCard
+          art="/assets/flag-podcast.webp"
+          artHeight={469}
+          artWidth={1400}
+          cta="פודקאסטים"
+          /* A microphone at each end, so the field is the middle of the
+             cloth: 25%-78% across, 16%-73% down. */
+          field={{ bottom: 27, left: 25, right: 22, top: 16 }}
+          href="/services/podcast"
+          line="אפיון, הפקה וחיתוכים לסרטונים קצרים"
+          title="פודקאסטים"
+        />
+
         <FlagCard
           art="/assets/flag-voice.webp"
           artHeight={469}
@@ -131,30 +141,6 @@ export function AfterFilm() {
           line="הקריין המושמע ביותר בישראל"
           title="קריינות מקצועית"
         />
-
-        {/* Podcasts still wear the first, plain treatment, so the site is
-            whole while that last banner is made. */}
-        <ul className="services">
-          {SERVICES.filter(
-            (service) =>
-              service.slug !== "strategy" &&
-              service.slug !== "digital" &&
-              service.slug !== "web" &&
-              service.slug !== "ai" &&
-              service.slug !== "implementer" &&
-              service.slug !== "video" &&
-              service.slug !== "photo" &&
-              service.slug !== "voice",
-          ).map((service) => (
-            <li className="service" key={service.slug}>
-              <h3 className="service__title">{service.title}</h3>
-              <p className="service__blurb">{service.blurb}</p>
-              <a className="service__link" href={`/services/${service.slug}`}>
-                לעמוד השירות
-              </a>
-            </li>
-          ))}
-        </ul>
 
         <section className="closing">
           <h2 className="closing__title">בואו נבנה יחד את המהלך העסקי הבא שלכם</h2>
