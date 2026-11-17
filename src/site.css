@@ -1027,9 +1027,9 @@
   position: absolute;
   /* Physical sides, deliberately: the cloth's clear run is on the right of
    * the picture whatever direction the document reads in. */
-  top: 14%;
+  top: 13%;
   right: 6%;
-  bottom: 27%;
+  bottom: 40%;
   left: 34%;
   display: flex;
   flex-direction: column;
@@ -1062,12 +1062,13 @@
 /* Light and loud against the deep blue: parchment, not gold, so it reads as
  * a button rather than as another piece of the frame. */
 .flag-card__cta {
-  /* Lifted out of the column so it can sit low on the cloth and well to the
-   * left of the headline, in the clear blue above the fringe rather than
-   * tucked under the line. Still clear of the king, who ends at 31% across. */
+  /* Against the card, not the text box: low on the cloth and well to the left
+   * of the headline. The velvet ends at 81% of the card's height, so a 24%
+   * offset from the bottom leaves the button clear of the gold border, and
+   * 36% from the left keeps it clear of the king, who reaches 33% across. */
   position: absolute;
-  left: 35%;
-  bottom: 28%;
+  left: 36%;
+  bottom: 24%;
   margin: 0;
   padding: 1.15cqw 3cqw;
   border: 0.12cqw solid #e8d9b4;
