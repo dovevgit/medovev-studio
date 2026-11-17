@@ -90,7 +90,20 @@ export function AfterFilm() {
           title="מיישם AI"
         />
 
-        {/* The remaining four still wear the first, plain treatment. They
+        <FlagCard
+          art="/assets/flag-video.webp"
+          artHeight={469}
+          artWidth={1400}
+          cta="הפקות וידאו"
+          /* The bishop stands on the right from 85%, the pole closes the left
+             at 7%, and the gold corners reach in at each end: 20%-72%. */
+          field={{ bottom: 27, left: 20, right: 28, top: 16 }}
+          href="/services/video"
+          line="מהקונספט ועד תוצר וידאו מושלם"
+          title="הפקות וידאו"
+        />
+
+        {/* The remaining three still wear the first, plain treatment. They
             stay on the page so the site is whole while each one is redesigned
             as its own banner, in turn. */}
         <ul className="services">
@@ -100,7 +113,8 @@ export function AfterFilm() {
               service.slug !== "digital" &&
               service.slug !== "web" &&
               service.slug !== "ai" &&
-              service.slug !== "implementer",
+              service.slug !== "implementer" &&
+              service.slug !== "video",
           ).map((service) => (
             <li className="service" key={service.slug}>
               <h3 className="service__title">{service.title}</h3>
