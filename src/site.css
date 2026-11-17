@@ -1204,6 +1204,234 @@
 }
 
 /* ===========================================================================
+ * The contact banner.
+ *
+ * The cloth has to be as tall as the form inside it, which a single picture
+ * cannot be: at a phone's width the whole banner is 195px, with about 130 of
+ * velvet in it, and four fields need three times that. Stretching one
+ * picture would stretch the horn with it.
+ *
+ * So it is three layers on one element. The top picture sits at the top at
+ * its own aspect, the foot at the bottom at its own, and between them a
+ * single row of velvet repeats as far as the form needs. All three were cut
+ * at the same row of the original, so the seams are the same pixels and
+ * cannot be seen.
+ *
+ * Every inset is a percentage, which in padding resolves against the WIDTH
+ * -- so the form keeps its place on the cloth at every size, exactly as the
+ * banners and scrolls above do with their measured fields.
+ * ======================================================================== */
+.contact {
+  position: relative;
+  z-index: 1;
+  max-width: 68rem;
+  margin: clamp(3rem, 7vw, 5rem) auto 0;
+}
+
+.contact__head {
+  margin-bottom: clamp(1rem, 2.4vw, 1.6rem);
+  text-align: center;
+}
+
+.contact__eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--gilt);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.contact__title {
+  margin: 0;
+  font-size: clamp(1.35rem, 3.6vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.contact__cloth {
+  position: relative;
+  container-type: inline-size;
+  /* 18.5% clears the swag and its central ornament; 15.5% clears the lower
+   * corner flourishes and the gold border; 9.5% clears the rope down each
+   * side. All three resolve against the width, so the form keeps its place
+   * on the cloth at every size. */
+  padding: 18.5% 9.5% 15.5%;
+  background:
+    url("/assets/horn-top.webp") top center / 100% auto no-repeat,
+    url("/assets/horn-foot.webp") bottom center / 100% auto no-repeat;
+}
+
+/* The middle of the cloth, stretched to fill whatever gap the form leaves
+ * between the two pictures. It begins and ends on the row they were cut at,
+ * so it meets both on identical pixels at any height. cqw is 1% of this
+ * element's own width, which is how the band knows where the pictures end:
+ * the top is 35.56% of the width tall and the foot 15.33%, and these sit a
+ * hair inside both so there is never a hairline of page showing through. */
+.contact__cloth::before {
+  content: "";
+  position: absolute;
+  top: 35.4cqw;
+  right: 0;
+  bottom: 15.2cqw;
+  left: 0;
+  background: url("/assets/horn-mid.webp") center / 100% 100% no-repeat;
+}
+
+/* A positioned pseudo-element paints above ordinary children, so the form
+ * is positioned too and comes after it in tree order. */
+.contact__cloth > * {
+  position: relative;
+}
+
+.contact__lede {
+  margin: 0 0 clamp(1rem, 2.4vw, 1.5rem);
+  color: #cdd9f0;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.6rem, 1.6vw, 1rem);
+}
+
+.contact__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.6rem, 1.6vw, 1rem);
+}
+
+.contact__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.contact__field > span {
+  color: #e8d9ad;
+  font-size: clamp(0.78rem, 1.6vw, 0.9rem);
+  font-weight: 700;
+}
+
+/* Dark glass on the velvet rather than a white box: a pale field would read
+ * as a hole cut in the cloth. */
+.contact__field input,
+.contact__field textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(232, 217, 173, 0.35);
+  border-radius: 0.6rem;
+  background: rgba(7, 12, 28, 0.55);
+  color: #f4ecdc;
+  font: inherit;
+  font-size: clamp(0.88rem, 1.9vw, 1rem);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.contact__field textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+}
+
+.contact__field input::placeholder,
+.contact__field textarea::placeholder {
+  color: rgba(226, 216, 192, 0.5);
+}
+
+.contact__field input:focus,
+.contact__field textarea:focus {
+  border-color: var(--gilt);
+  background: rgba(7, 12, 28, 0.78);
+  outline: none;
+}
+
+/* Off screen rather than display: none -- a bot reading the markup should
+ * find a field worth filling, and filling it is what gives it away. */
+.contact__trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.contact__send {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.contact__submit {
+  padding: 0.75rem 2.4rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--gilt);
+  color: #22180a;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.contact__submit:hover,
+.contact__submit:focus-visible {
+  background: #e2c070;
+  transform: translateY(-1px);
+}
+
+.contact__status {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 0.88rem;
+}
+
+.contact__status[data-kind="error"] { color: #f0b4a8; }
+.contact__status[data-kind="ok"] { color: #a8e0bd; }
+
+.contact__submit:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+@media (max-width: 680px) {
+  .contact__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Full bleed: the cloth is the page's edge here, and the gutters it would
+   * otherwise sit inside only make the field narrower. */
+  .contact {
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+
+  .contact__head {
+    padding-inline: 1.25rem;
+  }
+
+  .contact__cloth {
+    padding: 19.5% 8% 16.5%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact__field input,
+  .contact__field textarea,
+  .contact__submit {
+    transition: none;
+  }
+}
+
+/* ===========================================================================
  * The menu.
  *
  * The button rides over two backgrounds that could hardly differ more -- the

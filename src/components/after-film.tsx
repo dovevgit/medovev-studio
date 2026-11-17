@@ -1,3 +1,4 @@
+import { ContactBanner } from "@/components/contact-banner";
 import { FlagCard } from "@/components/flag-card";
 import { MemoryGame } from "@/components/memory-game";
 import { ScrollCard } from "@/components/scroll-card";
@@ -234,6 +235,8 @@ export function AfterFilm() {
         </section>
 
         <MemoryGame />
+
+        <ContactBanner />
       </div>
     </section>
   );

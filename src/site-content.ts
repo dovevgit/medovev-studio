@@ -98,7 +98,8 @@ export const ELSEWHERE: MenuLink[] = [
   },
 ];
 
-export const WHATSAPP_URL = "https://wa.me/972545008001";
+export const WHATSAPP_NUMBER = "972545008001";
+export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 /**
  * The two WhatsApp openers the old site uses, carried over word for word so
