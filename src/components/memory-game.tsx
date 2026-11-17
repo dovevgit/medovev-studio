@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 
 import { SERVICES, WHATSAPP_HELLO } from "@/site-content";
 
@@ -20,8 +20,7 @@ import { SERVICES, WHATSAPP_HELLO } from "@/site-content";
  * Short, because a card is a narrow thing, and the same words the banners
  * above the game use -- a visitor who has just scrolled past "נכסים
  * דיגיטליים" should meet that name here and not a longer formal one. The
- * line under each match comes from SERVICES, so the site keeps one copy of
- * it.
+ * line under each match comes from SERVICES, so the site keeps one copy.
  */
 const CARD_NAMES: Record<string, string> = {
   ai: "פתרונות AI מתקדמים",
@@ -37,16 +36,40 @@ const CARD_NAMES: Record<string, string> = {
 
 const CONFETTI_COLOURS = ["#c9a042", "#e8d49a", "#2f4b80", "#f1e8d6"];
 
+/** How long a wrong pair stays up to be read, and the pause before the win. */
+const HIDE_AFTER = 950;
+const WIN_AFTER = 850;
+
 type Card = { key: string; slug: string };
+
+type State = {
+  deck: Card[];
+  /** The service named by the last pair found, for the line under the board. */
+  found: string | null;
+  /** True while a wrong pair is on show and the board ignores clicks. */
+  locked: boolean;
+  matched: string[];
+  moves: number;
+  /** Cards turned up that are not yet matched: none, one, or a wrong pair. */
+  faceUp: string[];
+  won: boolean;
+};
+
+type Action =
+  | { key: string; type: "pick" }
+  | { type: "hide" }
+  | { type: "shuffle" }
+  | { type: "start" }
+  | { type: "win" };
 
 /**
  * The deck in its unshuffled order.
  *
- * The page is prerendered, so the first render has to be the same on the
- * build machine as in the browser -- a shuffle here would hand React a
+ * The page is prerendered, so the first render has to match between the
+ * build machine and the browser -- a shuffle here would hand React a
  * different order than the HTML it is hydrating. The shuffle runs on mount
- * instead, and because all eighteen cards are face down and identical,
- * nobody can see it happen.
+ * instead, and with all eighteen cards face down and identical, nobody can
+ * see it happen.
  */
 function orderedDeck(): Card[] {
   return SERVICES.flatMap((service) => [
@@ -64,51 +87,85 @@ function shuffled(deck: Card[]): Card[] {
   return next;
 }
 
-export function MemoryGame() {
-  const [deck, setDeck] = useState<Card[]>(orderedDeck);
-  const [faceUp, setFaceUp] = useState<string[]>([]);
-  const [matched, setMatched] = useState<string[]>([]);
-  const [first, setFirst] = useState<string | null>(null);
-  const [locked, setLocked] = useState(false);
-  const [moves, setMoves] = useState(0);
-  const [found, setFound] = useState<string | null>(null);
-  const [won, setWon] = useState(false);
+const FRESH: State = {
+  deck: orderedDeck(),
+  faceUp: [],
+  found: null,
+  locked: false,
+  matched: [],
+  moves: 0,
+  won: false,
+};
 
+/**
+ * Every turn is decided here rather than in the click handler.
+ *
+ * A handler would have to read the previous card out of state it captured
+ * when it rendered, and two clicks inside one task see the same stale value
+ * -- the second card then reads as a first, and nothing ever pairs. A
+ * reducer is always handed the newest state, however the clicks arrive.
+ */
+function reduce(state: State, action: Action): State {
+  switch (action.type) {
+    case "hide":
+      return { ...state, faceUp: [], locked: false };
+
+    case "pick": {
+      if (
+        state.locked ||
+        state.faceUp.includes(action.key) ||
+        state.matched.includes(action.key)
+      ) {
+        return state;
+      }
+
+      if (state.faceUp.length === 0) {
+        return { ...state, faceUp: [action.key] };
+      }
+
+      const [firstKey] = state.faceUp;
+      const first = state.deck.find((card) => card.key === firstKey);
+      const second = state.deck.find((card) => card.key === action.key);
+
+      if (first && second && first.slug === second.slug) {
+        return {
+          ...state,
+          faceUp: [],
+          found: second.slug,
+          matched: [...state.matched, firstKey, action.key],
+          moves: state.moves + 1,
+        };
+      }
+
+      return {
+        ...state,
+        faceUp: [firstKey, action.key],
+        locked: true,
+        moves: state.moves + 1,
+      };
+    }
+
+    case "shuffle":
+      return { ...state, deck: shuffled(state.deck) };
+
+    case "start":
+      return { ...FRESH, deck: shuffled(state.deck) };
+
+    case "win":
+      return { ...state, won: true };
+
+    default:
+      return state;
+  }
+}
+
+export function MemoryGame() {
+  const [state, dispatch] = useReducer(reduce, FRESH);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef(0);
-  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const pairs = matched.length / 2;
-
-  const start = useCallback(() => {
-    for (const timer of timersRef.current) {
-      clearTimeout(timer);
-    }
-    timersRef.current = [];
-    setDeck((current) => shuffled(current));
-    setFaceUp([]);
-    setMatched([]);
-    setFirst(null);
-    setLocked(false);
-    setMoves(0);
-    setFound(null);
-    setWon(false);
-  }, []);
-
-  // Shuffle once the component is in the browser; see orderedDeck above.
-  useEffect(() => {
-    setDeck((current) => shuffled(current));
-  }, []);
-
-  useEffect(
-    () => () => {
-      for (const timer of timersRef.current) {
-        clearTimeout(timer);
-      }
-      cancelAnimationFrame(frameRef.current);
-    },
-    [],
-  );
+  const pairs = state.matched.length / 2;
+  const complete = state.matched.length === state.deck.length;
 
   const confetti = useCallback(() => {
     const canvas = canvasRef.current;
@@ -125,7 +182,8 @@ export function MemoryGame() {
 
     const bits = Array.from({ length: 140 }, () => ({
       angle: Math.random() * Math.PI,
-      colour: CONFETTI_COLOURS[Math.floor(Math.random() * CONFETTI_COLOURS.length)],
+      colour:
+        CONFETTI_COLOURS[Math.floor(Math.random() * CONFETTI_COLOURS.length)],
       h: 8 + Math.random() * 8,
       spin: -0.1 + Math.random() * 0.2,
       vx: -0.9 + Math.random() * 1.8,
@@ -166,52 +224,33 @@ export function MemoryGame() {
     frameRef.current = requestAnimationFrame(tick);
   }, []);
 
-  const pick = (card: Card) => {
-    if (locked || faceUp.includes(card.key) || matched.includes(card.key)) {
+  // Shuffle once the component is in the browser; see orderedDeck above.
+  useEffect(() => {
+    dispatch({ type: "shuffle" });
+    return () => cancelAnimationFrame(frameRef.current);
+  }, []);
+
+  useEffect(() => {
+    if (!state.locked) {
       return;
     }
+    const timer = setTimeout(() => dispatch({ type: "hide" }), HIDE_AFTER);
+    return () => clearTimeout(timer);
+  }, [state.locked]);
 
-    if (!first) {
-      setFaceUp([card.key]);
-      setFirst(card.key);
+  useEffect(() => {
+    if (!complete || state.won) {
       return;
     }
+    const timer = setTimeout(() => {
+      dispatch({ type: "win" });
+      confetti();
+    }, WIN_AFTER);
+    return () => clearTimeout(timer);
+  }, [complete, confetti, state.won]);
 
-    const partner = deck.find((entry) => entry.key === first);
-    setFaceUp([first, card.key]);
-    setFirst(null);
-    setMoves((value) => value + 1);
-
-    if (partner && partner.slug === card.slug) {
-      const nextMatched = [...matched, first, card.key];
-      setMatched(nextMatched);
-      setFaceUp([]);
-      setFound(card.slug);
-      if (nextMatched.length === deck.length) {
-        timersRef.current.push(
-          setTimeout(() => {
-            setWon(true);
-            confetti();
-          }, 850),
-        );
-      }
-      return;
-    }
-
-    // Both stay up long enough to be read, and the board is locked meanwhile:
-    // without the lock a fast tapper turns a third card and leaves two faces
-    // up with nothing holding them.
-    setLocked(true);
-    timersRef.current.push(
-      setTimeout(() => {
-        setFaceUp([]);
-        setLocked(false);
-      }, 950),
-    );
-  };
-
-  const service = found
-    ? SERVICES.find((entry) => entry.slug === found)
+  const service = state.found
+    ? SERVICES.find((entry) => entry.slug === state.found)
     : undefined;
 
   return (
@@ -226,28 +265,33 @@ export function MemoryGame() {
 
       <div className="memory__bar">
         <span>
-          מהלכים: <b>{moves}</b>
+          מהלכים: <b>{state.moves}</b>
         </span>
         <span>
           זוגות: <b>{pairs}</b>/{SERVICES.length}
         </span>
-        <button className="memory__reset" onClick={start} type="button">
+        <button
+          className="memory__reset"
+          onClick={() => dispatch({ type: "start" })}
+          type="button"
+        >
           משחק חדש
         </button>
       </div>
 
       <div className="memory__grid">
-        {deck.map((card, index) => {
-          const open = faceUp.includes(card.key) || matched.includes(card.key);
+        {state.deck.map((card, index) => {
+          const done = state.matched.includes(card.key);
+          const open = done || state.faceUp.includes(card.key);
           const name = CARD_NAMES[card.slug];
           return (
             <button
               aria-label={open ? name : `קלף ${index + 1}, הפוך`}
               className="memory__card"
-              data-done={matched.includes(card.key) || undefined}
+              data-done={done || undefined}
               data-open={open || undefined}
               key={card.key}
-              onClick={() => pick(card)}
+              onClick={() => dispatch({ key: card.key, type: "pick" })}
               type="button"
             >
               <span className="memory__inner">
@@ -283,9 +327,9 @@ export function MemoryGame() {
 
       <div
         aria-label="סיום המשחק"
-        aria-modal={won || undefined}
+        aria-modal={state.won || undefined}
         className="memory__win"
-        data-open={won || undefined}
+        data-open={state.won || undefined}
         role="dialog"
       >
         <div className="memory__win-box">
@@ -302,7 +346,7 @@ export function MemoryGame() {
             </a>
             <button
               className="scroll-card__cta scroll-card__cta--quiet"
-              onClick={start}
+              onClick={() => dispatch({ type: "start" })}
               type="button"
             >
               משחק חדש
