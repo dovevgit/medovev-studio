@@ -918,6 +918,16 @@
   margin: 0 auto;
 }
 
+.memory__slot {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The caption only shows on a phone; see the small-screen block below. */
+.memory__caption {
+  display: none;
+}
+
 .memory__card {
   position: relative;
   aspect-ratio: 3 / 4;
@@ -936,7 +946,7 @@
   outline-offset: 3px;
 }
 
-.memory__card[data-done] {
+.memory__slot[data-done] .memory__card {
   cursor: default;
 }
 
@@ -952,15 +962,15 @@
   transition: transform 550ms cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 
-.memory__card[data-open] .memory__inner {
+.memory__slot[data-open] .memory__inner {
   transform: rotateY(180deg);
 }
 
-.memory__card:not([data-done]):hover .memory__inner {
+.memory__slot:not([data-done]) .memory__card:hover .memory__inner {
   transform: translateY(-2%);
 }
 
-.memory__card[data-open]:not([data-done]):hover .memory__inner {
+.memory__slot[data-open]:not([data-done]) .memory__card:hover .memory__inner {
   transform: rotateY(180deg) translateY(-2%);
 }
 
@@ -999,7 +1009,7 @@
   filter: drop-shadow(0 0.4cqw 0.7cqw rgba(0, 0, 0, 0.5));
 }
 
-.memory__card[data-done] .memory__face--front {
+.memory__slot[data-done] .memory__face--front {
   box-shadow: 0 0 0 1px rgba(201, 160, 66, 0.9), 0 0 1.6rem rgba(201, 160, 66, 0.4);
 }
 
@@ -1054,12 +1064,34 @@
 }
 
 .memory__win-box {
+  position: relative;
   max-width: 30rem;
   padding: clamp(1.6rem, 4vw, 2.6rem);
   border: 1px solid rgba(201, 160, 66, 0.45);
   border-radius: 1.1rem;
   background: var(--wood-raised);
   text-align: center;
+}
+
+.memory__win-close {
+  position: absolute;
+  top: 0.5rem;
+  inset-inline-start: 0.6rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--wood-ink-soft);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.memory__win-close:hover,
+.memory__win-close:focus-visible {
+  color: var(--wood-ink);
 }
 
 .memory__win-box h3 {
@@ -1137,13 +1169,43 @@
     gap: 0.3rem;
   }
 
+  /* Full bleed, so six cards get the whole width of the screen rather than
+   * the page's gutters as well. */
+  .memory__grid {
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    padding-inline: 0.3rem;
+  }
+
+  /* No name on the cloth now, so the emblem is the only thing inside and
+   * the padding is what keeps it from filling the card edge to edge. */
   .memory__face--front {
     gap: 0;
-    padding: 9% 11% 11%;
+    padding: 15% 14%;
   }
 
   .memory__name {
     display: none;
+  }
+
+  .memory__caption {
+    display: block;
+    margin-top: 0.3rem;
+    color: var(--wood-ink);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: center;
+    /* Kept in the layout at zero opacity rather than hidden: the row's
+     * height is then the same before and after a card turns, and the board
+     * does not shuffle itself under the thumb. */
+    opacity: 0;
+    transition: opacity 220ms ease;
+  }
+
+  .memory__slot[data-open] .memory__caption {
+    opacity: 1;
   }
 
   .memory__toast {
@@ -1154,6 +1216,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .memory__caption,
   .memory__inner,
   .memory__reset,
   .memory__win {

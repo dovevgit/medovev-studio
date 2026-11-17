@@ -43,6 +43,9 @@ const WIN_AFTER = 850;
 type Card = { key: string; slug: string };
 
 type State = {
+  /** True once the win has been shown, so dismissing it does not bring it
+   *  straight back: the effect that opens it watches this, not `won`. */
+  celebrated: boolean;
   deck: Card[];
   /** The service named by the last pair found, for the line under the board. */
   found: string | null;
@@ -57,6 +60,7 @@ type State = {
 
 type Action =
   | { key: string; type: "pick" }
+  | { type: "close" }
   | { type: "hide" }
   | { type: "shuffle" }
   | { type: "start" }
@@ -88,6 +92,7 @@ function shuffled(deck: Card[]): Card[] {
 }
 
 const FRESH: State = {
+  celebrated: false,
   deck: orderedDeck(),
   faceUp: [],
   found: null,
@@ -107,6 +112,9 @@ const FRESH: State = {
  */
 function reduce(state: State, action: Action): State {
   switch (action.type) {
+    case "close":
+      return { ...state, won: false };
+
     case "hide":
       return { ...state, faceUp: [], locked: false };
 
@@ -152,7 +160,7 @@ function reduce(state: State, action: Action): State {
       return { ...FRESH, deck: shuffled(state.deck) };
 
     case "win":
-      return { ...state, won: true };
+      return { ...state, celebrated: true, won: true };
 
     default:
       return state;
@@ -239,7 +247,7 @@ export function MemoryGame() {
   }, [state.locked]);
 
   useEffect(() => {
-    if (!complete || state.won) {
+    if (!complete || state.celebrated) {
       return;
     }
     const timer = setTimeout(() => {
@@ -247,7 +255,21 @@ export function MemoryGame() {
       confetti();
     }, WIN_AFTER);
     return () => clearTimeout(timer);
-  }, [complete, confetti, state.won]);
+  }, [complete, confetti, state.celebrated]);
+
+  // Escape closes it, the same as tapping the darkness around it.
+  useEffect(() => {
+    if (!state.won) {
+      return;
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        dispatch({ type: "close" });
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [state.won]);
 
   const service = state.found
     ? SERVICES.find((entry) => entry.slug === state.found)
@@ -285,29 +307,43 @@ export function MemoryGame() {
           const open = done || state.faceUp.includes(card.key);
           const name = CARD_NAMES[card.slug];
           return (
-            <button
-              aria-label={open ? name : `קלף ${index + 1}, הפוך`}
-              className="memory__card"
+            <div
+              className="memory__slot"
               data-done={done || undefined}
               data-open={open || undefined}
               key={card.key}
-              onClick={() => dispatch({ key: card.key, type: "pick" })}
-              type="button"
             >
-              <span className="memory__inner">
-                <span className="memory__face memory__face--back" />
-                <span className="memory__face memory__face--front">
-                  <img
-                    alt=""
-                    height={440}
-                    loading="lazy"
-                    src={`/assets/memory/logo-${card.slug}.webp`}
-                    width={440}
-                  />
-                  <span className="memory__name">{name}</span>
+              <button
+                aria-label={open ? name : `קלף ${index + 1}, הפוך`}
+                className="memory__card"
+                onClick={() => dispatch({ key: card.key, type: "pick" })}
+                type="button"
+              >
+                <span className="memory__inner">
+                  <span className="memory__face memory__face--back" />
+                  <span className="memory__face memory__face--front">
+                    <img
+                      alt=""
+                      height={440}
+                      loading="lazy"
+                      src={`/assets/memory/logo-${card.slug}.webp`}
+                      width={440}
+                    />
+                    <span className="memory__name">{name}</span>
+                  </span>
                 </span>
+              </button>
+
+              {/* The same name again, under the card rather than on it. A
+                  phone's card is about 60px wide; a name set inside it
+                  there would be five pixels tall. Beneath it, on the dark
+                  page, it is simply legible. One of the two shows at a
+                  time, so the button's own label carries the name for a
+                  screen reader and this copy is hidden from it. */}
+              <span aria-hidden="true" className="memory__caption">
+                {name}
               </span>
-            </button>
+            </div>
           );
         })}
       </div>
@@ -330,9 +366,23 @@ export function MemoryGame() {
         aria-modal={state.won || undefined}
         className="memory__win"
         data-open={state.won || undefined}
+        onClick={(event) => {
+          // Only the darkness itself, never a click that began on the box.
+          if (event.target === event.currentTarget) {
+            dispatch({ type: "close" });
+          }
+        }}
         role="dialog"
       >
         <div className="memory__win-box">
+          <button
+            aria-label="סגירה"
+            className="memory__win-close"
+            onClick={() => dispatch({ type: "close" })}
+            type="button"
+          >
+            ×
+          </button>
           <h3>כל הכבוד</h3>
           <p>עכשיו אתם יודעים כל מה שאנחנו יכולים לעשות עבורכם</p>
           <div className="memory__win-row">
