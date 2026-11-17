@@ -3151,22 +3151,40 @@ html.a11y-cursor * {
   font-size: 0.82rem;
 }
 
-/* Masonry-ish without masonry: the pictures are a mix of portrait and
- * landscape, so each cell is a fixed square and the picture fills it. A
- * ragged grid of their native shapes reads as a mistake at this size. */
+/* Columns, not a grid of equal cells.
+ *
+ * A grid would need one shape for every cell, and the only way to put a
+ * portrait and a landscape in the same square is to crop one of them. On a
+ * photographer's own page the framing IS the work, so the pictures keep the
+ * shape they were taken in and the columns take care of the packing. */
 .chap__grid {
-  display: grid;
-  gap: clamp(0.4rem, 1.5vw, 0.7rem);
-  grid-template-columns: repeat(auto-fill, minmax(min(10rem, 45%), 1fr));
+  column-gap: clamp(0.4rem, 1.5vw, 0.7rem);
+  columns: 3;
+}
+
+@media (max-width: 860px) {
+  .chap__grid {
+    columns: 2;
+  }
+}
+
+@media (max-width: 420px) {
+  .chap__grid {
+    columns: 1;
+  }
 }
 
 .g-item {
-  overflow: hidden;
+  display: block;
+  width: 100%;
+  margin-bottom: clamp(0.4rem, 1.5vw, 0.7rem);
   padding: 0;
+  overflow: hidden;
   border: 1px solid var(--page-edge);
   border-radius: 0.7rem;
-  aspect-ratio: 1;
   background: #0d0906;
+  /* A picture must never be split across two columns. */
+  break-inside: avoid;
   cursor: zoom-in;
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
@@ -3176,11 +3194,13 @@ html.a11y-cursor * {
   transform: translateY(-2px);
 }
 
+/* Height from the picture's own proportions. The width and height
+ * attributes on the tag reserve the right box before the file arrives, so
+ * the page does not jump as each one lands. */
 .g-item img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
 }
 
 /* --- the viewer ---------------------------------------------------------- */
