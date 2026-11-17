@@ -994,6 +994,56 @@ export const ARTICLE_PAGES: Record<string, ArticlePage> = {
   },
 };
 
+export type Picture = {
+  alt: string;
+  h: number;
+  src: string;
+  w: number;
+};
+
+/** The photograph on the training page. */
+export const TRAINING_PICTURE: Picture = {
+  alt: "מדריך מציג תרשים על לוח מחיק בפני קבוצת משתתפים בהדרכה",
+  h: 1024,
+  src: "/assets/training/training-1536.webp",
+  w: 1536,
+};
+
+/** The two mock-ups on the websites-and-apps page. */
+export const WEB_SHOWCASE: Picture[] = [
+  {
+    alt: "דוגמה לעיצוב של אתר עסקי במחשב נייד",
+    h: 941,
+    src: "/assets/showcase/site-mockup.webp",
+    w: 1672,
+  },
+  {
+    alt: "דוגמה לאפליקציה ולמערכת ניהול במחשב נייד ובטלפון",
+    h: 1013,
+    src: "/assets/showcase/app-mockup.webp",
+    w: 1800,
+  },
+];
+
+/** The robot on the AI page. */
+export const AI_PICTURE: Picture = {
+  alt: "רובוט AI עם כמה ידיים שעובד במקביל על עריכת וידאו, אודיו, נתונים, יומן וצ'אט",
+  h: 941,
+  src: "/assets/showcase/ai-robot.webp",
+  w: 1672,
+};
+
+/** The photo page keeps this list outside its body copy. */
+export const PHOTO_CHECKS = {
+  heading: "מה כלול",
+  items: [
+    "מצלמת פול פריים מקצועית ועדשות",
+    "תאורה במידת הצורך וחצובה",
+    "עריכה מקצועית לשיפור הנראות",
+    "ייצוא בקובץ איכותי לפי הסטנדרטים המקובלים בתעשייה",
+  ],
+};
+
 export type GalleryItem = {
   alt: string;
   /** The full-size file, shown when the picture is opened. */

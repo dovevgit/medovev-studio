@@ -3,7 +3,7 @@ import { createFileRoute, useParams } from "@tanstack/react-router";
 import { Cta, InnerPage, Lists, Prose, Steps } from "@/components/inner-page";
 import { PagePlaceholder } from "@/components/page-placeholder";
 import { ServiceMedia } from "@/components/service-media";
-import { SERVICE_PAGES } from "@/page-copy";
+import { PHOTO_CHECKS, SERVICE_PAGES } from "@/page-copy";
 import { serviceIcon } from "@/site-content";
 
 export const Route = createFileRoute("/services/$slug")({
@@ -32,7 +32,10 @@ function ServicePage() {
           site puts it. */}
       <ServiceMedia slug={slug} />
       <Prose paragraphs={page.body} />
-      <Lists lists={page.lists} />
+      {/* The photo page keeps one more list -- what a shoot includes --
+          outside its body copy on the old site, so it is carried separately
+          rather than folded into the others. */}
+      <Lists lists={slug === "photo" ? [...page.lists, PHOTO_CHECKS] : page.lists} />
       <Steps steps={page.steps} title="איך זה עובד" />
       <Cta back={{ href: "/#services", label: "לכל השירותים" }} cta={page.cta} />
     </InnerPage>

@@ -1,7 +1,7 @@
 import { PhotoGallery } from "@/components/photo-gallery";
 import { Reel } from "@/components/reel";
 import { VoiceExtras } from "@/components/voice-extras";
-import { PODCAST_REELS, VIDEO_REELS } from "@/page-copy";
+import { AI_PICTURE, PODCAST_REELS, VIDEO_REELS, WEB_SHOWCASE } from "@/page-copy";
 
 /**
  * The work itself, on the four service pages that have any to show.
@@ -33,6 +33,33 @@ export function ServiceMedia({ slug }: { slug: string }) {
             לצפייה ביוטיוב
           </a>
         </div>
+      </section>
+    );
+  }
+
+  if (slug === "web") {
+    return (
+      <section className="page__showcase">
+        {WEB_SHOWCASE.map((pic) => (
+          <figure className="showcase" key={pic.src}>
+            <img alt={pic.alt} height={pic.h} loading="lazy" src={pic.src} width={pic.w} />
+          </figure>
+        ))}
+      </section>
+    );
+  }
+
+  if (slug === "ai") {
+    return (
+      <section className="page__showcase">
+        <figure className="showcase">
+          <img
+            alt={AI_PICTURE.alt}
+            height={AI_PICTURE.h}
+            src={AI_PICTURE.src}
+            width={AI_PICTURE.w}
+          />
+        </figure>
       </section>
     );
   }
