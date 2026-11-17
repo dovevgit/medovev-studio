@@ -577,14 +577,17 @@
  * ======================================================================== */
 
 .after-film {
-  --wood: #e7d8bc;
-  --wood-raised: #f3e9d7;
-  --wood-edge: #cdb893;
-  --wood-ink: #2b2117;
-  --wood-ink-soft: #5e4e3a;
-  --royal: #27406e;
-  --royal-lit: #35538b;
-  --gilt: #a97f22;
+  /* The page used to open into pale wood here. It stays in the film's own
+   * night instead, and the journey carries on down a trail: the services are
+   * stops along it rather than cards on a board. */
+  --wood: #0d0b09;
+  --wood-raised: #19130e;
+  --wood-edge: #3a2d20;
+  --wood-ink: #f1e8d6;
+  --wood-ink-soft: #b3a692;
+  --royal: #2f4b80;
+  --royal-lit: #3f619f;
+  --gilt: #c9a042;
 
   position: relative;
   background: var(--wood);
@@ -601,15 +604,7 @@
    * follows immediately, so the background opens WHILE the words arrive
    * rather than before them. */
   height: 20vh;
-  background: linear-gradient(
-    180deg,
-    #0b0a09 0%,
-    #1b140d 14%,
-    #5c4529 40%,
-    #a98d62 64%,
-    #d8c7a6 84%,
-    var(--wood) 100%
-  );
+  background: linear-gradient(180deg, #0b0a09 0%, var(--wood) 100%);
 }
 
 /* A whisper of grain, so the wood is a material and not a flat fill. Two
@@ -619,16 +614,42 @@
   position: relative;
   padding: clamp(0.5rem, 1.2vw, 1rem) clamp(1.25rem, 5vw, 4rem)
     clamp(4rem, 9vw, 7rem);
-  background-image: repeating-linear-gradient(
-      91deg,
-      rgba(120, 92, 54, 0.045) 0 1px,
-      transparent 1px 7px
-    ),
-    repeating-linear-gradient(
-      89deg,
-      rgba(120, 92, 54, 0.03) 0 1px,
-      transparent 1px 23px
-    );
+}
+
+/* The trail itself, running the whole length of the services behind them.
+ *
+ * The picture does not meet its own top edge, so tiled straight down it
+ * would jump a tenth of its width at every join. The file that ships is the
+ * picture stacked with a mirrored copy of itself: both ends of that pair are
+ * the original's top edge, so it repeats seamlessly however long the section
+ * grows.
+ *
+ * It is masked away at both ends rather than cut, so the trail arrives out
+ * of the dark and leaves into it. */
+.after-film__body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: url("/assets/path.webp") top center / min(100%, 78rem) auto
+    repeat-y;
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Everything reads above the trail. */
+.services__head,
+.flag-card,
+.services,
+.closing {
+  position: relative;
+  z-index: 1;
 }
 
 .services__head {
@@ -684,7 +705,10 @@
   padding: clamp(1.25rem, 2.4vw, 1.7rem);
   border: 1px solid var(--wood-edge);
   border-radius: 14px;
-  background: var(--wood-raised);
+  /* Translucent, so the trail shows through the ones still waiting for
+   * their banner rather than being blocked by them. */
+  background: rgba(25, 19, 14, 0.82);
+  backdrop-filter: blur(2px);
 }
 
 .service__title {
