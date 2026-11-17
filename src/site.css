@@ -710,21 +710,24 @@
   transition: transform 180ms ease;
 }
 
-.site-brand__full {
+/* Two classes deep, so these beat the `.site-brand img` rule above, which
+ * sets display and would otherwise win on specificity against a lone class
+ * and show both lockups at once. */
+.site-brand .site-brand__full {
   height: clamp(3.4rem, 5.4vw, 4.8rem);
 }
 
-.site-brand__mark {
+.site-brand .site-brand__mark {
   display: none;
   height: clamp(2.1rem, 6vw, 2.6rem);
 }
 
 @media (hover: none) and (pointer: coarse), (max-width: 860px) {
-  .site-brand__full {
+  .site-brand .site-brand__full {
     display: none;
   }
 
-  .site-brand__mark {
+  .site-brand .site-brand__mark {
     display: block;
   }
 }
