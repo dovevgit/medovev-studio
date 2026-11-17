@@ -97,56 +97,6 @@
   }
 }
 
-/* ---------------------------------------------------------------------------
- * Crowned letter.
- *
- * The final letter of the headline's last word wears the same gold crown the
- * king wears in the film -- drawn as vector art so it stays crisp at every
- * size and costs no extra image request. It sits inside the word span, so it
- * fades in with that word rather than on its own.
- * ------------------------------------------------------------------------ */
-.scroll-scrub__title {
-  padding-top: 0.5em;
-}
-
-.scroll-scrub__title .ss-crowned {
-  position: relative;
-  display: inline-block;
-  /* A predictable 1em box, so the crown can be seated from the glyph's top
-   * rather than from the line box -- the headline's 0.94 line-height leaves a
-   * large gap above Hebrew letters, which is what made the crown float. */
-  line-height: 1;
-}
-
-.scroll-scrub__title .ss-crowned::before {
-  position: absolute;
-  /* Seated exactly where the letter ends, measured rather than guessed.
-   *
-   * Two numbers decide this, and the second one is easy to forget: the ink of
-   * ה reaches 0.611em above the BASELINE, but `bottom` is measured from the
-   * bottom of the line box, which sits 0.139em BELOW the baseline at this
-   * line-height. Treating the two as the same thing is what sank an earlier
-   * version a quarter of the way down the letter.
-   *
-   *   0.611em (ink) + 0.139em (baseline above the box's bottom) = 0.750em
-   *
-   * A hundredth less, so the gold rests on the letter with no hairline of
-   * background showing between them.
-   *
-   * Both numbers come from the live font via canvas metrics and a zero-height
-   * inline-block probe; re-measure if the headline's family, weight or
-   * line-height changes, because every one of them moves this. */
-  bottom: 0.74em;
-  left: 50%;
-  width: 0.64em;
-  height: 0.43em;
-  content: "";
-  background: url("/assets/crown.png") center / contain no-repeat;
-  /* A short shadow cast down onto the letter itself. Nothing else sells
-   * contact as cheaply: without it the gold reads as a cut-out laid on top. */
-  filter: drop-shadow(0 0.02em 0.02em rgba(0, 0, 0, 0.6));
-  transform: translateX(-50%);
-}
 
 /* ---------------------------------------------------------------------------
  * No scrim behind the chapter copy.

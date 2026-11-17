@@ -89,7 +89,7 @@ function useChapterCopyLayer() {
       return;
     }
 
-    const splitTitle = (title: HTMLElement, withCrown: boolean) => {
+    const splitTitle = (title: HTMLElement) => {
       if (title.dataset.wordsSplit === "true") {
         return;
       }
@@ -104,21 +104,7 @@ function useChapterCopyLayer() {
         span.className = "ss-word";
         span.style.setProperty("--i", String(index));
 
-        // The opening headline's last word wears the king's crown on its
-        // final letter, so that letter gets a span of its own to hang it
-        // from. Only the first chapter is crowned: repeated on every
-        // headline the crown stops being a symbol and becomes decoration.
-        if (withCrown && index === words.length - 1 && word.length > 1) {
-          const characters = [...word];
-          const last = characters.pop() ?? "";
-          span.append(characters.join(""));
-          const crowned = document.createElement("span");
-          crowned.className = "ss-crowned";
-          crowned.textContent = last;
-          span.append(crowned);
-        } else {
-          span.textContent = word;
-        }
+        span.textContent = word;
 
         fragment.append(span);
         if (index < words.length - 1) {
@@ -180,7 +166,7 @@ function useChapterCopyLayer() {
 
       const title = copy.querySelector<HTMLElement>(".scroll-scrub__title");
       if (title) {
-        splitTitle(title, index === 0);
+        splitTitle(title);
       }
     });
 
