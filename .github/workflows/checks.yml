@@ -28,3 +28,5 @@ jobs:
         run: python3 scripts/check_mobile_width.py dist/client
       - name: Nothing the site points at is missing
         run: python3 scripts/check_links.py
+      - name: The language switch survives a re-render
+        run: python3 scripts/check_i18n.py

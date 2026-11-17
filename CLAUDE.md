@@ -8,7 +8,7 @@ medovev.com — a Hebrew, right-to-left site. **Most visitors are on phones.**
 npm run check
 ```
 
-It builds, then runs two guards. Both must print `OK`. If either prints `FAIL`,
+It builds, then runs three guards. All must print `OK`. If any prints `FAIL`,
 fix the page and do not push.
 
 - **`scripts/check_mobile_width.py`** — opens every built page in a phone-sized
@@ -19,8 +19,20 @@ fix the page and do not push.
   something that is not there, if an image has no `alt`, if a page is missing
   its title/description/canonical/og:image/h1, or if a URL the **old** site
   published would 404 here.
+- **`scripts/check_i18n.py`** — switches the page to English and to Russian and
+  checks it again AFTER opening the menu and filtering the gallery. The
+  translation is a pass over the rendered page, so the failure mode is a React
+  re-render putting the Hebrew back; checking the page before any interaction
+  would never catch it.
 
-A GitHub Action runs the same two after each push, as a safety net.
+A GitHub Action runs all three after each push, as a safety net.
+
+## Languages
+
+`src/i18n/{en,ru}.json` are keyed by the **Hebrew string itself**, so a new
+Hebrew string on a page simply has no translation and stays Hebrew. After
+adding or changing Hebrew copy, run `npm run check`; if the share of untouched
+Hebrew rises, add the new strings to both files.
 
 ## CSS pitfalls that already broke the phone layout once (Nov 2026)
 
