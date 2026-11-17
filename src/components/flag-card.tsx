@@ -51,11 +51,20 @@ export function FlagCard({
   artHeight: number;
   field: ClearField;
 }) {
+  // The cloths are not equally open: the king leaves 61% of the first card
+  // clear, the knight only 45% of the second. Type sized against the CARD
+  // therefore fits one and breaks out of the other. On a phone, where there
+  // is no slack at all, it is sized against the FIELD instead -- this scale
+  // is that field measured against the first card's, so the roomiest cloth
+  // is the reference and the tighter ones step down in proportion.
+  const scale = (100 - field.left - field.right) / 61;
+
   const placement = {
     "--field-bottom": `${field.bottom}%`,
     "--field-left": `${field.left}%`,
     "--field-right": `${field.right}%`,
     "--field-top": `${field.top}%`,
+    "--type-scale": scale.toFixed(3),
   } as CSSProperties;
 
   return (

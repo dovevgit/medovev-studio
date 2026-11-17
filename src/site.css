@@ -1126,12 +1126,16 @@
     gap: 0.6cqw;
   }
 
+  /* Sized against the cloth's open field rather than the card, so the
+   * narrower banners step down instead of spilling onto the gold. Desktop
+   * keeps one size for every card -- there the widest line still fits the
+   * tightest field, so nothing needs to shrink. */
   .flag-card__title {
-    font-size: 6.6cqw;
+    font-size: calc(6.6cqw * var(--type-scale, 1));
   }
 
   .flag-card__line {
-    font-size: 3.6cqw;
+    font-size: calc(3.7cqw * var(--type-scale, 1));
   }
 
   .flag-card__cta {
