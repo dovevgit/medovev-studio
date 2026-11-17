@@ -117,7 +117,15 @@ function useChapterCopyLayer() {
       rail.setAttribute("aria-hidden", "true");
       const fill = document.createElement("span");
       fill.className = "ss-rail__fill";
-      rail.append(fill);
+
+      // The sentry. He patrols the rail: his place along it IS the journey's
+      // position, so he is pushed along by the thumb rather than animated
+      // into place, and he turns to face whichever way the page is going.
+      const walker = document.createElement("div");
+      walker.className = "ss-walker";
+      walker.dataset.facing = "down";
+      walker.append(document.createElement("span"));
+      rail.append(fill, walker);
 
       stage.append(cue, rail);
     }
@@ -238,6 +246,10 @@ function useChapterCopyLayer() {
     // near-zero total, which pinned the progress at 1 and emptied the screen;
     // reading it live costs a layout per frame on three elements and simply
     // cannot go stale.
+    // Where the sentry was last seen, kept outside the scroll handler so it
+    // survives between events.
+    const facing = { at: 0, way: "down" };
+
     const publish = () => {
       const viewport = window.innerHeight;
       const rootTop = root.getBoundingClientRect().top + window.scrollY;
@@ -258,6 +270,20 @@ function useChapterCopyLayer() {
       }
       const p = Math.min(Math.max((window.scrollY - rootTop) / total, 0), 1);
       root.style.setProperty("--copy-progress", String(p));
+
+      // Which way he faces. Only written when the direction actually
+      // changes, and never read back from layout, so this costs nothing on
+      // a scroll frame. The threshold ignores the sub-pixel jitter a
+      // trackpad produces at rest, which would otherwise spin him round.
+      const walker = stage.querySelector<HTMLElement>(".ss-walker");
+      if (walker && Math.abs(p - facing.at) > 0.0006) {
+        const next = p > facing.at ? "down" : "up";
+        if (next !== facing.way) {
+          walker.dataset.facing = next;
+          facing.way = next;
+        }
+        facing.at = p;
+      }
     };
 
     // Deliberately NOT scheduled through requestAnimationFrame: a browser

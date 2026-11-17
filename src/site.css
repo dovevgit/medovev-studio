@@ -308,6 +308,69 @@
     0 0 1.4rem rgba(201, 160, 66, 0.45);
 }
 
+/* ---------------------------------------------------------------------------
+ * The sentry on the rail.
+ *
+ * He walks the progress bar. His place along it is not animated: it IS the
+ * journey's position, so the thumb pushes him along and he stops the moment
+ * the page stops. The page reads right to left, so the fill grows from the
+ * right and he sets off from there -- and the walk cycle happens to face
+ * left, which is the way he is going. Scroll back up and he turns round.
+ *
+ * His legs are on a slow timer rather than on the scroll, at a sentry's
+ * pace. Tying each step to a slice of the journey would have meant one
+ * frame every few hundred pixels of scroll -- a stutter, not a walk -- and
+ * at this size nobody can tell that his feet are not measuring the ground.
+ * ------------------------------------------------------------------------ */
+.ss-walker {
+  position: absolute;
+  /* Standing on the rail, not inside it. */
+  bottom: 100%;
+  right: calc(clamp(0, var(--copy-progress, 0), 1) * 100%);
+  width: calc(var(--sentry-h, 2.9rem) * 0.7833);
+  height: var(--sentry-h, 2.9rem);
+  /* Half his own width, so it is his FEET that track the progress and not
+   * his left edge. */
+  transform: translateX(50%);
+}
+
+.ss-walker > span {
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/knight-walk.webp");
+  background-repeat: no-repeat;
+  /* Eight cells side by side: at 800% the strip is eight element-widths
+   * wide, and `steps(8)` walks it one cell at a time. */
+  background-size: 800% 100%;
+  animation: ss-sentry-step 2.4s steps(8) infinite;
+}
+
+/* Facing. The flip is on the sprite and not on the wrapper, because a
+ * scaleX on the wrapper would mirror its own translateX and park him half a
+ * body away from the point he is meant to be standing on. */
+.ss-walker[data-facing="up"] > span {
+  transform: scaleX(-1);
+}
+
+@keyframes ss-sentry-step {
+  from { background-position-x: 0%; }
+  to { background-position-x: 100%; }
+}
+
+@media (hover: none) and (pointer: coarse), (max-width: 860px) {
+  .ss-walker {
+    --sentry-h: 2.3rem;
+  }
+}
+
+/* He is decoration driven by scroll, so he keeps still for anyone who asked
+ * the page to. */
+@media (prefers-reduced-motion: reduce) {
+  .ss-walker {
+    display: none;
+  }
+}
+
 .ss-cue {
   display: none;
 }
