@@ -1215,7 +1215,20 @@
   .after-film {
     position: relative;
     z-index: 1;
-    margin-top: -44vh;
+    /* How far the wood may climb into the film's exit, and no further.
+     *
+     * The last chapter's words end 71% of the way down a phone screen, so
+     * anything past about 28vh starts covering them -- at 44vh it was eating
+     * 120px of a 137px headline, which reads as the film's type shrinking
+     * rather than as what it was. 26vh leaves the headline a clear margin at
+     * the very end of the journey, which is the one moment it must be whole.
+     *
+     * Worth revisiting from the other side: the stage is a full viewport tall
+     * while the film only uses the top three quarters of it on a phone, so a
+     * shorter stage would cut the same gap without crowding anything. That
+     * moves the film's own framing, so it is a change to make deliberately,
+     * not in passing. */
+    margin-top: -26vh;
   }
 
   .after-film__dawn {
