@@ -314,8 +314,9 @@
  * He walks the progress bar. His place along it is not animated: it IS the
  * journey's position, so the thumb pushes him along and he stops the moment
  * the page stops. The page reads right to left, so the fill grows from the
- * right and he sets off from there -- and the walk cycle happens to face
- * left, which is the way he is going. Scroll back up and he turns round.
+ * right and he sets off from there, walking left. The sprite's own walk
+ * faces RIGHT -- the cape trails to the left -- so going down the page is
+ * the case that needs the flip, not going back up.
  *
  * His legs are on the scroll too, not on a timer: a step is a slice of the
  * journey, so the pace he walks at is the pace the bar fills at. Stop
@@ -327,8 +328,8 @@
   /* Standing on the rail, not inside it. */
   bottom: 100%;
   right: calc(clamp(0, var(--copy-progress, 0), 1) * 100%);
-  width: calc(var(--sentry-h, 3.3rem) * 0.7833);
-  height: var(--sentry-h, 3.3rem);
+  width: calc(var(--sentry-h, 6.6rem) * 0.7833);
+  height: var(--sentry-h, 6.6rem);
   /* Half his own width, so it is his FEET that track the progress and not
    * his left edge. */
   transform: translateX(50%);
@@ -349,13 +350,13 @@
 /* Facing. The flip is on the sprite and not on the wrapper, because a
  * scaleX on the wrapper would mirror its own translateX and park him half a
  * body away from the point he is meant to be standing on. */
-.ss-walker[data-facing="up"] > span {
+.ss-walker[data-facing="down"] > span {
   transform: scaleX(-1);
 }
 
 @media (hover: none) and (pointer: coarse), (max-width: 860px) {
   .ss-walker {
-    --sentry-h: 2.7rem;
+    --sentry-h: 5.4rem;
   }
 }
 
