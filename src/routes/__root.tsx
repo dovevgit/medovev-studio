@@ -6,21 +6,47 @@ import {
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
+import { Analytics } from "@vercel/analytics/react";
+
 import { AccessibilityMenu } from "@/components/accessibility-menu";
 import { SiteFooter } from "@/components/site-footer";
 
 import appCss from "../styles.css?url";
+
+/** Where the site will live. Absolute URLs are required in og: tags and in
+ *  a canonical link -- a relative one is ignored by most crawlers. */
+const SITE = "https://medovev.com";
 
 const TITLE = "סטודיו לאסטרטגיה עסקית | דובב גרינברג";
 const DESCRIPTION =
   "אסטרטגיה עסקית, נוכחות דיגיטלית, אתרים ואפליקציות, פתרונות AI, הפקת וידאו, צילום, פודקאסטים וקריינות — פתרונות מקצה לקצה לצמיחה עסקית.";
 
 export const Route = createRootRoute({
-  head: () => ({
+  head: (ctx) => {
+    // Every page says which URL it is the canonical copy of, and names that
+    // same URL to the social networks. Without it the site is reachable at
+    // several addresses -- with and without a trailing slash, with a tracking
+    // query on the end -- and a crawler has no way to know they are one page.
+    // The LAST match, not this one: `head` runs on the root route, whose own
+    // pathname is always "/", so asking it which page this is gives the same
+    // answer everywhere.
+    const leaf = ctx.matches.at(-1)?.pathname ?? "/";
+    const path = leaf.replace(/\/+$/, "") || "/";
+    const url = `${SITE}${path}`;
+    return {
     links: [
       { href: appCss, rel: "stylesheet" },
+      { href: url, rel: "canonical" },
       { href: "/assets/favicon.png", rel: "icon", type: "image/png" },
-      { href: "/assets/favicon.png", rel: "apple-touch-icon" },
+      { href: "/assets/apple-touch-icon.png", rel: "apple-touch-icon" },
+      { href: "/assets/manifest.webmanifest", rel: "manifest" },
+    ],
+    scripts: [
+      // The same tracker the other two sites use, carried over as it is. It
+      // listens on the document for clicks and scroll depth, so it needs no
+      // hook into the components and nothing to maintain alongside them.
+      // It records what KIND of thing happened and on which page, never who.
+      { defer: true, src: "/assets/track.js" },
     ],
     meta: [
       { charSet: "utf-8" },
@@ -31,10 +57,18 @@ export const Route = createRootRoute({
       { content: DESCRIPTION, property: "og:description" },
       { content: "website", property: "og:type" },
       { content: "he_IL", property: "og:locale" },
+      { content: "DG Workflow System Studio", property: "og:site_name" },
+      // Without an image, a link shared to WhatsApp or Facebook arrives as a
+      // bare line of text. The file is 1200x630, the size both of them crop to.
+      { content: `${SITE}/assets/og.jpg`, property: "og:image" },
+      { content: "1200", property: "og:image:width" },
+      { content: "630", property: "og:image:height" },
       { content: "summary_large_image", name: "twitter:card" },
       { content: "#0b0a09", name: "theme-color" },
+      { content: url, property: "og:url" },
     ],
-  }),
+    };
+  },
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   shellComponent: RootDocument,
@@ -63,6 +97,8 @@ function RootComponent() {
       <Outlet />
       <SiteFooter />
       <AccessibilityMenu />
+      {/* Supplies window.va, which the tracker above reports through. */}
+      <Analytics />
     </>
   );
 }

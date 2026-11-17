@@ -1,0 +1,149 @@
+{
+  "redirects": [
+    {
+      "source": "/%D7%9E%D7%99-%D7%90%D7%A0%D7%99",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A6%D7%A8%D7%95-%D7%A7%D7%A9%D7%A8",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A6%D7%99%D7%9C%D7%95%D7%9E%D7%99-%D7%9E%D7%96%D7%95%D7%9F",
+      "destination": "/services/photo",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A6%D7%99%D7%9C%D7%95%D7%9E%D7%99-%D7%AA%D7%93%D7%9E%D7%99%D7%AA",
+      "destination": "/services/photo",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A6%D7%99%D7%9C%D7%95%D7%9E%D7%99-%D7%90%D7%93%D7%A8%D7%99%D7%9B%D7%9C%D7%95%D7%AA",
+      "destination": "/services/photo",
+      "permanent": true
+    },
+    {
+      "source": "/video-productions",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%94%D7%96%D7%9E%D7%A0%D7%AA-%D7%94%D7%A4%D7%A7%D7%AA-%D7%95%D7%99%D7%93%D7%90%D7%95",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%90%D7%99%D7%9A-%D7%9C%D7%AA%D7%9E%D7%97%D7%A8-%D7%94%D7%A4%D7%A7%D7%AA-%D7%95%D7%99%D7%93%D7%90%D7%95",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%9B%D7%99%D7%A6%D7%93-%D7%A0%D7%99%D7%92%D7%A9%D7%99%D7%9D-%D7%9C%D7%94%D7%A4%D7%A7%D7%AA-%D7%A1%D7%A8%D7%98%D7%95%D7%9F-%D7%AA%D7%93%D7%9E%D7%99%D7%AA",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A1%D7%A8%D7%98-%D7%AA%D7%93%D7%9E%D7%99%D7%AA-%D7%A9%D7%A0%D7%A8%D7%90%D7%94-%D7%9E%D7%9C%D7%99%D7%95%D7%9F-%D7%93%D7%95%D7%9C%D7%A8",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%94%D7%A4%D7%A7%D7%AA-%D7%A4%D7%A8%D7%95%D7%99%D7%A7%D7%98-%D7%A9%D7%99%D7%95%D7%95%D7%A7%D7%99-%D7%9C%D7%A0%D7%9B%D7%A1%D7%99-%D7%A0%D7%93%D7%9C%D7%9F",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%9B%D7%99%D7%A6%D7%93-%D7%9C%D7%A6%D7%9C%D7%9D-%D7%A0%D7%9B%D7%A1-%D7%91hdr",
+      "destination": "/services/photo",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%98%D7%95%D7%A4%D7%A1-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F-%D7%9C%D7%A6%D7%99%D7%9C%D7%95%D7%9E%D7%99-%D7%9E%D7%95%D7%A6%D7%A8",
+      "destination": "/services/photo",
+      "permanent": true
+    },
+    {
+      "source": "/category/%D7%9E%D7%90%D7%9E%D7%A8%D7%99%D7%9D",
+      "destination": "/articles",
+      "permanent": true
+    },
+    {
+      "source": "/category/chapters",
+      "destination": "/articles",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A1%D7%A8%D7%98%D7%95%D7%A0%D7%99-%D7%90%D7%A0%D7%99%D7%9E%D7%A6%D7%99%D7%94",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A6%D7%99%D7%9C%D7%95%D7%9E%D7%99-%D7%95%D7%99%D7%93%D7%90%D7%95-%D7%9C%D7%A0%D7%9B%D7%A1%D7%99%D7%9D",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A1%D7%A8%D7%98-%D7%AA%D7%93%D7%9E%D7%99%D7%AA-%D7%9B%D7%9B%D7%9C-%D7%A2%D7%91%D7%95%D7%93%D7%94",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/category/%D7%9B%D7%9C%D7%9C%D7%99",
+      "destination": "/articles",
+      "permanent": true
+    },
+    {
+      "source": "/author/dvoice-info",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%90%D7%95%D7%9C%D7%A4%D7%9F-%D7%A4%D7%95%D7%93%D7%A7%D7%90%D7%A1%D7%98-%D7%91%D7%97%D7%99%D7%A4%D7%94",
+      "destination": "/services/podcast",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A6%D7%99%D7%9C%D7%95%D7%9E%D7%99-%D7%9E%D7%95%D7%A6%D7%A8",
+      "destination": "/services/photo",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A6%D7%99%D7%9C%D7%95%D7%9D-%D7%9B%D7%A0%D7%A1%D7%99%D7%9D-%D7%95%D7%94%D7%A8%D7%A6%D7%90%D7%95%D7%AA",
+      "destination": "/services/photo",
+      "permanent": true
+    },
+    {
+      "source": "/%D7%A2%D7%9E%D7%99%D7%93%D7%94-%D7%9E%D7%95%D7%9C-%D7%9E%D7%A6%D7%9C%D7%9E%D7%94",
+      "destination": "/services/video",
+      "permanent": true
+    },
+    {
+      "source": "/category/%D7%94%D7%93%D7%A8%D7%9B%D7%95%D7%AA",
+      "destination": "/articles",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)\\.(png|jpg|jpeg|webp|svg|ico|mp3|mp4)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)\\.(js|css)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
