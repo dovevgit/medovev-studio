@@ -1226,6 +1226,10 @@
  * ======================================================================== */
 .descent {
   position: relative;
+  /* A clear strip at the foot for him to pace in. Without it he walks over
+   * the last scroll's buttons: he stands on the lane's bottom edge, and the
+   * lane ends the moment the scrolls do. */
+  padding-bottom: clamp(5.5rem, 10vw, 8rem);
 }
 
 .rappel {
