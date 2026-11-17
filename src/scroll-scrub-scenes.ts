@@ -3,6 +3,13 @@
  *
  * Single-shot build: the chapters of the journey read over the generated film.
  * Every `poster` is the exact first frame of the encoded clip beside it.
+ *
+ * WebP, not PNG. A poster is on screen for the moment before its clip is
+ * ready to play, and the six of them in PNG were 6.7 MB of the home page's
+ * weight -- which on a phone meant the film appeared after nearly four
+ * seconds of dark screen, and after twelve on a weak signal. At 0.35 MB the
+ * difference is 1.3 of 255 per colour channel: nothing the eye can find at
+ * the size and for the length of time these are shown.
  */
 import type {
   ScrollScrubScene,
@@ -30,8 +37,8 @@ export const scrollScrubScenes: ScrollScrubScene[] = [
     linger: 0.2,
     mobileClip: "/assets/world/scene-01-mobile.mp4",
     mobileObjectPosition: "50% 30%",
-    mobilePoster: "/assets/world/scene-01-mobile-poster.png",
-    poster: "/assets/world/scene-01-poster.png",
+    mobilePoster: "/assets/world/scene-01-mobile-poster.webp",
+    poster: "/assets/world/scene-01-poster.webp",
     scroll: 2.2,
     title: "כל מהלך מתחיל באסטרטגיה",
   },
@@ -47,8 +54,8 @@ export const scrollScrubScenes: ScrollScrubScene[] = [
     linger: 0.15,
     mobileClip: "/assets/world/scene-02-mobile.mp4",
     mobileObjectPosition: "50% 30%",
-    mobilePoster: "/assets/world/scene-02-mobile-poster.png",
-    poster: "/assets/world/scene-02-poster.png",
+    mobilePoster: "/assets/world/scene-02-mobile-poster.webp",
+    poster: "/assets/world/scene-02-poster.webp",
     scroll: 2.1,
     title: "משם הכל מתחיל",
   },
@@ -66,8 +73,8 @@ export const scrollScrubScenes: ScrollScrubScene[] = [
     linger: 0.15,
     mobileClip: "/assets/world/scene-03-mobile.mp4",
     mobileObjectPosition: "50% 30%",
-    mobilePoster: "/assets/world/scene-03-mobile-poster.png",
-    poster: "/assets/world/scene-03-poster.png",
+    mobilePoster: "/assets/world/scene-03-mobile-poster.webp",
+    poster: "/assets/world/scene-03-poster.webp",
     scroll: 2.1,
     title: "להיות בכל מקום ולדבר באותה השפה",
   },
