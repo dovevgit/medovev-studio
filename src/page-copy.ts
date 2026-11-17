@@ -993,3 +993,39 @@ export const ARTICLE_PAGES: Record<string, ArticlePage> = {
     title: "הבינה מלאכותית האינטילגנציה אנושית",
   },
 };
+
+export type VoiceSample = {
+  src: string;
+  title: string;
+};
+
+/** The telephony samples, in the order the old site lists them. */
+export const VOICE_SAMPLES: VoiceSample[] = [
+  { src: "/assets/audio/sample-1.mp3", title: "פתיח/פאנטון לחברת אינסטלציה" },
+  { src: "/assets/audio/sample-2.mp3", title: "פתיח/פאנטון לחברת צילום והדרכת מטיסי רחפנים" },
+  { src: "/assets/audio/sample-3.mp3", title: "פתיח/פאנטון לחברה לעבודות עץ" },
+  { src: "/assets/audio/sample-4.mp3", title: "פתיח/פאנטון לחברה לעיצוב נוף" },
+  { src: "/assets/audio/sample-5.mp3", title: "נתב שיחות ללא מוזיקה לחברת בנייה" },
+  { src: "/assets/audio/sample-6.mp3", title: "פתיח/פאנטון אולימפוס שירותי מיזוג" },
+  { src: "/assets/audio/sample-7.mp3", title: "ארזים פתרונות אינסטלציה מתקדמים" },
+];
+
+/** The showreel at the top of the voice page. */
+export const SHOWREEL = {
+  id: "U_nw1QFQ4cw",
+  label: "סרטון הדגמה",
+};
+
+/** The reels the voice has been heard in. */
+export const SPONSOR_REELS: string[] = [
+  "XgZjfWQNCTk",
+  "v8WeC8JADeg",
+  "nk1H76VE3Jo",
+  "WmlMraI7K2c",
+  "kM4OAuoUhL8",
+  "eRYnC5e6MGQ",
+  "cPCQOV4BvqY",
+  "cU5my7VJA80",
+  "r1WHiFnAxnw",
+  "k402hkT8ZY8",
+];

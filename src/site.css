@@ -2428,3 +2428,256 @@
 .page-bullets li + li {
   margin-top: 0.5rem;
 }
+
+/* ===========================================================================
+ * The voice page's own media.
+ *
+ * Reels are stills until they are asked for: eleven YouTube frames on one
+ * page would be eleven third-party players loading before anyone pressed
+ * anything. The still is YouTube's own thumbnail; the frame is created on
+ * the click.
+ * ======================================================================== */
+.page__showreel {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.reel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--page-edge);
+  border-radius: 1rem;
+  aspect-ratio: 16 / 9;
+  background: #0d0906;
+}
+
+.reel__btn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.reel__btn img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* YouTube's hqdefault is 4:3 with black bars; cropping to the middle gives
+   * back the 16:9 frame the video actually is. */
+  object-fit: cover;
+}
+
+.reel__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 3.6rem;
+  height: 3.6rem;
+  border: 1px solid rgba(227, 185, 74, 0.6);
+  border-radius: 999px;
+  background: rgba(20, 13, 4, 0.72);
+  color: #e3b94a;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.reel__btn:hover .reel__play {
+  background: rgba(227, 185, 74, 0.2);
+  transform: translate(-50%, -50%) scale(1.07);
+}
+
+.reel--live iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.showreel__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.showreel__yt {
+  color: var(--page-ink-soft);
+  font-size: 0.93rem;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+/* --- the telephony samples ----------------------------------------------- */
+.page__phone {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.phone {
+  display: grid;
+  gap: clamp(1rem, 3vw, 1.6rem);
+  padding: clamp(1.3rem, 3.5vw, 2rem);
+  border: 1px solid var(--page-edge);
+  border-radius: 1.2rem;
+  background: var(--page-card);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.phone__head {
+  text-align: center;
+}
+
+.phone__eyebrow {
+  margin: 0;
+  color: var(--page-gilt);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.phone__hint {
+  margin: 0.4rem 0 0;
+  color: var(--page-ink-soft);
+  font-size: 0.93rem;
+}
+
+.phone__stage {
+  justify-self: center;
+  width: min(13rem, 55vw);
+}
+
+.phone__stage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The rings. They exist at rest too, collapsed and invisible, so switching
+ * on is a change of animation state rather than a change of markup. */
+.phone__rip {
+  fill: none;
+  opacity: 0;
+  stroke: #e3b94a;
+  stroke-width: 2;
+  transform-origin: 160px 160px;
+}
+
+.phone__stage[data-playing="true"] .phone__rip {
+  animation: voice-ripple 2.4s ease-out infinite;
+}
+
+.phone__stage[data-playing="true"] .phone__rip--2 {
+  animation-delay: 0.8s;
+}
+
+.phone__stage[data-playing="true"] .phone__rip--3 {
+  animation-delay: 1.6s;
+}
+
+@keyframes voice-ripple {
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+.phone__list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.track {
+  display: grid;
+  width: 100%;
+  align-items: center;
+  gap: 0.2rem 0.7rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 0.7rem;
+  background: rgba(255, 248, 235, 0.04);
+  color: #ded3c0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.93rem;
+  grid-template-areas:
+    "ico title time"
+    "bar bar bar";
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  text-align: start;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.track:hover,
+.track[data-live="true"] {
+  border-color: var(--page-edge);
+  background: rgba(227, 185, 74, 0.09);
+}
+
+.track__ico {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid var(--page-edge);
+  border-radius: 999px;
+  color: var(--page-gilt);
+  grid-area: ico;
+  place-items: center;
+}
+
+.track__title {
+  grid-area: title;
+  line-height: 1.4;
+}
+
+.track__time {
+  color: var(--page-gilt);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  grid-area: time;
+}
+
+.track__bar {
+  overflow: hidden;
+  height: 2px;
+  margin-top: 0.45rem;
+  border-radius: 999px;
+  background: rgba(241, 232, 214, 0.14);
+  grid-area: bar;
+}
+
+.track__bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #a87f2c, #e2c070 60%, #f3dda0);
+}
+
+/* --- the reels ----------------------------------------------------------- */
+.page__sponsors {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.sponsors {
+  display: grid;
+  gap: clamp(0.7rem, 2vw, 1rem);
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone__stage[data-playing="true"] .phone__rip,
+  .reel__play {
+    animation: none;
+    transition: none;
+  }
+}
