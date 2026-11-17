@@ -725,7 +725,7 @@
 .scroll-card__line {
   margin: 0;
   color: #5c4527;
-  font-size: 3.5cqw;
+  font-size: 3.8cqw;
   line-height: 1.4;
 }
 
@@ -782,10 +782,14 @@
     width: 100%;
   }
 
-  .scroll-card__title { font-size: 4.6cqw; }
-  .scroll-card__line { font-size: 2.5cqw; }
-  .scroll-card[data-wide] .scroll-card__title { font-size: 4.6cqw; }
-  .scroll-card[data-wide] .scroll-card__line { font-size: 2.5cqw; }
+  /* One scroll per row here, so every card is the same width and the type
+   * can be set once. It runs larger than the desktop's three-up, not
+   * smaller: the field is the same fraction of a card either way, and on a
+   * phone the card is the whole page. */
+  .scroll-card__title { font-size: 5.8cqw; }
+  .scroll-card__line { font-size: 3.5cqw; }
+  .scroll-card[data-wide] .scroll-card__title { font-size: 5.8cqw; }
+  .scroll-card[data-wide] .scroll-card__line { font-size: 3.5cqw; }
 }
 
 @media (prefers-reduced-motion: reduce) {
