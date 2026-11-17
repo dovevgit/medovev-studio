@@ -317,10 +317,10 @@
  * right and he sets off from there -- and the walk cycle happens to face
  * left, which is the way he is going. Scroll back up and he turns round.
  *
- * His legs are on a slow timer rather than on the scroll, at a sentry's
- * pace. Tying each step to a slice of the journey would have meant one
- * frame every few hundred pixels of scroll -- a stutter, not a walk -- and
- * at this size nobody can tell that his feet are not measuring the ground.
+ * His legs are on the scroll too, not on a timer: a step is a slice of the
+ * journey, so the pace he walks at is the pace the bar fills at. Stop
+ * scrolling and he stops mid-stride, which a timed walk could not do --
+ * it would have had him marching on the spot while the page stood still.
  * ------------------------------------------------------------------------ */
 .ss-walker {
   position: absolute;
@@ -342,7 +342,8 @@
   /* Eight cells side by side: at 800% the strip is eight element-widths
    * wide, and `steps(8)` walks it one cell at a time. */
   background-size: 800% 100%;
-  animation: ss-sentry-step 2.4s steps(8) infinite;
+  /* Eight cells, so cell n sits at n/7 of the seven widths of overhang. */
+  background-position: calc(var(--walk-frame, 0) / 7 * 100%) 0;
 }
 
 /* Facing. The flip is on the sprite and not on the wrapper, because a
@@ -350,11 +351,6 @@
  * body away from the point he is meant to be standing on. */
 .ss-walker[data-facing="up"] > span {
   transform: scaleX(-1);
-}
-
-@keyframes ss-sentry-step {
-  from { background-position-x: 0%; }
-  to { background-position-x: 100%; }
 }
 
 @media (hover: none) and (pointer: coarse), (max-width: 860px) {

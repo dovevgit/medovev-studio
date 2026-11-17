@@ -51,6 +51,9 @@ const COPY = {
  * it -- the reveal itself is pure CSS reading one variable the engine already
  * updates.
  */
+/** How many steps the sentry takes over the whole journey. */
+const STRIDES = 112;
+
 function useChapterCopyLayer() {
   useEffect(() => {
     const root = document.querySelector<HTMLElement>(".scroll-scrub");
@@ -248,7 +251,7 @@ function useChapterCopyLayer() {
     // cannot go stale.
     // Where the sentry was last seen, kept outside the scroll handler so it
     // survives between events.
-    const facing = { at: 0, way: "down" };
+    const facing = { at: 0, frame: -1, way: "down" };
 
     const publish = () => {
       const viewport = window.innerHeight;
@@ -276,6 +279,20 @@ function useChapterCopyLayer() {
       // a scroll frame. The threshold ignores the sub-pixel jitter a
       // trackpad produces at rest, which would otherwise spin him round.
       const walker = stage.querySelector<HTMLElement>(".ss-walker");
+
+      // His stride. STRIDES is how many steps he takes over the whole
+      // journey: his legs are driven by the same number as his position, so
+      // the two can never drift apart. Short steps on purpose -- at one
+      // stride per body-width he would move a frame every few hundred
+      // pixels of scroll, which reads as a stutter rather than a walk.
+      if (walker) {
+        const frame = Math.floor(p * STRIDES) % 8;
+        if (frame !== facing.frame) {
+          walker.style.setProperty("--walk-frame", String(frame));
+          facing.frame = frame;
+        }
+      }
+
       if (walker && Math.abs(p - facing.at) > 0.0006) {
         const next = p > facing.at ? "down" : "up";
         if (next !== facing.way) {
