@@ -102,9 +102,23 @@ export function AfterFilm() {
           title="הפקות וידאו"
         />
 
-        {/* Out of order for now: photography and podcasts still wear the
-            plain treatment, and this one slots in behind them once they
-            have banners of their own. */}
+        <FlagCard
+          art="/assets/flag-photo.webp"
+          artHeight={469}
+          artWidth={1400}
+          cta="צילום"
+          /* The camera stands on the LEFT and is the widest piece yet, so the
+             open field is the right of the cloth: 26%-90% across, 16%-73%
+             down. */
+          field={{ bottom: 27, left: 27, right: 10, top: 16 }}
+          href="/services/photo"
+          line="נכסים, מוצרים ותדמית"
+          title="צילום"
+        />
+
+        {/* Out of order for now: podcasts still wear the plain treatment,
+            and this one slots in behind them once they have a banner of
+            their own. */}
         <FlagCard
           art="/assets/flag-voice.webp"
           artHeight={469}
@@ -118,9 +132,8 @@ export function AfterFilm() {
           title="קריינות מקצועית"
         />
 
-        {/* The remaining two still wear the first, plain treatment. They
-            stay on the page so the site is whole while each one is redesigned
-            as its own banner, in turn. */}
+        {/* Podcasts still wear the first, plain treatment, so the site is
+            whole while that last banner is made. */}
         <ul className="services">
           {SERVICES.filter(
             (service) =>
@@ -130,6 +143,7 @@ export function AfterFilm() {
               service.slug !== "ai" &&
               service.slug !== "implementer" &&
               service.slug !== "video" &&
+              service.slug !== "photo" &&
               service.slug !== "voice",
           ).map((service) => (
             <li className="service" key={service.slug}>
