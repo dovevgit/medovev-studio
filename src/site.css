@@ -1033,7 +1033,16 @@
 .flag-card__title {
   margin: 0;
   color: #f6edd9;
-  font-size: 5.4cqw;
+  /* One size for every banner, set by the TIGHTEST cloth rather than the
+   * roomiest. The fourth card's velvet is only 52% open against the first's
+   * 61%, and at the old 5.4cqw its headline broke to two lines and ran over
+   * its own button. Sizing to the narrowest keeps every card identical, which
+   * is the point of them, and nothing overflows.
+   *
+   * This is the number to revisit when a new banner arrives with less open
+   * cloth than any before it -- or better, the reason to leave the carved
+   * piece further out of frame so the cloth stays open. */
+  font-size: 4.6cqw;
   font-weight: 700;
   line-height: 1.1;
   /* The velvet is dark but not even -- it has folds. A soft shadow keeps the
@@ -1044,7 +1053,7 @@
 .flag-card__line {
   margin: 0;
   color: #d9c79c;
-  font-size: 2.7cqw;
+  font-size: 2.35cqw;
   font-weight: 500;
   line-height: 1.3;
   text-shadow: 0 0.1cqw 0.45cqw rgba(6, 10, 24, 0.7);
@@ -1065,7 +1074,7 @@
   border-radius: 999px;
   background: #f7efde;
   color: #22365c;
-  font-size: 2.1cqw;
+  font-size: 1.85cqw;
   font-weight: 700;
   text-decoration: none;
   box-shadow: 0 0.3cqw 1.2cqw rgba(6, 10, 24, 0.45);
