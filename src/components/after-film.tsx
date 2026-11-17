@@ -30,16 +30,35 @@ export function AfterFilm() {
           artHeight={469}
           artWidth={1400}
           cta="אסטרטגיה עסקית"
+          /* Clear velvet: 33%-94% across, 12%-81% down. The king stands on
+             the left, so the open field is the right of the cloth. */
+          field={{ bottom: 19, left: 33, right: 6, top: 12 }}
           href="/services/strategy"
           line="תוכנית פעולה אמיתית"
           title="קודם כל אסטרטגיה"
         />
 
-        {/* The remaining eight still wear the first, plain treatment. They
+        <FlagCard
+          art="/assets/flag-digital.webp"
+          artHeight={469}
+          artWidth={1400}
+          cta="נוכחות דיגיטלית"
+          /* The knight stands on the RIGHT here, and his mane reaches in from
+             66%, so the open field is the left of the cloth: 17%-62% across,
+             18%-75% down. */
+          field={{ bottom: 25, left: 17, right: 38, top: 18 }}
+          href="/services/digital"
+          line="להיות בכל מקום ולדבר באותה שפה"
+          title="נוכחות דיגיטלית"
+        />
+
+        {/* The remaining seven still wear the first, plain treatment. They
             stay on the page so the site is whole while each one is redesigned
             as its own banner, in turn. */}
         <ul className="services">
-          {SERVICES.filter((service) => service.slug !== "strategy").map((service) => (
+          {SERVICES.filter(
+            (service) => service.slug !== "strategy" && service.slug !== "digital",
+          ).map((service) => (
             <li className="service" key={service.slug}>
               <h3 className="service__title">{service.title}</h3>
               <p className="service__blurb">{service.blurb}</p>

@@ -1033,10 +1033,10 @@
    * The block is centred in that field rather than in the cloth's true
    * middle, because to the eye the banner's open space begins where the king
    * ends. */
-  top: 12%;
-  right: 6%;
-  bottom: 19%;
-  left: 33%;
+  top: var(--field-top);
+  right: var(--field-right);
+  bottom: var(--field-bottom);
+  left: var(--field-left);
   display: flex;
   flex-direction: column;
   align-items: center;

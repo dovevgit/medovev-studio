@@ -1,24 +1,36 @@
+import type { CSSProperties } from "react";
+
 /**
  * A service presented as one of the film's own banners.
  *
  * The artwork is a single cut-out: the hanging cloth, its gold frame and
- * fringe, and the fallen king lying across the lower edge — half on the
- * cloth, half off it. It carries no lettering of its own.
+ * fringe, and one of the carved pieces breaking across its edge. It carries
+ * no lettering of its own.
  *
  * The words are live HTML laid over the cloth, not drawn into the picture.
  * That is the lesson the film taught twice over: live text stays sharp at
  * every size, costs nothing to reword, and is there for a crawler to read.
+ */
+export type ClearField = {
+  /** From the image's LEFT edge to the field's left edge, in %. */
+  left: number;
+  /** From the image's RIGHT edge to the field's right edge, in %. */
+  right: number;
+  top: number;
+  /** From the image's BOTTOM edge to the field's bottom edge, in %. */
+  bottom: number;
+};
+
+/**
+ * `field` is the run of clear velvet in ONE artwork -- the part no gold
+ * ornament and no carved piece overlaps. It differs per card, because the
+ * piece stands on a different side each time.
  *
- * Where the text sits was measured, not eyeballed: the clear run of velvet —
- * the part no gold ornament and no king overlaps — starts 33% across the
- * image and ends at 94%, and runs from 12% down to 81%.
- *
- * That bottom figure was 73% at first, and wrong. It came from asking which
- * rows of the whole image are mostly blue, and the lower rows are not,
- * because the king and his red cloth cover the left of them. Reading a
- * single column through the clear right-hand side gives the true edge. Any
- * replacement artwork wants measuring the same way: down a column that
- * nothing overlaps, not across the picture.
+ * Measure it, never judge it: read a single column down the clear side for
+ * the top and bottom, and a profile across the cloth for the sides. Asking
+ * which rows of the whole picture are mostly velvet reports the bottom edge
+ * far too early, because the piece covers part of every row it stands in --
+ * that mistake put the first card's bottom at 73% when it is really 81%.
  */
 export function FlagCard({
   title,
@@ -28,6 +40,7 @@ export function FlagCard({
   art,
   artWidth,
   artHeight,
+  field,
 }: {
   title: string;
   line: string;
@@ -36,7 +49,15 @@ export function FlagCard({
   art: string;
   artWidth: number;
   artHeight: number;
+  field: ClearField;
 }) {
+  const placement = {
+    "--field-bottom": `${field.bottom}%`,
+    "--field-left": `${field.left}%`,
+    "--field-right": `${field.right}%`,
+    "--field-top": `${field.top}%`,
+  } as CSSProperties;
+
   return (
     <article className="flag-card">
       <img
@@ -46,7 +67,7 @@ export function FlagCard({
         src={art}
         width={artWidth}
       />
-      <div className="flag-card__text">
+      <div className="flag-card__text" style={placement}>
         <h3 className="flag-card__title">{title}</h3>
         <p className="flag-card__line">{line}</p>
         <a className="flag-card__cta" href={href}>
