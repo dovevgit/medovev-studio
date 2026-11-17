@@ -1418,8 +1418,11 @@
     padding-inline: 1.25rem;
   }
 
+  /* Full bleed means the rope down each side is a bigger share of the
+   * width than it is on a desktop, so the inset grows with it: at 8% the
+   * fields were sitting on the gold. */
   .contact__cloth {
-    padding: 19.5% 8% 16.5%;
+    padding: 19.5% 11.5% 16.5%;
   }
 }
 
