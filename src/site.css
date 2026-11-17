@@ -308,8 +308,10 @@
     font-size: 0.82rem;
     letter-spacing: 0.04em;
     pointer-events: none;
+    /* No transition: the clamp already fades it out smoothly across the
+     * first 1.2% of the journey. A transition on top of that only adds lag
+     * behind the thumb. */
     opacity: clamp(0, calc(1 - var(--copy-progress, 0) / 0.012), 1);
-    transition: opacity 0.35s ease;
   }
 
   .ss-cue__chevron {
