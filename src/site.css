@@ -629,10 +629,170 @@
   pointer-events: none;
 }
 
+/* ===========================================================================
+ * The parchment scrolls.
+ *
+ * Same idea as the banners above: the picture carries the frame, the words
+ * are live text laid inside the clear field. Each scroll is a different torn
+ * edge, so each one's field is measured separately and arrives as four
+ * custom properties on the text box.
+ *
+ * The type is sized in cqw, against the card rather than the page, because
+ * one of these is a third of the row on a desktop and the whole width of a
+ * phone -- the same rule has to hold at both.
+ * ======================================================================== */
+.why {
+  margin-top: clamp(3rem, 7vw, 5.5rem);
+}
+
+.why__head {
+  max-width: 48rem;
+  margin: 0 auto clamp(1.4rem, 3vw, 2.2rem);
+  text-align: center;
+}
+
+.why__eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--gilt);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.why__title {
+  margin: 0;
+  font-size: clamp(1.35rem, 3.6vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.why__row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.6rem, 1.8vw, 1.4rem);
+  align-items: start;
+}
+
+.scroll-card {
+  container-type: inline-size;
+  margin: 0 auto;
+}
+
+.scroll-card[data-wide] {
+  max-width: 62rem;
+  margin-top: clamp(1.6rem, 4vw, 3rem);
+}
+
+/* Exactly the picture's box, so the measured percentages resolve against the
+ * art and not against the card, which grows when buttons sit beneath it. */
+.scroll-card__stage {
+  position: relative;
+}
+
+.scroll-card__art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.scroll-card__text {
+  position: absolute;
+  top: var(--field-top);
+  right: var(--field-right);
+  bottom: var(--field-bottom);
+  left: var(--field-left);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4cqw;
+  text-align: center;
+}
+
+/* Ink on paper, not on cloth: a warm near-black, the colour an old nib
+ * leaves, rather than the cream the banners use on their velvet. */
+.scroll-card__title {
+  margin: 0;
+  color: #43301a;
+  font-size: 6.4cqw;
+  font-weight: 700;
+  line-height: 1.12;
+}
+
+.scroll-card__line {
+  margin: 0;
+  color: #5c4527;
+  font-size: 3.5cqw;
+  line-height: 1.4;
+}
+
+.scroll-card[data-wide] .scroll-card__title { font-size: 4.4cqw; }
+.scroll-card[data-wide] .scroll-card__line { font-size: 2.3cqw; }
+
+.scroll-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: clamp(0.9rem, 2vw, 1.4rem);
+}
+
+.scroll-card__cta {
+  padding: 0.75rem 1.7rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--gilt);
+  color: #22180a;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.scroll-card__cta:hover,
+.scroll-card__cta:focus-visible {
+  background: #e2c070;
+  transform: translateY(-1px);
+}
+
+.scroll-card__cta--quiet {
+  background: transparent;
+  border-color: rgba(241, 232, 214, 0.4);
+  color: var(--wood-ink);
+}
+
+.scroll-card__cta--quiet:hover,
+.scroll-card__cta--quiet:focus-visible {
+  background: var(--royal);
+  border-color: var(--royal-lit);
+}
+
+/* A third of a row is too narrow for a scroll to read: at that width the
+ * line inside it would be six pixels. One per row instead, full bleed like
+ * the banners above. */
+@media (max-width: 860px) {
+  .why__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1rem, 4vw, 1.6rem);
+  }
+
+  .scroll-card {
+    width: 100%;
+  }
+
+  .scroll-card__title { font-size: 4.6cqw; }
+  .scroll-card__line { font-size: 2.5cqw; }
+  .scroll-card[data-wide] .scroll-card__title { font-size: 4.6cqw; }
+  .scroll-card[data-wide] .scroll-card__line { font-size: 2.5cqw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-card__cta { transition: none; }
+}
+
 /* Everything reads above the trail. */
 .services__head,
 .flag-card,
-.closing {
+.why {
   position: relative;
   z-index: 1;
 }
@@ -649,36 +809,6 @@
   font-size: clamp(1.65rem, 4.2vw, 2.9rem);
   font-weight: 700;
   line-height: 1.15;
-}
-
-.closing {
-  max-width: 48rem;
-  margin: clamp(3rem, 7vw, 5.5rem) auto 0;
-  text-align: center;
-}
-
-.closing__title {
-  margin: 0 0 1.4rem;
-  font-size: clamp(1.4rem, 3.4vw, 2.3rem);
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.closing__cta {
-  display: inline-block;
-  padding: 0.8rem 2.2rem;
-  border-radius: 999px;
-  background: var(--royal);
-  color: #f4ecdc;
-  font-size: 1.05rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background-color 160ms ease;
-}
-
-.closing__cta:hover,
-.closing__cta:focus-visible {
-  background: var(--royal-lit);
 }
 
 /* ===========================================================================
@@ -898,7 +1028,6 @@
   .site-brand img,
   .site-menu__bars > span,
   .site-menu__panel,
-  .closing__cta,
   .site-menu__list a {
     transition: none;
   }

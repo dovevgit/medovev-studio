@@ -1,5 +1,6 @@
 import { FlagCard } from "@/components/flag-card";
-import { WHATSAPP_URL } from "@/site-content";
+import { ScrollCard } from "@/components/scroll-card";
+import { WHATSAPP_CONSULT, WHATSAPP_HELLO } from "@/site-content";
 
 /**
  * Where the page comes up out of the film.
@@ -142,16 +143,93 @@ export function AfterFilm() {
           title="קריינות מקצועית"
         />
 
-        <section className="closing">
-          <h2 className="closing__title">בואו נבנה יחד את המהלך העסקי הבא שלכם</h2>
-          <a
-            className="closing__cta"
-            href={WHATSAPP_URL}
-            rel="noreferrer"
-            target="_blank"
-          >
-            שיחת ייעוץ
-          </a>
+        {/* Why us, about, and the ask -- all three on parchment.
+         *
+         * The banners above are the catalogue; this is the argument, and it
+         * wanted a different material to say so. Three small scrolls side by
+         * side for the reasons, then two wide ones, which share the one piece
+         * of art that has a gold rule around its field: the eye reads the
+         * repeat as "these two belong together". Every word here is the old
+         * site's, carried over unchanged. */}
+        <section className="why">
+          <header className="why__head">
+            <p className="why__eyebrow">למה לבחור בנו</p>
+            <h2 className="why__title">
+              שילוב מנצח של אסטרטגיה, יצירתיות וטכנולוגיה
+            </h2>
+          </header>
+
+          <div className="why__row">
+            <ScrollCard
+              art="/assets/scroll-torn-even.webp"
+              artHeight={609}
+              artWidth={1200}
+              field={{ bottom: 29, left: 17, right: 17, top: 30 }}
+              line="תכנון מדויק, חשיבה רחבה והפיכת פעולות שיווקיות לצמיחה אמיתית."
+              title="אסטרטגיה עסקית"
+            />
+            <ScrollCard
+              art="/assets/scroll-torn-wide.webp"
+              artHeight={614}
+              artWidth={1200}
+              field={{ bottom: 27, left: 19, right: 20, top: 30 }}
+              line="קריאייטיב ותוכן ברמה גבוהה שמחברים את המותג שלכם לקהל הנכון."
+              title="יצירתיות והפקה"
+            />
+            <ScrollCard
+              art="/assets/scroll-curled.webp"
+              artHeight={616}
+              artWidth={1200}
+              field={{ bottom: 30, left: 22, right: 18, top: 31 }}
+              line="שילוב של כלי AI, אוטומציה ומערכות חכמות שמייצרים תוצאות."
+              title="טכנולוגיה מתקדמת"
+            />
+          </div>
+
+          <ScrollCard
+            actions={
+              <a className="scroll-card__cta" href="/about">
+                הכירו אותי
+              </a>
+            }
+            art="/assets/scroll-framed.webp"
+            artHeight={589}
+            artWidth={1200}
+            field={{ bottom: 28, left: 17, right: 17, top: 26 }}
+            line="מעל 20 שנה בעולם הדיגיטל, המיתוג והשיווק, לצד ההפקה והצד הטכני. הכירו את דובב גרינברג."
+            title="מי עומד מאחורי הסטודיו"
+            wide
+          />
+
+          <ScrollCard
+            actions={
+              <>
+                <a
+                  className="scroll-card__cta"
+                  href={WHATSAPP_HELLO}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  דברו איתנו
+                </a>
+                <a
+                  className="scroll-card__cta scroll-card__cta--quiet"
+                  href={WHATSAPP_CONSULT}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  קביעת שיחת ייעוץ
+                </a>
+              </>
+            }
+            art="/assets/scroll-framed.webp"
+            artHeight={589}
+            artWidth={1200}
+            field={{ bottom: 28, left: 17, right: 17, top: 26 }}
+            line="ייעוץ, תכנון ויצירה, פתרון מותאם אישית לעסק שלכם."
+            title="בואו נבנה יחד את המהלך העסקי הבא שלכם"
+            wide
+          />
         </section>
       </div>
     </section>
