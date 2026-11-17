@@ -9,6 +9,7 @@ import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 
 import { AccessibilityMenu } from "@/components/accessibility-menu";
+import { LanguagePicker } from "@/components/language";
 import { SiteFooter } from "@/components/site-footer";
 
 import appCss from "../styles.css?url";
@@ -97,6 +98,7 @@ function RootComponent() {
       <Outlet />
       <SiteFooter />
       <AccessibilityMenu />
+      <LanguagePicker />
       {/* Supplies window.va, which the tracker above reports through. */}
       <Analytics />
     </>
