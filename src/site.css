@@ -1204,6 +1204,94 @@
 }
 
 /* ===========================================================================
+ * The knight on the rope.
+ *
+ * The rope runs down the left margin of everything between the film and the
+ * contact banner. The knight is sticky, so he keeps his place on the screen
+ * while the page scrolls past him: what moves is the rope behind him and
+ * his hands, which the script advances a frame at a time.
+ *
+ * The sprite's own rope sits at 66.3% across each cell -- the cells were cut
+ * around the rope, not around the knight -- so the page's rope is placed
+ * there too and the two read as one line.
+ * ======================================================================== */
+.rappel {
+  --knight-w: clamp(4.6rem, 8vw, 8rem);
+
+  position: absolute;
+  top: 0;
+  bottom: 22rem;
+  left: clamp(0.25rem, 2vw, 3.5rem);
+  z-index: 2;
+  width: var(--knight-w);
+  pointer-events: none;
+}
+
+.rappel__rope {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* Centred on the sprite's own rope: 66.3% across, 10.26% wide. */
+  left: 61.17%;
+  width: 10.26%;
+  background: url("/assets/knight-rope-tile.webp") top center / 100% auto repeat-y;
+  /* It is a rope hanging from the film and paid out towards the ground, so
+   * it fades in at the top rather than being cut off square. */
+  mask-image: linear-gradient(180deg, transparent 0, #000 4rem, #000 calc(100% - 3rem), transparent 100%);
+}
+
+.rappel__knight {
+  position: sticky;
+  top: 26vh;
+  width: 100%;
+  aspect-ratio: 183 / 420;
+  background-image: url("/assets/knight-rope.webp");
+  background-repeat: no-repeat;
+  /* Eight cells side by side: at 800% the strip is eight element-widths
+   * wide, and a percentage position runs across the seven widths of
+   * overhang -- so cell n sits at n/7 of it. */
+  background-size: 800% 100%;
+  background-position: calc(var(--knight-frame, 0) / 7 * 100%) 0;
+  filter: drop-shadow(0 0.6rem 1rem rgba(0, 0, 0, 0.55));
+}
+
+/* At the foot of the rope he lets go and lands on one knee. The pose is a
+ * picture of its own, wider and shorter than a hanging man, so the box
+ * changes shape with it. */
+.rappel[data-landed="true"] .rappel__knight {
+  width: 150%;
+  aspect-ratio: 320 / 297;
+  background-image: url("/assets/knight-land.webp");
+  background-size: 100% 100%;
+  background-position: 0 0;
+}
+
+.rappel[data-landed="true"] .rappel__rope {
+  mask-image: linear-gradient(180deg, transparent 0, #000 4rem, #000 calc(100% - 9rem), transparent 100%);
+}
+
+@media (max-width: 860px) {
+  .rappel {
+    --knight-w: clamp(3.4rem, 17vw, 5rem);
+
+    left: 0.1rem;
+    bottom: 26rem;
+  }
+
+  .rappel__knight {
+    top: 22svh;
+  }
+}
+
+/* No rope and no knight for anyone who asked the page to hold still: the
+ * whole thing is motion driven by scroll. */
+@media (prefers-reduced-motion: reduce) {
+  .rappel {
+    display: none;
+  }
+}
+
+/* ===========================================================================
  * The contact banner.
  *
  * The cloth has to be as tall as the form inside it, which a single picture

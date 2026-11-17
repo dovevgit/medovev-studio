@@ -1,6 +1,7 @@
 import { ContactBanner } from "@/components/contact-banner";
 import { FlagCard } from "@/components/flag-card";
 import { MemoryGame } from "@/components/memory-game";
+import { Rappel } from "@/components/rappel";
 import { ScrollCard } from "@/components/scroll-card";
 import { WHATSAPP_CONSULT, WHATSAPP_HELLO } from "@/site-content";
 
@@ -23,6 +24,8 @@ export function AfterFilm() {
       <div aria-hidden="true" className="after-film__dawn" />
 
       <div className="after-film__body">
+        <Rappel />
+
         <header className="services__head">
           <h2 className="services__title">פתרונות מקצה לקצה לצמיחה עסקית</h2>
         </header>
