@@ -153,6 +153,16 @@ export function AccessibilityMenu() {
 
   return (
     <>
+      {/* Inverted and grayscale are done with a fixed pane that filters
+          what is painted behind it, NOT with a filter on <body>. A filter
+          makes its element the containing block for every fixed descendant,
+          so filtering the body detached the menu, the logo and the site
+          menu from the window and let them scroll away -- turning on
+          inverted colours took the accessibility button off the screen. */}
+      {state.mode === "invert" || state.mode === "gray" ? (
+        <div aria-hidden="true" className="a11y-ui a11y-tint" />
+      ) : null}
+
       {/* The first thing in the tab order on every page, and visible only
           once it is focused. */}
       <a className="a11y-ui a11y-skip" href="#main">

@@ -2736,8 +2736,10 @@ html.a11y-high {
   background: #000 !important;
 }
 
-html.a11y-high body a:not(.a11y-ui a),
-html.a11y-high body a *:not(.a11y-ui *) {
+/* The same :not chain as the sweep above, plus the `a`: anything less
+ * specific loses to it and links come out the same colour as the text. */
+html.a11y-high body a:not(.a11y-ui):not(.a11y-ui *):not(img):not(video):not(svg):not(svg *),
+html.a11y-high body a *:not(.a11y-ui):not(.a11y-ui *):not(img):not(video):not(svg):not(svg *) {
   color: #0ff !important;
 }
 
@@ -2753,26 +2755,43 @@ html.a11y-light {
   background: #fff !important;
 }
 
-html.a11y-light body a:not(.a11y-ui a),
-html.a11y-light body a *:not(.a11y-ui *) {
+html.a11y-light body a:not(.a11y-ui):not(.a11y-ui *):not(img):not(video):not(svg):not(svg *),
+html.a11y-light body a *:not(.a11y-ui):not(.a11y-ui *):not(img):not(video):not(svg):not(svg *) {
   color: #0000c8 !important;
 }
 
-/* Inversion is a filter on the root, so pictures are inverted back: a
- * photograph in negative is not a more readable photograph. */
-html.a11y-invert body {
-  filter: invert(1) hue-rotate(180deg);
+/* Inverted and grayscale: a pane over the page that filters what is painted
+ * behind it, rather than a filter on <body>.
+ *
+ * WHY NOT the body: a filter makes its element the containing block for
+ * every fixed-position descendant. Filtering the body detached the site
+ * menu, the logo and the accessibility button from the window and let them
+ * scroll away with the page -- so turning on inverted colours took the
+ * accessibility button off the screen, which is the one control the person
+ * needs to turn it off again.
+ *
+ * The pane sits above everything on the page and below the menu, so the
+ * menu keeps its own colours and stays usable. */
+.a11y-tint {
+  position: fixed;
+  z-index: 2147482400;
+  inset: 0;
+  pointer-events: none;
 }
 
-html.a11y-invert img,
-html.a11y-invert video,
-html.a11y-invert picture,
-html.a11y-invert iframe {
-  filter: invert(1) hue-rotate(180deg);
+html.a11y-invert .a11y-tint {
+  backdrop-filter: invert(1) hue-rotate(180deg);
 }
 
-html.a11y-gray body {
-  filter: grayscale(1);
+html.a11y-gray .a11y-tint {
+  backdrop-filter: grayscale(1);
+}
+
+/* Pictures are inverted once by themselves and once more by the pane, which
+ * lands them back where they started: a photograph in negative is not a
+ * more readable photograph. */
+html.a11y-invert :is(img, video, picture, iframe) {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 /* --- the switches -------------------------------------------------------- */
