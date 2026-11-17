@@ -1035,7 +1035,8 @@
    * ends. */
   top: var(--field-top);
   right: var(--field-right);
-  bottom: var(--field-bottom);
+  /* The foot of the field is left for the button. */
+  bottom: calc(var(--field-bottom) + 16%);
   left: var(--field-left);
   display: flex;
   flex-direction: column;
@@ -1068,7 +1069,13 @@
 /* Light and loud against the deep blue: parchment, not gold, so it reads as
  * a button rather than as another piece of the frame. */
 .flag-card__cta {
-  margin-top: 0.6cqw;
+  /* Centred across the same field as the words, sitting at its foot. */
+  position: absolute;
+  left: var(--field-left);
+  right: var(--field-right);
+  bottom: calc(var(--field-bottom) + 4%);
+  width: max-content;
+  margin-inline: auto;
   padding: 1.15cqw 3cqw;
   border: 0.12cqw solid #e8d9b4;
   border-radius: 999px;
@@ -1091,30 +1098,39 @@
  * it -- 5.4cqw of a 360px card is 19px, and the button would be unreadable.
  * The words come off the cloth and sit under the picture instead, which also
  * gives the king room to read. */
+/* A phone is where this card is hardest. The banner is 3:1, so at 390px it
+ * is only about 120px tall and the clear field inside it is smaller again.
+ * The words still belong ON the cloth -- that is the whole idea of the card
+ * -- so they stay, set larger as a share of the card to fill the field, and
+ * the field is given its full height back. Only the button steps off, below
+ * the picture, where it can be a real tap target instead of a sliver. */
 @media (max-width: 760px) {
+  /* Edge to edge: every pixel of width is a pixel of cloth. */
+  .flag-card {
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+
   .flag-card__text {
-    position: static;
-    gap: 0.5rem;
-    padding: 1.25rem 0.25rem 0;
-    text-align: center;
+    bottom: var(--field-bottom);
+    gap: 0.6cqw;
   }
 
   .flag-card__title {
-    font-size: clamp(1.6rem, 7vw, 2.3rem);
-    color: var(--wood-ink);
-    text-shadow: none;
+    font-size: 6.6cqw;
   }
 
   .flag-card__line {
-    font-size: clamp(1rem, 4.2vw, 1.2rem);
-    color: var(--wood-ink-soft);
-    text-shadow: none;
+    font-size: 3.2cqw;
   }
 
   .flag-card__cta {
-    align-self: center;
-    margin-top: 0.35rem;
-    padding: 0.7rem 1.8rem;
+    position: static;
+    display: block;
+    width: max-content;
+    margin: 0.9rem auto 0;
+    padding: 0.7rem 1.9rem;
     border-width: 1px;
     background: var(--royal);
     color: #f4ecdc;
@@ -1136,5 +1152,44 @@
 @media (prefers-reduced-motion: reduce) {
   .flag-card__cta {
     transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Closing the gap between the film and the services on a phone.
+ *
+ * Measured at 390x844: 1126px — a screen and a third — between the last
+ * chapter ending and the first card. Only 281px of that was the dawn and the
+ * heading. The other 845px is structural: the film's stage is a full
+ * viewport tall and pinned, so once the journey finishes the stage still has
+ * a whole screen to scroll off before anything below it can arrive.
+ *
+ * It cannot be shortened, but it can be shared. The wood is pulled up over
+ * the stage's exit, so the background opens WHILE the last frame is leaving
+ * instead of waiting its turn behind it. The film itself is untouched: the
+ * scrub measures the chapter bands, which this does not move, so the last
+ * clip still reaches its final frame exactly as the stage releases.
+ * ------------------------------------------------------------------------ */
+@media (max-width: 760px) {
+  .after-film {
+    position: relative;
+    z-index: 1;
+    margin-top: -44vh;
+  }
+
+  .after-film__dawn {
+    height: 13vh;
+  }
+
+  .after-film__body {
+    padding-top: 0.35rem;
+  }
+
+  .services__head {
+    margin-bottom: 1rem;
+  }
+
+  .services__title {
+    font-size: clamp(1.4rem, 6.4vw, 2rem);
   }
 }

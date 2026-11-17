@@ -70,10 +70,12 @@ export function FlagCard({
       <div className="flag-card__text" style={placement}>
         <h3 className="flag-card__title">{title}</h3>
         <p className="flag-card__line">{line}</p>
-        <a className="flag-card__cta" href={href}>
-          {cta}
-        </a>
       </div>
+      {/* Separate from the words on purpose: on a phone they stay on the
+          cloth and only the button steps off it, below the picture. */}
+      <a className="flag-card__cta" href={href} style={placement}>
+        {cta}
+      </a>
     </article>
   );
 }
