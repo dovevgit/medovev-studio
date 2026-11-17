@@ -3080,3 +3080,161 @@ html.a11y-cursor * {
   margin: 0 auto clamp(0.8rem, 2.5vw, 1.2rem);
   filter: drop-shadow(0 0.4rem 0.9rem rgba(0, 0, 0, 0.55));
 }
+
+/* ===========================================================================
+ * The photographs.
+ *
+ * Five chapters, a chip row to narrow to one, and two sizes of every picture:
+ * the grid shows the small file and the full one is fetched only when someone
+ * opens it. Thirty full-size photographs on load would be the whole page's
+ * weight spent on pictures nobody has asked to look at closely yet.
+ * ======================================================================== */
+.page__gallery {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.g-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-bottom: clamp(1.4rem, 4vw, 2.2rem);
+}
+
+.g-chip {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--page-edge);
+  border-radius: 999px;
+  background: rgba(255, 248, 235, 0.04);
+  color: var(--page-ink-soft);
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.g-chip[aria-selected="true"] {
+  border-color: var(--page-gilt);
+  background: rgba(227, 185, 74, 0.18);
+  color: #f3dda0;
+  font-weight: 700;
+}
+
+.chap {
+  margin-bottom: clamp(1.8rem, 5vw, 2.8rem);
+}
+
+.chap__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--page-edge);
+}
+
+.chap__num {
+  color: var(--page-gilt);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.chap__title {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: clamp(1.1rem, 2.8vw, 1.4rem);
+  font-weight: 700;
+}
+
+.chap__count {
+  color: var(--page-ink-soft);
+  font-size: 0.82rem;
+}
+
+/* Masonry-ish without masonry: the pictures are a mix of portrait and
+ * landscape, so each cell is a fixed square and the picture fills it. A
+ * ragged grid of their native shapes reads as a mistake at this size. */
+.chap__grid {
+  display: grid;
+  gap: clamp(0.4rem, 1.5vw, 0.7rem);
+  grid-template-columns: repeat(auto-fill, minmax(min(10rem, 45%), 1fr));
+}
+
+.g-item {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--page-edge);
+  border-radius: 0.7rem;
+  aspect-ratio: 1;
+  background: #0d0906;
+  cursor: zoom-in;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.g-item:hover {
+  border-color: var(--page-gilt);
+  transform: translateY(-2px);
+}
+
+.g-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- the viewer ---------------------------------------------------------- */
+.g-view {
+  position: fixed;
+  z-index: 2147482300;
+  inset: 0;
+  display: grid;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  background: rgba(8, 6, 4, 0.94);
+  cursor: zoom-out;
+  place-items: center;
+  align-content: center;
+  gap: 0.9rem;
+}
+
+.g-view__img {
+  max-width: 100%;
+  max-height: 78svh;
+  border-radius: 0.6rem;
+  cursor: default;
+  object-fit: contain;
+}
+
+.g-view__alt {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--page-ink-soft, #c2b6a2);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.g-view__close {
+  position: absolute;
+  top: clamp(0.7rem, 3vw, 1.4rem);
+  right: clamp(0.7rem, 3vw, 1.4rem);
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 1px solid rgba(227, 185, 74, 0.4);
+  border-radius: 999px;
+  background: rgba(21, 16, 10, 0.9);
+  color: #efe6d5;
+  cursor: pointer;
+}
+
+/* The podcast episodes share the reel grid with the voice page's reels. */
+.page__episodes {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-chip,
+  .g-item {
+    transition: none;
+  }
+}

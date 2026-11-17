@@ -2,7 +2,7 @@ import { createFileRoute, useParams } from "@tanstack/react-router";
 
 import { Cta, InnerPage, Lists, Prose, Steps } from "@/components/inner-page";
 import { PagePlaceholder } from "@/components/page-placeholder";
-import { VoiceExtras } from "@/components/voice-extras";
+import { ServiceMedia } from "@/components/service-media";
 import { SERVICE_PAGES } from "@/page-copy";
 import { serviceIcon } from "@/site-content";
 
@@ -27,10 +27,10 @@ function ServicePage() {
       lead={page.lead}
       title={page.title}
     >
-      {/* The voice page is the one that has to be heard, not only read:
-          the showreel, the telephony samples and the reels go above its
-          prose, where the old site puts them. */}
-      {slug === "voice" ? <VoiceExtras /> : null}
+      {/* Four of the nine have work to show -- a showreel, a gallery,
+          episodes, recordings -- and it goes above the prose, where the old
+          site puts it. */}
+      <ServiceMedia slug={slug} />
       <Prose paragraphs={page.body} />
       <Lists lists={page.lists} />
       <Steps steps={page.steps} title="איך זה עובד" />

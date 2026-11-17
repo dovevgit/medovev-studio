@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
+import { Reel } from "@/components/reel";
+
 import { SHOWREEL, SPONSOR_REELS, VOICE_SAMPLES } from "@/page-copy";
 
 /**
@@ -14,51 +16,6 @@ import { SHOWREEL, SPONSOR_REELS, VOICE_SAMPLES } from "@/page-copy";
  * elements, which also makes "only one plays at a time" a property of the
  * markup instead of something to police.
  */
-
-/** A YouTube still that becomes a player on click. */
-function Reel({ eager, id, label }: { eager?: boolean; id: string; label: string }) {
-  const [playing, setPlaying] = useState(false);
-
-  if (playing) {
-    return (
-      <div className="reel reel--live">
-        <iframe
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`}
-          title={label}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div className="reel">
-      <button
-        aria-label={label}
-        className="reel__btn"
-        onClick={() => setPlaying(true)}
-        type="button"
-      >
-        <img
-          alt=""
-          height={360}
-          // The showreel is the first thing on the page, so it is not
-          // deferred: a lazy image above the fold is a blank box while the
-          // browser works out that it was visible all along.
-          loading={eager ? "eager" : "lazy"}
-          src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
-          width={480}
-        />
-        <span aria-hidden="true" className="reel__play">
-          <svg fill="currentColor" height="28" viewBox="0 0 24 24" width="28">
-            <path d="M8 5.5v13l11-6.5z" />
-          </svg>
-        </span>
-      </button>
-    </div>
-  );
-}
 
 function time(seconds: number) {
   if (!Number.isFinite(seconds)) {

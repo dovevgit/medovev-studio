@@ -994,6 +994,121 @@ export const ARTICLE_PAGES: Record<string, ArticlePage> = {
   },
 };
 
+export type GalleryItem = {
+  alt: string;
+  /** The full-size file, shown when the picture is opened. */
+  full: string;
+  h: number;
+  src: string;
+  w: number;
+};
+
+export type GalleryChapter = {
+  cat: string;
+  count: string;
+  items: GalleryItem[];
+  num: string;
+  title: string;
+};
+
+export const GALLERY = {
+  chips: [
+    { id: "all", label: "הכל" },
+    { id: "fashion", label: "אופנה ופורטרט" },
+    { id: "food", label: "אוכל" },
+    { id: "products", label: "מוצרים" },
+    { id: "realestate", label: "נדל\"ן ועיצוב פנים" },
+    { id: "print", label: "דפוס ומיתוג" },
+  ],
+  chapters: [
+    {
+      cat: "fashion",
+      count: "6 תמונות",
+      items: [
+        { alt: "גבר בחליפה בהירה וחולצה כחולה עם משקפי שמש", full: "/assets/gallery/g01-l.webp", h: 900, src: "/assets/gallery/g01-s.webp", w: 601 },
+        { alt: "פורטרט סטודיו בתאורה דרמטית על רקע שחור", full: "/assets/gallery/g02-l.webp", h: 600, src: "/assets/gallery/g02-s.webp", w: 900 },
+        { alt: "גבר צעיר בחליפה אפורה וקשירת עניבה כחולה ברחוב", full: "/assets/gallery/g03-l.webp", h: 900, src: "/assets/gallery/g03-s.webp", w: 601 },
+        { alt: "גבר בחליפה כחולה עם פפיון אדום", full: "/assets/gallery/g05-l.webp", h: 900, src: "/assets/gallery/g05-s.webp", w: 601 },
+        { alt: "אימון חבלים בחדר כושר בסגנון תעשייתי", full: "/assets/gallery/g07-l.webp", h: 630, src: "/assets/gallery/g07-s.webp", w: 900 },
+        { alt: "חמישה אנשים בלבוש עסקי כהה ליד דלפק קבלה, מתחת לקשת אבן", full: "/assets/gallery/g17-l.webp", h: 600, src: "/assets/gallery/g17-s.webp", w: 900 },
+      ],
+      num: "01",
+      title: "אופנה ופורטרט",
+    },
+    {
+      cat: "food",
+      count: "6 תמונות",
+      items: [
+        { alt: "מנת בשר ממולאת בפטריות עם רוטב בצלחת לבנה", full: "/assets/gallery/g04-l.webp", h: 605, src: "/assets/gallery/g04-s.webp", w: 900 },
+        { alt: "סלט עדשים שחורות עם בטטה וגזר", full: "/assets/gallery/g06-l.webp", h: 541, src: "/assets/gallery/g06-s.webp", w: 900 },
+        { alt: "סלט עדשים שחורות עם בטטה על שולחן עץ", full: "/assets/gallery/g09-l.webp", h: 570, src: "/assets/gallery/g09-s.webp", w: 900 },
+        { alt: "סלט טונה עם גזר, עשבי תיבול ופרוסות לימון בצלחת לבנה", full: "/assets/gallery/g18-l.webp", h: 600, src: "/assets/gallery/g18-s.webp", w: 900 },
+        { alt: "פרוסת פשטידת בטטה ובצל על מרית, בצלחת לבנה", full: "/assets/gallery/g19-l.webp", h: 600, src: "/assets/gallery/g19-s.webp", w: 900 },
+        { alt: "כריך ביצים קשות עם עגבנייה ומלפפון על לחם כהה, על קרש עץ", full: "/assets/gallery/g20-l.webp", h: 600, src: "/assets/gallery/g20-s.webp", w: 900 },
+      ],
+      num: "02",
+      title: "אוכל",
+    },
+    {
+      cat: "products",
+      count: "3 תמונות",
+      items: [
+        { alt: "קופסת סבון טבעי על קרש עץ", full: "/assets/gallery/g08-l.webp", h: 597, src: "/assets/gallery/g08-s.webp", w: 900 },
+        { alt: "צמיד קלוע עם חרוזים וצדפים", full: "/assets/gallery/g10-l.webp", h: 900, src: "/assets/gallery/g10-s.webp", w: 900 },
+        { alt: "צמיד עור וחוטים צבעוניים עם תליון זנב לוויתן", full: "/assets/gallery/g11-l.webp", h: 900, src: "/assets/gallery/g11-s.webp", w: 900 },
+      ],
+      num: "03",
+      title: "מוצרים",
+    },
+    {
+      cat: "realestate",
+      count: "8 תמונות",
+      items: [
+        { alt: "סלון מודרני עם כיסא תלוי שקוף", full: "/assets/gallery/g14-l.webp", h: 601, src: "/assets/gallery/g14-s.webp", w: 900 },
+        { alt: "וילה עם בריכה בשעת שקיעה", full: "/assets/gallery/g15-l.webp", h: 514, src: "/assets/gallery/g15-s.webp", w: 900 },
+        { alt: "קומה עליונה עם מעקה, ספרייה ושטיח צבעוני", full: "/assets/gallery/g16-l.webp", h: 600, src: "/assets/gallery/g16-s.webp", w: 900 },
+        { alt: "סלון עם מדרגות שיש ומעקה זכוכית, קיר לבנים לבן ונוף לעיר ולים דרך החלון", full: "/assets/gallery/g21-l.webp", h: 600, src: "/assets/gallery/g21-s.webp", w: 900 },
+        { alt: "סלון בחלל כפול גובה עם חלונות גדולים, קיר לבנים לבן, ספרייה ושולחן אוכל מעץ", full: "/assets/gallery/g22-l.webp", h: 600, src: "/assets/gallery/g22-s.webp", w: 900 },
+        { alt: "חצר וילה עם בריכה, פינת ישיבה על דשא סינטטי ותקרת עץ", full: "/assets/gallery/g23-l.webp", h: 600, src: "/assets/gallery/g23-s.webp", w: 900 },
+        { alt: "סלון עם ספה אדומה, שולחן קפה מעץ ישן וחלונות במסגרת ירוקה", full: "/assets/gallery/g24-l.webp", h: 600, src: "/assets/gallery/g24-s.webp", w: 900 },
+        { alt: "חלל בית עם מדרגות שיש מעוקלות, מעקה ברזל מעוצב וסלון בחלל כפול גובה", full: "/assets/gallery/g25-l.webp", h: 600, src: "/assets/gallery/g25-s.webp", w: 900 },
+      ],
+      num: "04",
+      title: "נדל\"ן ועיצוב פנים",
+    },
+    {
+      cat: "print",
+      count: "7 תמונות",
+      items: [
+        { alt: "לוחות שנה שולחניים בעיצובים שונים", full: "/assets/gallery/g12-l.webp", h: 600, src: "/assets/gallery/g12-s.webp", w: 900 },
+        { alt: "מחברת ספירלה בעיצוב מותאם", full: "/assets/gallery/g13-l.webp", h: 600, src: "/assets/gallery/g13-s.webp", w: 900 },
+        { alt: "מעמדי קרטון לפלייארים עם עיצוב פרסומי של ZEISS בהולנדית ובעברית", full: "/assets/gallery/g26-l.webp", h: 600, src: "/assets/gallery/g26-s.webp", w: 900 },
+        { alt: "אריזות קרטון מעוצבות למוצרים שונים: ציוד טכנולוגי, רפואי, טיפוח ותינוקות", full: "/assets/gallery/g27-l.webp", h: 600, src: "/assets/gallery/g27-s.webp", w: 900 },
+        { alt: "לוחות שנה שולחניים בספירלה בעיצובים של כמה חברות ומוסדות", full: "/assets/gallery/g28-l.webp", h: 600, src: "/assets/gallery/g28-s.webp", w: 900 },
+        { alt: "אריזות צבעוניות למשחקי קלפים לילדים", full: "/assets/gallery/g29-l.webp", h: 600, src: "/assets/gallery/g29-s.webp", w: 900 },
+        { alt: "חותמות עצמיות, עגולה ומלבנית", full: "/assets/gallery/g30-l.webp", h: 600, src: "/assets/gallery/g30-s.webp", w: 900 },
+      ],
+      num: "05",
+      title: "דפוס ומיתוג",
+    },
+  ] satisfies GalleryChapter[],
+};
+
+/** The showreel on the video page. */
+export const VIDEO_REELS: string[] = [
+  "DM84vuuj5lU",
+];
+
+/** The episodes on the podcast page. */
+export const PODCAST_REELS: string[] = [
+  "U-NUZqlAiLM",
+  "mbCakjaG0Y4",
+  "ePvj3PiajwM",
+  "cBxH8O2YiTc",
+  "l2IrCYn318E",
+  "THnJi89Q9Pc",
+];
+
 export const ACCESSIBILITY = {
   eyebrow: "נגישות",
   lead: "הסטודיו רואה חשיבות בכך שהאתר יהיה שימושי לכל אדם, כולל אנשים עם מוגבלות.",
