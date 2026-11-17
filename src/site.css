@@ -1,0 +1,989 @@
+/* ---------------------------------------------------------------------------
+ * Mobile framing for the scroll-scrub film.
+ *
+ * The film is 16:9 and a phone viewport is tall and narrow, so the engine's
+ * default `cover` crops away roughly three quarters of the frame's width --
+ * which on this site removes the very subjects the chapter is about. On phones
+ * we therefore fit the WHOLE frame instead of filling the screen, and sit the
+ * strip high so the chapter copy reads in the dark space beneath it. Desktop
+ * keeps the engine's full-bleed `cover` untouched.
+ * ------------------------------------------------------------------------ */
+@media (hover: none) and (pointer: coarse), (max-width: 860px) {
+  .scroll-scrub .scroll-scrub__poster,
+  .scroll-scrub .scroll-scrub__video {
+    object-fit: contain;
+  }
+
+  /* The letterbox bars are the stage colour, so the strip reads as a framed
+   * panel rather than as a video that failed to fill the screen. */
+  .scroll-scrub .scroll-scrub__stage {
+    background: var(--ss-bg);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Cap how much of the film the desktop crop is allowed to take.
+ *
+ * The engine fills the screen with `cover`, so whatever shape the window is
+ * not, it crops away. That was harmless while every frame's subject stood in
+ * the middle. It stops being harmless in the third chapter: the banners run
+ * from 2% to 94% of the frame's width -- edge to edge -- so a deep crop eats
+ * the outer two, which are the ones carrying two of the three words.
+ *
+ * At 16:9 `cover` and `contain` are the SAME picture, so this rule costs
+ * nothing on a window of roughly that shape, which is most of them. It only
+ * bites once the window is far enough from 16:9 that `cover` would throw away
+ * more than about a seventh of the frame -- and there, a whole frame with bars
+ * beats a cropped one with a word missing.
+ * ------------------------------------------------------------------------ */
+@media (min-width: 861px) and (max-aspect-ratio: 3 / 2),
+  (min-width: 861px) and (min-aspect-ratio: 2 / 1) {
+  .scroll-scrub .scroll-scrub__poster,
+  .scroll-scrub .scroll-scrub__video {
+    object-fit: contain;
+  }
+
+  .scroll-scrub .scroll-scrub__stage {
+    background: var(--ss-bg);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Scroll-built chapter headline.
+ *
+ * The headline arrives one word at a time as the visitor scrolls. The engine
+ * already publishes the journey's position as `--ss-progress` on the scrub
+ * root, so each word derives its own opacity from that one value in CSS --
+ * no per-frame React state, and nothing is driven by an IntersectionObserver.
+ *
+ * `--w` is a word's own 0..1 reveal. Its initial value is 1, so if the var is
+ * missing (before hydration, or if the split never runs) the full headline is
+ * simply visible -- the text is never left stranded at opacity 0.
+ * ------------------------------------------------------------------------ */
+@property --w {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+.scroll-scrub__title .ss-word {
+  display: inline-block;
+  --step: calc(var(--build-span) / var(--word-count));
+  --word-start: calc(var(--build-start) + var(--i) * var(--step));
+  --w: clamp(0, calc((var(--copy-progress) - var(--word-start)) / var(--step)), 1);
+  opacity: var(--w);
+  transform: translateY(calc((1 - var(--w)) * 0.32em));
+  filter: blur(calc((1 - var(--w)) * 3px));
+  will-change: opacity, transform;
+}
+
+.scroll-scrub__title .ss-space {
+  display: inline;
+}
+
+/* Fallbacks only. Each chapter measures its own band after mount and writes
+ * the real values onto its own title, because `--ss-progress` spans the whole
+ * journey rather than a single chapter. */
+.scroll-scrub__title {
+  --build-start: 0;
+  --build-span: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-scrub__title .ss-word {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Crowned letter.
+ *
+ * The final letter of the headline's last word wears the same gold crown the
+ * king wears in the film -- drawn as vector art so it stays crisp at every
+ * size and costs no extra image request. It sits inside the word span, so it
+ * fades in with that word rather than on its own.
+ * ------------------------------------------------------------------------ */
+.scroll-scrub__title {
+  padding-top: 0.5em;
+}
+
+.scroll-scrub__title .ss-crowned {
+  position: relative;
+  display: inline-block;
+  /* A predictable 1em box, so the crown can be seated from the glyph's top
+   * rather than from the line box -- the headline's 0.94 line-height leaves a
+   * large gap above Hebrew letters, which is what made the crown float. */
+  line-height: 1;
+}
+
+.scroll-scrub__title .ss-crowned::before {
+  position: absolute;
+  /* Seated exactly where the letter ends, measured rather than guessed.
+   *
+   * Two numbers decide this, and the second one is easy to forget: the ink of
+   * ה reaches 0.611em above the BASELINE, but `bottom` is measured from the
+   * bottom of the line box, which sits 0.139em BELOW the baseline at this
+   * line-height. Treating the two as the same thing is what sank an earlier
+   * version a quarter of the way down the letter.
+   *
+   *   0.611em (ink) + 0.139em (baseline above the box's bottom) = 0.750em
+   *
+   * A hundredth less, so the gold rests on the letter with no hairline of
+   * background showing between them.
+   *
+   * Both numbers come from the live font via canvas metrics and a zero-height
+   * inline-block probe; re-measure if the headline's family, weight or
+   * line-height changes, because every one of them moves this. */
+  bottom: 0.74em;
+  left: 50%;
+  width: 0.64em;
+  height: 0.43em;
+  content: "";
+  background: url("/assets/crown.png") center / contain no-repeat;
+  /* A short shadow cast down onto the letter itself. Nothing else sells
+   * contact as cheaply: without it the gold reads as a cut-out laid on top. */
+  filter: drop-shadow(0 0.02em 0.02em rgba(0, 0, 0, 0.6));
+  transform: translateX(-50%);
+}
+
+/* ---------------------------------------------------------------------------
+ * No scrim behind the chapter copy.
+ *
+ * The engine paints a dark wash behind the headline for legibility. Against
+ * this site's low-key film the type already reads on its own, and the wash
+ * puts a visible smudge over the picture. Removed on both breakpoints.
+ *
+ * Worth revisiting for the chapters that end the journey in morning light:
+ * pale type on a bright frame may need the wash back, scoped to those scenes.
+ * ------------------------------------------------------------------------ */
+.scroll-scrub .scroll-scrub__copy::before {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Run-out space after the last chapter.
+ *
+ * The engine scrubs the film across a timeline whose length is the bottom edge
+ * of the LAST band, but the sticky stage needs a viewport's worth of room
+ * beneath it to stay pinned. Without trailing space the page therefore runs
+ * out of scroll at (total - viewport): the journey's progress stops around
+ * 77%, and the final chapter's clip reaches only about half of itself before
+ * the stage starts scrolling away. The end of the story was literally
+ * unreachable at full screen.
+ *
+ * One viewport of empty space after the last band closes that gap: the final
+ * frame is now reached, and held, while the stage is still pinned.
+ * ------------------------------------------------------------------------ */
+.scroll-scrub .scroll-scrub__story::after {
+  display: block;
+  height: 100dvh;
+  content: "";
+}
+
+/* ---------------------------------------------------------------------------
+ * Chapter copy, lifted into the pinned stage.
+ *
+ * The engine's own sticky band always lets the copy slide away one viewport
+ * before its clip ends. Here each block lives inside the stage instead, which
+ * stays pinned for the whole journey, and its presence is a pure function of
+ * `--ss-progress`: it arrives with its chapter, holds while the clip plays out
+ * to its final beat, and only then gives way to the next one.
+ *
+ * `--p` is the block's own 0..1 presence. Its initial value is 1 so that if
+ * anything is missing the copy is simply visible rather than invisible.
+ * ------------------------------------------------------------------------ */
+@property --copy-progress {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --p {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+.ss-copy-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.ss-copy-slot {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: clamp(5rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem);
+  /* Present while this chapter owns the screen, absent outside it. */
+  --p: clamp(
+    0,
+    min(
+      calc((var(--copy-progress) - var(--from)) / (var(--in-end) - var(--from))),
+      calc((var(--out-end) - var(--copy-progress)) / (var(--out-end) - var(--out-start)))
+    ),
+    1
+  );
+  opacity: var(--p);
+}
+
+/* The page is RTL, so the engine's logical "right" is the physical left. */
+.ss-copy-slot[data-align="right"] {
+  justify-content: flex-end;
+}
+
+.ss-copy-slot .scroll-scrub__copy {
+  pointer-events: auto;
+}
+
+/* ---------------------------------------------------------------------------
+ * The third chapter's headline sits ABOVE the banners.
+ *
+ * Every other chapter centres its copy against the screen, which is right
+ * when the frame's subject is a single piece in the middle. The third
+ * chapter is different: its film carries words of its own, embroidered on
+ * three banners across the lower third of the frame. Centred, the headline
+ * lands on the cloth and hides the very words the chapter is about.
+ *
+ * So this one headline is anchored to the FILM's geometry rather than the
+ * screen's, and sits just above where the banners' top edge falls. The box
+ * is reconstructed here exactly as the film is drawn -- `cover` by default,
+ * `contain` at the window shapes where the crop is capped above -- so the
+ * headline clears the cloth whatever shape the window is.
+ *
+ * Phones need none of this: there the copy already reads in the darkness
+ * beneath the film strip, nowhere near the banners.
+ * ------------------------------------------------------------------------ */
+@media (hover: hover) and (min-width: 861px) {
+  .ss-copy-slot[data-chapter="2"] {
+    --box-h: max(100dvh, calc(100vw * 9 / 16));
+    --box-y: calc((100dvh - var(--box-h)) / 2);
+
+    align-items: flex-end;
+    padding-bottom: calc(100dvh - (var(--box-y) + var(--box-h) * 0.58));
+  }
+}
+
+@media (hover: hover) and (min-width: 861px) and (max-aspect-ratio: 3 / 2),
+  (hover: hover) and (min-width: 861px) and (min-aspect-ratio: 2 / 1) {
+  .ss-copy-slot[data-chapter="2"] {
+    --box-h: min(100dvh, calc(100vw * 9 / 16));
+    --box-y: calc((100dvh - var(--box-h)) / 2);
+  }
+}
+
+/* The band keeps its height -- it is what the engine measures to scrub the
+ * clip -- but it no longer shows anything, because its copy now lives above. */
+.scroll-scrub__chapter-pin:empty {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse), (max-width: 860px) {
+  /* The copy follows the film's lower edge instead of sitting on the floor
+   * of the screen: bottom-aligned it left a tall band of empty black between
+   * the strip and the words. */
+  .ss-copy-slot {
+    --box-h: min(100dvh, calc(100vw * 9 / 16));
+    --box-y: calc((100dvh - var(--box-h)) * 0.3);
+
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: calc(var(--box-y) + var(--box-h) + 2.9rem)
+      max(1.25rem, env(safe-area-inset-right))
+      calc(1.5rem + env(safe-area-inset-bottom))
+      max(1.25rem, env(safe-area-inset-left));
+  }
+  .ss-copy-slot[data-align="right"] {
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-copy-slot {
+    opacity: 1;
+  }
+}
+
+/* The engine's chapter-jump rail repeated the same few words across the top of
+ * every frame. Removed: the headlines already name each chapter. */
+.scroll-scrub .scroll-scrub__route {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Emblems on the monoliths.
+ *
+ * The stones are filmed bare; their markings are added here so they stay
+ * razor-sharp at any size and can light one after another as the visitor
+ * scrolls -- something a generated clip cannot be directed to do reliably.
+ *
+ * GEOMETRY: the emblems must sit on their stones, not at fixed points on the
+ * screen, and the film is cropped to fill a desktop window but shown whole on
+ * a phone. So this layer reproduces the video's own box exactly -- same
+ * 16:9 aspect, same cover/contain rule, same object-position -- and each
+ * emblem is then placed as a percentage of the FRAME. Move the frame, and the
+ * emblems move with it.
+ *
+ * `screen` blending drops the artwork's black field, so only the engraved
+ * glow reaches the stone, as if the rock itself were lighting up.
+ * ------------------------------------------------------------------------ */
+@property --lit {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.ss-emblems {
+  position: absolute;
+  z-index: 2;
+  direction: ltr;
+  pointer-events: none;
+
+  /* The film's rendered box: cover, centred — matching the desktop video. */
+  --box-w: max(100vw, calc(100dvh * 16 / 9));
+  --box-h: max(100dvh, calc(100vw * 9 / 16));
+  --box-x: calc((100vw - var(--box-w)) / 2);
+  --box-y: calc((100dvh - var(--box-h)) / 2);
+
+  left: var(--box-x);
+  top: var(--box-y);
+  width: var(--box-w);
+  height: var(--box-h);
+
+  /* Present only while the presence chapter owns the screen. */
+  opacity: clamp(
+    0,
+    min(
+      calc((var(--copy-progress) - var(--from)) / (var(--in-end) - var(--from))),
+      calc((var(--out-end) - var(--copy-progress)) / (var(--out-end) - var(--out-start)))
+    ),
+    1
+  );
+}
+
+.ss-emblem {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  /* One word per stone, so it is never broken across lines: the box is sized
+   * to the word itself and centred on the rock's measured middle. */
+  width: max-content;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  color: #DCE6FF;
+  direction: rtl;
+  font-size: clamp(0.95rem, 1.95vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-wrap: balance;
+  /* Layered halo: a near-white core so the letters stay legible, the brand
+   * blue just outside it, and a purple bloom beyond that. */
+  text-shadow: 0 0 0.3rem rgba(226, 234, 255, 0.9),
+    0 0 0.8rem rgba(110, 127, 179, 0.95),
+    0 0 1.7rem rgba(149, 94, 232, 0.8),
+    0 0 3.2rem rgba(109, 40, 217, 0.55);
+
+  /* Each word lights in its own turn. */
+  --lit: clamp(
+    0,
+    calc((var(--copy-progress) - var(--lit-from)) / (var(--lit-to) - var(--lit-from))),
+    1
+  );
+  opacity: var(--lit);
+}
+
+/* On phones the film is shown whole and sits high, so the layer follows it. */
+@media (hover: none) and (pointer: coarse), (max-width: 860px) {
+  .ss-emblems {
+    --box-w: min(100vw, calc(100dvh * 16 / 9));
+    --box-h: min(100dvh, calc(100vw * 9 / 16));
+    --box-y: calc((100dvh - var(--box-h)) * 0.3);
+  }
+
+  /* The letterboxed strip is small, so the words need to hold their own. */
+  .ss-emblem {
+    width: max-content;
+    font-size: clamp(0.62rem, 2.9vw, 1.15rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-emblem {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * The line under each headline.
+ *
+ * It carries the chapter's actual claim, so it is sized to be read rather than
+ * skimmed: clearly below the headline in the hierarchy, clearly above a
+ * caption. Brighter than the engine's muted default, for the same reason.
+ * ------------------------------------------------------------------------ */
+.ss-copy-slot .scroll-scrub__body {
+  max-width: 24ch;
+  margin-top: 1.1rem;
+  color: #D9D3C8;
+  font-size: clamp(1.45rem, 2.8vw, 2.6rem);
+  font-weight: 300;
+  line-height: 1.35;
+  /* Arrives only once the headline above it has finished assembling. */
+  opacity: clamp(
+    0,
+    calc((var(--copy-progress) - var(--body-from)) / (var(--body-to) - var(--body-from))),
+    1
+  );
+  text-wrap: balance;
+}
+
+@media (hover: none) and (pointer: coarse), (max-width: 860px) {
+  .ss-copy-slot .scroll-scrub__body {
+    max-width: 24ch;
+    font-size: clamp(1.2rem, 5.2vw, 1.9rem);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * The service name above the headline.
+ *
+ * It names what the chapter is selling, so it carries real size here rather
+ * than the engine's small all-caps eyebrow. Still clearly subordinate to the
+ * headline beneath it, and in the brand accent so the eye lands on it first.
+ * ------------------------------------------------------------------------ */
+.ss-copy-slot .scroll-scrub__kicker {
+  margin-bottom: 0.7rem;
+  font-size: clamp(1.5rem, 2.9vw, 2.9rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  text-shadow: 0 0 0.9rem rgba(110, 127, 179, 0.6),
+    0 0 2rem rgba(149, 94, 232, 0.45);
+}
+
+@media (hover: none) and (pointer: coarse), (max-width: 860px) {
+  .ss-copy-slot .scroll-scrub__kicker {
+    font-size: clamp(1.25rem, 5.6vw, 2.1rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-copy-slot .scroll-scrub__body {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * The service name.
+ *
+ * It names what this stretch of the film is selling, so it holds its place
+ * while the headline and line beneath it change, and hands over only when the
+ * service does. That is why it sits in its own layer with its own stretch of
+ * the journey instead of inside a chapter's copy, which used to carry it off
+ * screen at the first chapter break.
+ *
+ * Its position is fixed rather than stacked above the copy: chapters differ in
+ * height, and anchoring it to them would make it jump at every hand-over.
+ * ------------------------------------------------------------------------ */
+.ss-services {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+
+  /* The same box the film is drawn into, so the name can be placed against
+   * the film's edge rather than against the screen's. */
+  --box-w: max(100vw, calc(100dvh * 16 / 9));
+  --box-h: max(100dvh, calc(100vw * 9 / 16));
+  --box-y: calc((100dvh - var(--box-h)) / 2);
+}
+
+.ss-service {
+  position: absolute;
+  inset-inline-start: auto;
+  inset-inline-end: clamp(1.25rem, 6vw, 6rem);
+  bottom: 11%;
+  max-width: 16ch;
+  margin: 0;
+  color: var(--ss-accent);
+  font-size: clamp(1.5rem, 2.9vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.15;
+  text-shadow: 0 0 0.9rem rgba(110, 127, 179, 0.6),
+    0 0 2rem rgba(149, 94, 232, 0.45);
+  opacity: clamp(
+    0,
+    min(
+      calc((var(--copy-progress) - var(--from)) / (var(--in-end) - var(--from))),
+      calc((var(--out-end) - var(--copy-progress)) / (var(--out-end) - var(--out-start)))
+    ),
+    1
+  );
+}
+
+/* On phones the film is a strip with darkness beneath it, and the name
+ * belongs in that darkness -- it titles the page, it is not part of the
+ * filmed world. Anchored to the film's lower edge so it sits just below it
+ * whatever the screen's shape. */
+@media (hover: none) and (pointer: coarse), (max-width: 860px) {
+  .ss-services {
+    --box-w: min(100vw, calc(100dvh * 16 / 9));
+    --box-h: min(100dvh, calc(100vw * 9 / 16));
+    --box-y: calc((100dvh - var(--box-h)) * 0.3);
+  }
+
+  .ss-service {
+    inset-inline-end: max(1.25rem, env(safe-area-inset-right));
+    inset-inline-start: max(1.25rem, env(safe-area-inset-left));
+    top: calc(var(--box-y) + var(--box-h) + 0.6rem);
+    bottom: auto;
+    max-width: none;
+    font-size: clamp(1.25rem, 5.6vw, 2.1rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-service {
+    opacity: 1;
+  }
+}
+
+/* A chapter whose meaning is carried inside the film itself has no line of
+ * its own. The engine still renders the element, so an empty one is taken
+ * out of the flow rather than left holding a gap above the next chapter. */
+.scroll-scrub__body:empty {
+  display: none;
+}
+
+/* ===========================================================================
+ * Out of the film, into the daylight.
+ *
+ * Everything above this point is the journey: a dark world, full bleed, one
+ * frame at a time. Everything below it is an ordinary site -- services to
+ * read, pages to open -- and the join between the two is the whole trick.
+ * A hard edge from near-black to a pale page would read as two websites
+ * stapled together.
+ *
+ * So the first thing after the film is a tall band carrying nothing but a
+ * gradient, walking from the film's own background through the walnut the
+ * pieces are carved from and up to the pale wood the rest of the site lives
+ * on. Scrolling through it feels like coming up out of the night.
+ * ======================================================================== */
+
+.after-film {
+  --wood: #e7d8bc;
+  --wood-raised: #f3e9d7;
+  --wood-edge: #cdb893;
+  --wood-ink: #2b2117;
+  --wood-ink-soft: #5e4e3a;
+  --royal: #27406e;
+  --royal-lit: #35538b;
+  --gilt: #a97f22;
+
+  position: relative;
+  background: var(--wood);
+  color: var(--wood-ink);
+}
+
+/* The band itself. Its stops are weighted towards the dark end on purpose:
+ * the eye reads a slow hold in the dark and then a quick opening, the way
+ * dawn actually behaves, rather than an even wash. */
+.after-film__dawn {
+  height: 64vh;
+  background: linear-gradient(
+    180deg,
+    #0b0a09 0%,
+    #130e0a 20%,
+    #3a2a1a 47%,
+    #8a6e48 71%,
+    #c8b18c 88%,
+    var(--wood) 100%
+  );
+}
+
+/* A whisper of grain, so the wood is a material and not a flat fill. Two
+ * near-invisible stripe layers at odds with each other; at this opacity it
+ * reads as texture rather than as lines. */
+.after-film__body {
+  position: relative;
+  padding: clamp(2.5rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4rem)
+    clamp(4rem, 9vw, 7rem);
+  background-image: repeating-linear-gradient(
+      91deg,
+      rgba(120, 92, 54, 0.045) 0 1px,
+      transparent 1px 7px
+    ),
+    repeating-linear-gradient(
+      89deg,
+      rgba(120, 92, 54, 0.03) 0 1px,
+      transparent 1px 23px
+    );
+}
+
+.services__head {
+  max-width: 62rem;
+  margin: 0 auto clamp(2rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.services__eyebrow {
+  margin: 0 0 0.6rem;
+  color: var(--gilt);
+  font-size: clamp(0.82rem, 1.4vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+}
+
+.services__title {
+  margin: 0;
+  font-size: clamp(1.65rem, 4.2vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.9rem, 1.8vw, 1.4rem);
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 1040px) {
+  .services {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .services {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* A card is a panel of lighter wood lying on the darker board. The border is
+ * the only edge it gets -- no drop shadow, which on a warm ground turns grey
+ * and muddy. */
+.service {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: clamp(1.25rem, 2.4vw, 1.7rem);
+  border: 1px solid var(--wood-edge);
+  border-radius: 14px;
+  background: var(--wood-raised);
+}
+
+.service__title {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.9vw, 1.32rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.service__blurb {
+  flex: 1;
+  margin: 0;
+  color: var(--wood-ink-soft);
+  font-size: clamp(0.95rem, 1.5vw, 1.04rem);
+  line-height: 1.5;
+}
+
+.service__link {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  padding: 0.58rem 1.25rem;
+  border-radius: 999px;
+  background: var(--royal);
+  color: #f4ecdc;
+  font-size: 0.97rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+
+.service__link:hover,
+.service__link:focus-visible {
+  background: var(--royal-lit);
+}
+
+.closing {
+  max-width: 48rem;
+  margin: clamp(3rem, 7vw, 5.5rem) auto 0;
+  text-align: center;
+}
+
+.closing__title {
+  margin: 0 0 1.4rem;
+  font-size: clamp(1.4rem, 3.4vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.closing__cta {
+  display: inline-block;
+  padding: 0.8rem 2.2rem;
+  border-radius: 999px;
+  background: var(--royal);
+  color: #f4ecdc;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+
+.closing__cta:hover,
+.closing__cta:focus-visible {
+  background: var(--royal-lit);
+}
+
+/* ===========================================================================
+ * The menu.
+ *
+ * The button rides over two backgrounds that could hardly differ more -- the
+ * film's near-black at the top of the page, the pale wood below it. Rather
+ * than recolouring it on scroll, which means keeping a listener in step with
+ * a position, it carries its own dark disc. One appearance, readable on both.
+ * ======================================================================== */
+
+.site-menu__button {
+  position: fixed;
+  top: clamp(0.85rem, 2vw, 1.4rem);
+  inset-inline-end: clamp(0.85rem, 2vw, 1.4rem);
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 1px solid rgba(243, 239, 232, 0.28);
+  border-radius: 50%;
+  background: rgba(11, 10, 9, 0.62);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.site-menu__bars {
+  display: grid;
+  gap: 4px;
+  width: 1.15rem;
+}
+
+.site-menu__bars > span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: #f3efe8;
+  transition: transform 180ms ease, opacity 140ms ease;
+}
+
+.site-menu__bars[data-open] > span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.site-menu__bars[data-open] > span:nth-child(2) {
+  opacity: 0;
+}
+
+.site-menu__bars[data-open] > span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.site-menu__panel {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #120d09 0%, #1d140c 100%);
+  color: #efe6d5;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 200ms ease, visibility 0s linear 200ms;
+}
+
+.site-menu__panel[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 200ms ease, visibility 0s;
+}
+
+.site-menu__inner {
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: clamp(4.5rem, 10vw, 6.5rem) clamp(1.5rem, 6vw, 3rem)
+    clamp(3rem, 8vw, 5rem);
+}
+
+.site-menu__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-menu__list a {
+  display: block;
+  padding: 0.42rem 0;
+  color: inherit;
+  font-size: clamp(1.25rem, 3.4vw, 1.75rem);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 140ms ease;
+}
+
+.site-menu__list a:hover,
+.site-menu__list a:focus-visible {
+  color: #e3b94a;
+}
+
+.site-menu__heading {
+  margin: clamp(1.5rem, 4vw, 2.2rem) 0 0.5rem;
+  color: #a79c8c;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+/* The nine services are the longest part of the menu. Two columns keep the
+ * whole site reachable without scrolling the panel on a laptop. */
+.site-menu__list--services {
+  columns: 2;
+  column-gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+@media (max-width: 620px) {
+  .site-menu__list--services {
+    columns: 1;
+  }
+}
+
+.site-menu__list--services a {
+  font-size: clamp(1rem, 2.6vw, 1.18rem);
+  font-weight: 500;
+}
+
+.site-menu__list--quiet {
+  margin-top: clamp(1.5rem, 4vw, 2.2rem);
+  padding-top: 1rem;
+  border-top: 1px solid rgba(243, 239, 232, 0.14);
+}
+
+.site-menu__list--quiet a {
+  font-size: clamp(0.98rem, 2.4vw, 1.1rem);
+  font-weight: 500;
+}
+
+.site-menu__cta {
+  display: inline-block;
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  padding: 0.75rem 2rem;
+  border-radius: 999px;
+  background: #e3b94a;
+  color: #241a0b;
+  font-size: 1.02rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Announced, not shown: a link that leaves the site should say so to a
+ * screen reader without putting a parenthesis on the page. */
+.site-menu__away {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-menu__bars > span,
+  .site-menu__panel,
+  .service__link,
+  .closing__cta,
+  .site-menu__list a {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * The stand-in pages.
+ *
+ * Dark walnut rather than the home page's wood: these are interiors, and the
+ * visitor should feel they have stepped through a door rather than onto a
+ * second copy of the home page. Replace each one with its real page.
+ * ------------------------------------------------------------------------ */
+.stub {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: clamp(5rem, 12vw, 8rem) clamp(1.5rem, 6vw, 3rem);
+  background: linear-gradient(180deg, #120d09 0%, #241a10 100%);
+  color: #efe6d5;
+  text-align: center;
+}
+
+.stub__inner {
+  max-width: 40rem;
+}
+
+.stub__eyebrow {
+  margin: 0 0 0.7rem;
+  color: #e3b94a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+}
+
+.stub__title {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.stub__blurb {
+  margin: 1rem 0 0;
+  color: #cdc0ab;
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+  line-height: 1.5;
+}
+
+.stub__note {
+  margin: 1.6rem 0 0;
+  color: #a79c8c;
+  font-size: 1rem;
+}
+
+.stub__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  justify-content: center;
+  margin-top: 2.2rem;
+}
+
+.stub__cta {
+  padding: 0.75rem 2rem;
+  border-radius: 999px;
+  background: #e3b94a;
+  color: #241a0b;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.stub__back {
+  padding: 0.75rem 2rem;
+  border: 1px solid rgba(243, 239, 232, 0.3);
+  border-radius: 999px;
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
