@@ -1025,18 +1025,24 @@
 
 .flag-card__text {
   position: absolute;
-  /* Physical sides, deliberately: the cloth's clear run is on the right of
-   * the picture whatever direction the document reads in. */
-  top: 13%;
+  /* The clear field of velvet: everything left of 33% is the king and his
+   * cloth, and the gold border closes in at 94%, 12% and 81%. Physical sides
+   * deliberately -- the clear run is on the right of the PICTURE, whichever
+   * way the document reads.
+   *
+   * The block is centred in that field rather than in the cloth's true
+   * middle, because to the eye the banner's open space begins where the king
+   * ends. */
+  top: 12%;
   right: 6%;
-  bottom: 40%;
-  left: 34%;
+  bottom: 19%;
+  left: 33%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   gap: 1.1cqw;
-  text-align: right;
+  text-align: center;
 }
 
 .flag-card__title {
@@ -1062,14 +1068,7 @@
 /* Light and loud against the deep blue: parchment, not gold, so it reads as
  * a button rather than as another piece of the frame. */
 .flag-card__cta {
-  /* Against the card, not the text box: low on the cloth and well to the left
-   * of the headline. The velvet ends at 81% of the card's height, so a 24%
-   * offset from the bottom leaves the button clear of the gold border, and
-   * 36% from the left keeps it clear of the king, who reaches 33% across. */
-  position: absolute;
-  left: 36%;
-  bottom: 24%;
-  margin: 0;
+  margin-top: 0.6cqw;
   padding: 1.15cqw 3cqw;
   border: 0.12cqw solid #e8d9b4;
   border-radius: 999px;
@@ -1097,7 +1096,7 @@
     position: static;
     gap: 0.5rem;
     padding: 1.25rem 0.25rem 0;
-    text-align: right;
+    text-align: center;
   }
 
   .flag-card__title {
@@ -1113,8 +1112,7 @@
   }
 
   .flag-card__cta {
-    position: static;
-    align-self: flex-start;
+    align-self: center;
     margin-top: 0.35rem;
     padding: 0.7rem 1.8rem;
     border-width: 1px;

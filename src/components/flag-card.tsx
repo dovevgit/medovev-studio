@@ -49,13 +49,10 @@ export function FlagCard({
       <div className="flag-card__text">
         <h3 className="flag-card__title">{title}</h3>
         <p className="flag-card__line">{line}</p>
+        <a className="flag-card__cta" href={href}>
+          {cta}
+        </a>
       </div>
-      {/* Outside the text box on purpose: placed against the artwork itself,
-          so its position is a share of the CARD and not of a box that is
-          already inset inside it. */}
-      <a className="flag-card__cta" href={href}>
-        {cta}
-      </a>
     </article>
   );
 }
