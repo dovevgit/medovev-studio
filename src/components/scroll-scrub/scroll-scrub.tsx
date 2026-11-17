@@ -651,7 +651,11 @@ export function ScrollScrub({
       <div className="scroll-scrub__story">
         {segments.map((segment) => {
           const bandStyle: CSSProperties = {
-            minHeight: `${Math.max(segment.weight, 0.2) * 100}dvh`,
+            // svh, not dvh. A phone's dynamic viewport changes as the URL bar
+            // collapses, and every band here is a multiple of it -- so the
+            // document's whole height moved while the visitor scrolled, and
+            // the page jumped under them. The small viewport is a constant.
+            minHeight: `${Math.max(segment.weight, 0.2) * 100}svh`,
           };
 
           if (segment.kind === "connector") {

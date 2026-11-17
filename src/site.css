@@ -178,7 +178,7 @@
  * ------------------------------------------------------------------------ */
 .scroll-scrub .scroll-scrub__story::after {
   display: block;
-  height: 100dvh;
+  height: 100svh;
   content: "";
 }
 
@@ -261,19 +261,19 @@
  * ------------------------------------------------------------------------ */
 @media (hover: hover) and (min-width: 861px) {
   .ss-copy-slot[data-chapter="2"] {
-    --box-h: max(100dvh, calc(100vw * 9 / 16));
-    --box-y: calc((100dvh - var(--box-h)) / 2);
+    --box-h: max(100svh, calc(100vw * 9 / 16));
+    --box-y: calc((100svh - var(--box-h)) / 2);
 
     align-items: flex-end;
-    padding-bottom: calc(100dvh - (var(--box-y) + var(--box-h) * 0.58));
+    padding-bottom: calc(100svh - (var(--box-y) + var(--box-h) * 0.58));
   }
 }
 
 @media (hover: hover) and (min-width: 861px) and (max-aspect-ratio: 3 / 2),
   (hover: hover) and (min-width: 861px) and (min-aspect-ratio: 2 / 1) {
   .ss-copy-slot[data-chapter="2"] {
-    --box-h: min(100dvh, calc(100vw * 9 / 16));
-    --box-y: calc((100dvh - var(--box-h)) / 2);
+    --box-h: min(100svh, calc(100vw * 9 / 16));
+    --box-y: calc((100svh - var(--box-h)) / 2);
   }
 }
 
@@ -288,8 +288,8 @@
    * of the screen: bottom-aligned it left a tall band of empty black between
    * the strip and the words. */
   .ss-copy-slot {
-    --box-h: min(100dvh, calc(100vw * 9 / 16));
-    --box-y: calc((100dvh - var(--box-h)) * 0.3);
+    --box-h: min(100svh, calc(100vw * 9 / 16));
+    --box-y: calc((100svh - var(--box-h)) * 0.3);
 
     align-items: flex-start;
     justify-content: flex-start;
@@ -345,10 +345,10 @@
   pointer-events: none;
 
   /* The film's rendered box: cover, centred — matching the desktop video. */
-  --box-w: max(100vw, calc(100dvh * 16 / 9));
-  --box-h: max(100dvh, calc(100vw * 9 / 16));
+  --box-w: max(100vw, calc(100svh * 16 / 9));
+  --box-h: max(100svh, calc(100vw * 9 / 16));
   --box-x: calc((100vw - var(--box-w)) / 2);
-  --box-y: calc((100dvh - var(--box-h)) / 2);
+  --box-y: calc((100svh - var(--box-h)) / 2);
 
   left: var(--box-x);
   top: var(--box-y);
@@ -402,9 +402,9 @@
 /* On phones the film is shown whole and sits high, so the layer follows it. */
 @media (hover: none) and (pointer: coarse), (max-width: 860px) {
   .ss-emblems {
-    --box-w: min(100vw, calc(100dvh * 16 / 9));
-    --box-h: min(100dvh, calc(100vw * 9 / 16));
-    --box-y: calc((100dvh - var(--box-h)) * 0.3);
+    --box-w: min(100vw, calc(100svh * 16 / 9));
+    --box-h: min(100svh, calc(100vw * 9 / 16));
+    --box-y: calc((100svh - var(--box-h)) * 0.3);
   }
 
   /* The letterboxed strip is small, so the words need to hold their own. */
@@ -499,9 +499,9 @@
 
   /* The same box the film is drawn into, so the name can be placed against
    * the film's edge rather than against the screen's. */
-  --box-w: max(100vw, calc(100dvh * 16 / 9));
-  --box-h: max(100dvh, calc(100vw * 9 / 16));
-  --box-y: calc((100dvh - var(--box-h)) / 2);
+  --box-w: max(100vw, calc(100svh * 16 / 9));
+  --box-h: max(100svh, calc(100vw * 9 / 16));
+  --box-y: calc((100svh - var(--box-h)) / 2);
 }
 
 .ss-service {
@@ -533,9 +533,9 @@
  * whatever the screen's shape. */
 @media (hover: none) and (pointer: coarse), (max-width: 860px) {
   .ss-services {
-    --box-w: min(100vw, calc(100dvh * 16 / 9));
-    --box-h: min(100dvh, calc(100vw * 9 / 16));
-    --box-y: calc((100dvh - var(--box-h)) * 0.3);
+    --box-w: min(100vw, calc(100svh * 16 / 9));
+    --box-h: min(100svh, calc(100vw * 9 / 16));
+    --box-y: calc((100svh - var(--box-h)) * 0.3);
   }
 
   .ss-service {
@@ -603,7 +603,7 @@
    * band earns its keep in the first fifth of a screen and the heading
    * follows immediately, so the background opens WHILE the words arrive
    * rather than before them. */
-  height: 20vh;
+  height: 20svh;
   background: linear-gradient(180deg, #0b0a09 0%, var(--wood) 100%);
 }
 
@@ -631,7 +631,12 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: url("/assets/path.webp") top center / min(100%, 78rem) auto
+  /* Wider than the content on purpose. The gravel occupies 15%-90% of the
+   * file, so the trail drawn is three quarters of whatever width it is given
+   * -- at the content's own width that came out 596px against 713px banners,
+   * a path narrower than the things standing on it. Half again as wide puts
+   * the banners comfortably inside it with its edges showing either side. */
+  background: url("/assets/path.webp") top center / min(150%, 128rem) auto
     repeat-y;
   mask-image: linear-gradient(
     180deg,
@@ -952,7 +957,7 @@
 .stub {
   display: grid;
   place-items: center;
-  min-height: 100dvh;
+  min-height: 100svh;
   padding: clamp(5rem, 12vw, 8rem) clamp(1.5rem, 6vw, 3rem);
   background: linear-gradient(180deg, #120d09 0%, #241a10 100%);
   color: #efe6d5;
@@ -1228,11 +1233,11 @@
      * shorter stage would cut the same gap without crowding anything. That
      * moves the film's own framing, so it is a change to make deliberately,
      * not in passing. */
-    margin-top: -26vh;
+    margin-top: -26svh;
   }
 
   .after-film__dawn {
-    height: 13vh;
+    height: 13svh;
   }
 
   .after-film__body {
