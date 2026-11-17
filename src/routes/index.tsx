@@ -31,36 +31,6 @@ const COPY = {
 };
 
 /**
- * What each monolith is carved with, in the presence chapter.
- *
- * These are words, not icons: an icon on a distant stone has to be decoded,
- * and the whole point of the chapter is that the visitor reads the services
- * at a glance. Set as live text, they also stay crisp at every size and are
- * there for a crawler.
- *
- * `x` and `y` are measured against the FILM FRAME, not the screen: the layer
- * that holds them reproduces the video's own box, so a word stays on its
- * stone whether the frame is cropped to fill a desktop window or letterboxed
- * whole on a phone.
- *
- * `at` is when the word lights, as a fraction of its chapter. They start only
- * after the stones have finished rising, and arrive one after another.
- */
-/**
- * The service each stretch of the journey is about.
- *
- * The name stays put while the headlines and lines beneath it change, and
- * gives way only when the service itself does -- it is what the whole film is
- * selling, so it outlives any single chapter. It therefore lives in its own
- * layer rather than inside a chapter's copy, which is what used to carry it
- * off screen at the first chapter break.
- */
-const SERVICES = [
-  { first: 0, label: "אסטרטגיה עסקית", last: 1 },
-  { first: 2, label: "נוכחות דיגיטלית", last: 2 },
-];
-
-/**
  * Lift each chapter's copy into the pinned stage and drive it from scroll.
  *
  * WHY: the engine parks chapter copy in a tall band and pins it with
@@ -128,19 +98,6 @@ function useChapterCopyLayer() {
       stage.append(layer);
     }
 
-    let services = stage.querySelector<HTMLElement>(".ss-services");
-    if (!services) {
-      services = document.createElement("div");
-      services.className = "ss-services";
-      for (const [index, service] of SERVICES.entries()) {
-        const mark = document.createElement("p");
-        mark.className = "ss-service";
-        mark.dataset.service = String(index);
-        mark.textContent = service.label;
-        services.append(mark);
-      }
-      stage.append(services);
-    }
 
     const chapters = [
       ...root.querySelectorAll<HTMLElement>(".scroll-scrub__chapter"),
@@ -202,34 +159,6 @@ function useChapterCopyLayer() {
           band.getBoundingClientRect().top + window.scrollY - rootTop;
         return { from: top / total, to: (top + band.offsetHeight) / total };
       };
-
-      SERVICES.forEach((service, index) => {
-        const mark = services?.querySelector<HTMLElement>(
-          `[data-service="${index}"]`,
-        );
-        const start = bandRange(service.first);
-        const end = bandRange(service.last);
-        if (!mark || !start || !end) {
-          return;
-        }
-        const span = Math.max(end.to - start.from, 0.001);
-        mark.style.setProperty("--from", String(start.from));
-        mark.style.setProperty("--in-end", String(start.from + 0.04 * span));
-        // The LAST service name has nothing to hand over to -- the journey
-        // ends on it. Fading it across the final band left it at half
-        // strength exactly where the visitor stops scrolling, so its fade is
-        // pushed far past the end of the journey: it holds at full strength
-        // to the last pixel.
-        const isLast = index === SERVICES.length - 1;
-        mark.style.setProperty(
-          "--out-start",
-          String(isLast ? 9 : end.to - 0.02 * span),
-        );
-        mark.style.setProperty(
-          "--out-end",
-          String(isLast ? 10 : end.to + 0.02 * span),
-        );
-      });
 
       bands.forEach((band, index) => {
         const slot = layer?.querySelector<HTMLElement>(
