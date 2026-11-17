@@ -1638,7 +1638,7 @@
 .site-menu__crown {
   position: relative;
   display: grid;
-  aspect-ratio: 1672 / 941;
+  aspect-ratio: 1672 / 884;
   background: url("/assets/menu-scroll.webp") center / 100% 100% no-repeat;
   place-items: center;
 }
@@ -1652,9 +1652,10 @@
 }
 
 /* The sheet the links are written on. It is pulled up under the scroll's
- * torn bottom edge so the two read as one piece of parchment. */
+ * torn bottom edge, and its paper was re-toned to the exact colour of that
+ * edge, so the two read as one sheet rather than two. */
 .site-menu__sheet {
-  margin-top: -7%;
+  margin-top: -9.5%;
   padding: clamp(1rem, 3vw, 1.6rem) clamp(1.4rem, 5vw, 3rem) clamp(1.6rem, 4vw, 2.4rem);
   background: url("/assets/menu-parchment.webp") center / 100% 100% no-repeat;
   /* The sheet's own torn edge at the foot, cut rather than drawn: a soft
